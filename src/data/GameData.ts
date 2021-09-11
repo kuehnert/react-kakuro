@@ -1,44 +1,44 @@
-enum Difficulty {
+export enum Difficulty {
   Easy = 0,
-  Medium = 0,
-  MediumPlus = 0,
-  Hard = 0,
-  VeryHard = 0,
+  Medium = 1,
+  MediumPlus = 2,
+  Hard = 3,
+  VeryHard = 4,
 }
 
-enum CellType {
+export enum CellType {
   Blank = 0,
   Hint = 1,
   Number = 2,
 }
 
-interface Cell {
+export interface Cell {
   type: CellType;
 }
 
-interface BlankCell extends Cell {
+export interface BlankCell extends Cell {
   type: CellType.Blank;
 }
 
-interface HintCell extends Cell {
+export interface HintCell extends Cell {
   type: CellType.Hint;
-  hintHorizontal: number;
-  hintVertical: number;
+  hintHorizontal?: number;
+  hintVertical?: number;
 }
 
-interface NumberCell extends Cell {
+export interface NumberCell extends Cell {
   type: CellType.Number;
   pencilMarks: boolean[];
   guess: number;
   solution: number;
 }
 
-interface Row {
+export interface Row {
   cells: Cell[];
 }
 
 export interface IGameData {
   name: string;
   level: Difficulty;
-  grid: Row[];
+  rows: Row[];
 }

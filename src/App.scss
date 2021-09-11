@@ -1,0 +1,46 @@
+.content {
+  display: flex;
+  flex-flow: row wrap;
+  height: 90vh;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* We tell all items to be 100% width, via flex-basis */
+.content > * {
+  flex: 1 100%;
+  padding: 10px;
+}
+
+/* Medium screens */
+@media all and (min-width: 600px) {
+  /* We tell both sidebars to share a row */
+  .controls {
+    flex: 1 0 0;
+  }
+}
+
+/* Large screens */
+@media all and (min-width: 800px) {
+  /* We invert order of first sidebar and main
+   * And tell the main element to take twice as much width as the other two sidebars
+   */
+  .main {
+    flex: 3 0px;
+  }
+  .main {
+    order: 1;
+  }
+  .controls {
+    order: 2;
+  }
+  .footer {
+    order: 3;
+  }
+}
+
+.header {
+  background-color: #282c34;
+  color: white;
+  font-size: calc(10px + 2vmin);
+}
