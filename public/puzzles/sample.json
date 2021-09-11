@@ -1,0 +1,118 @@
+{
+  "name": "Sample Easy",
+  "level": 0,
+  "grid": {
+    "rows": [
+      {
+        "cells": [
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          }
+        ]
+      },
+      {
+        "cells": [
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          }
+        ]
+      },
+      {
+        "cells": [
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          }
+        ]
+      },
+      {
+        "cells": [
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          }
+        ]
+      },
+      {
+        "cells": [
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          },
+          {
+            "type": "Blank"
+          }
+        ]
+      }
+    ]
+  }
+}
