@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import GuessButton from './GuessButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
-import { setGuess } from '../store/gameSlice';
+import { autoPencil, setGuess } from '../store/gameSlice';
 
 /*
  * Here be number buttons for guesses and pencil marks
@@ -18,6 +18,10 @@ const Controls: React.FC = () => {
     if (selectedIndex) {
       dispatch(setGuess({ index: selectedIndex, guess: -1 }));
     }
+  };
+
+  const handleAutoPencil = (event: React.MouseEvent) => {
+    dispatch(autoPencil());
   };
 
   const renderButton = (digit: number) => {
@@ -35,6 +39,12 @@ const Controls: React.FC = () => {
           className={classnames('button', 'is-warning', 'is-large')}
           onClick={handleDeleteClick}>
           X
+        </button>
+
+        <button
+          className={classnames('button is-large')}
+          onClick={handleAutoPencil}>
+          Auto Pencil
         </button>
       </div>
 

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk } from './store';
 import axios from 'axios';
+import makeCombinations, { ICombinations } from '../helpers/makeCombinations';
 
 /* Types */
 export enum Difficulty {
@@ -52,6 +53,7 @@ export interface IGuess {
 /* State */
 type GameSliceState = {
   game?: IGameData;
+  combinations?: ICombinations;
   selectedIndex?: number;
 };
 
@@ -63,6 +65,9 @@ export const gameSlice = createSlice({
   reducers: {
     fetchGameSuccess(state, action: PayloadAction<IGameData>) {
       state.game = action.payload;
+    },
+    fetchCombinations(state, action: PayloadAction) {
+      state.combinations = makeCombinations();
     },
     setSelectedIndex(state, action: PayloadAction<number>) {
       state.selectedIndex = action.payload;
@@ -76,10 +81,13 @@ export const gameSlice = createSlice({
         state.game = newGame;
       }
     },
+    autoPencil(state, action: PayloadAction) {
+      console.log('autoPencil Not Implemented Yet!');
+    },
   },
 });
 
-export const { fetchGameSuccess, setSelectedIndex, setGuess } =
+export const { fetchGameSuccess, fetchCombinations, setSelectedIndex, setGuess, autoPencil } =
   gameSlice.actions;
 
 export default gameSlice.reducer;
