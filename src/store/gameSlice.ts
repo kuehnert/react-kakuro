@@ -123,7 +123,7 @@ export default gameSlice.reducer;
 export const fetchGame = (): AppThunk => async (dispatch: any) => {
   let game;
   try {
-    const response = await axios.get('/puzzles/sample.json', {
+    const response = await axios.get('puzzles/sample.json', {
       headers: { 'Access-Control-Allow-Origin': '*' },
     });
     game = response.data;
