@@ -1,15 +1,3 @@
-.gamecell {
-  // background: rgba(0,0,0,0.1);
-  border: 2px lightgray solid;
-  position: relative;
-  aspect-ratio: 1;
-}
-
-/* Blank Cells */
-.blank {
-  background-color: black;
-}
-
 /* Hint Cells */
 /* Solution for X from https://stackoverflow.com/questions/18012420/draw-diagonal-lines-in-div-background-with-css */
 .hint {
@@ -35,18 +23,4 @@
   position: absolute;
   top: 5%;
   right: 5%;
-}
-
-/* Number Cells */
-.number {
-  background-color: white;
-  color: black;
-}
-
-.guess {
-  font-size: calc(10px + 10vmin);
-  align-content: center;
-  // position: absolute;
-  // top: 50%;
-  // left: 50%;
 }

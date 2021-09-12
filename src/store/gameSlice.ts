@@ -44,9 +44,15 @@ export interface IGameData {
   cells: ICell[];
 }
 
+export interface IGuess {
+  index: number;
+  guess: number;
+}
+
 /* State */
 type GameSliceState = {
   game?: IGameData;
+  selectedIndex?: number;
 };
 
 const initialState: GameSliceState = {};
@@ -58,10 +64,23 @@ export const gameSlice = createSlice({
     fetchGameSuccess(state, action: PayloadAction<IGameData>) {
       state.game = action.payload;
     },
+    setSelectedIndex(state, action: PayloadAction<number>) {
+      state.selectedIndex = action.payload;
+    },
+    setGuess(state, action: PayloadAction<IGuess>) {
+      const { index, guess } = action.payload;
+      const newGame: IGameData = JSON.parse(JSON.stringify(state.game));
+      const currentCell: INumberCell = newGame.cells[index] as INumberCell;
+      if (currentCell.type === CellType.Number) {
+        currentCell.guess = guess;
+        state.game = newGame;
+      }
+    },
   },
 });
 
-export const { fetchGameSuccess } = gameSlice.actions;
+export const { fetchGameSuccess, setSelectedIndex, setGuess } =
+  gameSlice.actions;
 
 export default gameSlice.reducer;
 

@@ -1,0 +1,11 @@
+.gamecell {
+  // background: rgba(0,0,0,0.1);
+  border: 2px lightgray solid;
+  position: relative;
+  aspect-ratio: 1;
+}
+
+.selected {
+  border: 4px lightblue solid;
+  background-color: aliceblue;
+}

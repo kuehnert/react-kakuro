@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import classnames from 'classnames';
 import React from 'react';
+import { IBlankCell } from '../store/gameSlice';
 import styles from './BlankCell.module.scss';
-import { fetchGame, IBlankCell, IHintCell, INumberCell } from '../store/gameSlice';
 
 export interface Props {
   cell: IBlankCell;
@@ -10,7 +10,7 @@ export interface Props {
 }
 
 const BlankCell: React.FC<Props> = ({ cell, index }) => {
-  return <div className={classnames(styles.gamecell, styles.blank)}></div>;
+  return <div className={classnames('gamecell', styles.blank)}></div>;
 };
 
 export default BlankCell;
