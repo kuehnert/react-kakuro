@@ -1,129 +1,109 @@
 {
   "name": "Sample Easy",
   "level": 0,
-  "rows": [
+  "cells": [
     {
-      "cells": [
-        {
-          "type": 0
-        },
-        {
-          "type": 1,
-          "hintVertical": 4
-        },
-        {
-          "type": 1,
-          "hintVertical": 9
-        },
-        {
-          "type": 0
-        },
-        {
-          "type": 0
-        }
-      ]
+      "type": 0
     },
     {
-      "cells": [
-        {
-          "type": 1,
-          "hintHorizontal": 3
-        },
-        {
-          "type": 2,
-          "guess": 1,
-          "solution": 1
-        },
-        {
-          "type": 2,
-          "guess": "",
-          "solution": 2
-        },
-        {
-          "type": 1,
-          "hintVertical": 24
-        },
-        {
-          "type": 0
-        }
-      ]
+      "type": 1,
+      "hintVertical": 4
     },
     {
-      "cells": [
-        {
-          "type": 1,
-          "hintHorizontal": 17
-        },
-        {
-          "type": 2,
-          "guess": "",
-          "solution": 2
-        },
-        {
-          "type": 2,
-          "guess": "",
-          "solution": 2
-        },
-        {
-          "type": 2,
-          "guess": "",
-          "solution": 2
-        },
-        {
-          "type": 1,
-          "hintVertical": 17
-        }
-      ]
+      "type": 1,
+      "hintVertical": 9
     },
     {
-      "cells": [
-        {
-          "type": 0
-        },
-        {
-          "type": 1,
-          "hintHorizontal": 18
-        },
-        {
-          "type": 2,
-          "guess": "",
-          "solution": 2
-        },
-        {
-          "type": 2,
-          "guess": "",
-          "solution": 2
-        },
-        {
-          "type": 2,
-          "guess": "",
-          "solution": 2
-        }
-      ]
+      "type": 0
     },
     {
-      "cells": [
-        {
-          "type": 0
-        },
-        {
-          "type": 0
-        },
-        {
-          "type": 1,
-          "hintHorizontal": 16
-        },
-        {
-          "type": 2,
-          "guess": "",
-          "solution": 2
-        },
-        {
-          "type": 2,
-          "guess": "",
-          "solution": 2
-        }
-      ]
+      "type": 0
+    },
+    {
+      "type": 1,
+      "hintHorizontal": 3
+    },
+    {
+      "type": 2,
+      "guess": 1,
+      "solution": 1
+    },
+    {
+      "type": 2,
+      "guess": "",
+      "solution": 2
+    },
+    {
+      "type": 1,
+      "hintVertical": 24
+    },
+    {
+      "type": 0
+    },
+    {
+      "type": 1,
+      "hintHorizontal": 17
+    },
+    {
+      "type": 2,
+      "guess": "",
+      "solution": 2
+    },
+    {
+      "type": 2,
+      "guess": "",
+      "solution": 2
+    },
+    {
+      "type": 2,
+      "guess": "",
+      "solution": 2
+    },
+    {
+      "type": 1,
+      "hintVertical": 17
+    },
+    {
+      "type": 0
+    },
+    {
+      "type": 1,
+      "hintHorizontal": 18
+    },
+    {
+      "type": 2,
+      "guess": "",
+      "solution": 2
+    },
+    {
+      "type": 2,
+      "guess": "",
+      "solution": 2
+    },
+    {
+      "type": 2,
+      "guess": "",
+      "solution": 2
+    },
+    {
+      "type": 0
+    },
+    {
+      "type": 0
+    },
+    {
+      "type": 1,
+      "hintHorizontal": 16
+    },
+    {
+      "type": 2,
+      "guess": "",
+      "solution": 2
+    },
+    {
+      "type": 2,
+      "guess": "",
+      "solution": 2
     }
   ]
 }

@@ -1,45 +1,58 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
-import { IGameData, Row } from '../data/GameData';
-import loadGame from '../data/loadGame';
-import styles from './GameGrid.module.scss';
 import classnames from 'classnames';
-import GameCell from './GameCell';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  CellType,
+  fetchGame,
+  IBlankCell,
+  ICell,
+  IHintCell,
+  INumberCell,
+} from '../store/gameSlice';
+import { RootState } from '../store/store';
+import styles from './GameGrid.module.scss';
+import BlankCell from './BlankCell';
+import HintCell from './HintCell';
+import NumberCell from './NumberCell';
 
 const GameGrid: React.FC = () => {
-  const [game, setGame] = useState<IGameData | null>(null);
+  const game = useSelector((state: RootState) => state.game.game);
+  const dispatch = useDispatch();
 
-  const renderRow = (row: Row, i: number) => {
-    return (
-      <React.Fragment key={i}>
-        {row.cells.map((cell, i) => (
-          <GameCell cell={cell} key={i} />
-        ))}
-      </React.Fragment>
-    );
+  const renderCell = (cell: ICell, index: number) => {
+    if (cell.type === CellType.Blank) {
+      return <BlankCell cell={cell as IBlankCell} index={index} />;
+    } else if (cell.type === CellType.Hint) {
+      return <HintCell cell={cell as IHintCell} index={index} />;
+    } else {
+      // type == Number
+      return <NumberCell cell={cell as INumberCell} index={index} />;
+    }
   };
 
   const renderGrid = () => {
+    if (!game) {
+      return;
+    }
+
     return (
-      <div className={styles.grid}>{game!.rows.map((row, i) => renderRow(row, i))}</div>
+      <div className={styles.grid}>
+        {game.cells.map((cell, i) => renderCell(cell, i))}
+      </div>
     );
   };
 
   useEffect(() => {
-    async function load() {
-      const newGame = await loadGame();
-      setGame(newGame);
-    }
-
     if (game == null) {
-      load();
+      dispatch(fetchGame());
     }
   }, []);
 
   return (
     <article className={classnames('main', styles.gamegrid)}>
       <p>GameGrid</p>
-      {game != null && renderGrid()}
+      {renderGrid()}
     </article>
   );
 };
