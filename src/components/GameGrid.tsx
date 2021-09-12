@@ -10,15 +10,15 @@ import {
   ICell,
   IHintCell,
   INumberCell,
-  setGuess,
+  setGuess
 } from '../store/gameSlice';
 import { RootState } from '../store/store';
-import styles from './GameGrid.module.scss';
 import BlankCell from './BlankCell';
-import HintCell from './HintCell';
-import CombinationLine from './CombinationLine';
-import NumberCell from './NumberCell';
 import './Cell.scss';
+import CombinationLine from './CombinationLine';
+import styles from './GameGrid.module.scss';
+import HintCell from './HintCell';
+import NumberCell from './NumberCell';
 
 const GameGrid: React.FC = () => {
   const { combinations, game, selectedIndex, sumHorizontal, countHorizontal } =
