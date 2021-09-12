@@ -42,6 +42,7 @@ export interface INumberCell extends ICell {
 export interface IGameData {
   name: string;
   level: Difficulty;
+  columnCount: number;
   cells: ICell[];
 }
 
@@ -55,6 +56,9 @@ type GameSliceState = {
   game?: IGameData;
   combinations?: ICombinations;
   selectedIndex?: number;
+  hintHorizontal?: number;
+  sumHorizontal?: number;
+  countHorizontal?: number;
 };
 
 const initialState: GameSliceState = {};
@@ -70,7 +74,26 @@ export const gameSlice = createSlice({
       state.combinations = makeCombinations();
     },
     setSelectedIndex(state, action: PayloadAction<number>) {
-      state.selectedIndex = action.payload;
+      let currentIndex = action.payload;
+      state.selectedIndex = currentIndex;
+
+      // Find corresponding hint cell horizontally
+      while (state.game?.cells[currentIndex].type === CellType.Number) {
+        currentIndex--;
+      }
+
+      state.hintHorizontal = currentIndex;
+      state.sumHorizontal = (
+        state.game?.cells[currentIndex] as IHintCell
+      ).hintHorizontal;
+
+      // Find count of cells for this hint
+      currentIndex = action.payload;
+      while ((currentIndex+1) % state.game!.columnCount !== 0 && state.game?.cells[currentIndex + 1].type === CellType.Number) {
+        currentIndex++;
+      }
+
+      state.countHorizontal = currentIndex - state.hintHorizontal;
     },
     setGuess(state, action: PayloadAction<IGuess>) {
       const { index, guess } = action.payload;
@@ -87,8 +110,13 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { fetchGameSuccess, fetchCombinations, setSelectedIndex, setGuess, autoPencil } =
-  gameSlice.actions;
+export const {
+  fetchGameSuccess,
+  fetchCombinations,
+  setSelectedIndex,
+  setGuess,
+  autoPencil,
+} = gameSlice.actions;
 
 export default gameSlice.reducer;
 

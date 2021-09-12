@@ -16,13 +16,13 @@ import { RootState } from '../store/store';
 import styles from './GameGrid.module.scss';
 import BlankCell from './BlankCell';
 import HintCell from './HintCell';
+import CombinationLine from './CombinationLine';
 import NumberCell from './NumberCell';
 import './Cell.scss';
 
 const GameGrid: React.FC = () => {
-  const { combinations, game, selectedIndex } = useSelector(
-    (state: RootState) => state.game
-  );
+  const { combinations, game, selectedIndex, sumHorizontal, countHorizontal } =
+    useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
   const handleKeyPress = (event: any) => {
@@ -80,9 +80,7 @@ const GameGrid: React.FC = () => {
       onKeyDown={handleKeyPress}
       tabIndex={-1}>
       {renderGrid()}
-      <div className="combinations">
-        {combinations && JSON.stringify(combinations["9"], null, 4)}
-      </div>
+      <CombinationLine />
     </article>
   );
 };

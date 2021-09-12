@@ -1,6 +1,7 @@
 {
   "name": "Sample Easy",
   "level": 0,
+  "columnCount": 5,
   "cells": [
     {
       "type": 0
