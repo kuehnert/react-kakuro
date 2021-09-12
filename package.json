@@ -1,7 +1,7 @@
 {
   "name": "kakuro",
   "version": "0.1.0",
-  "homepage": "https://kuehnert.github.io/kakuro",
+  "homepage": "https://kuehnert.github.io/react-kakuro",
   "private": false,
   "dependencies": {
     "@reduxjs/toolkit": "1.6.1",
