@@ -2,7 +2,8 @@
 /* Solution for X from https://stackoverflow.com/questions/18012420/draw-diagonal-lines-in-div-background-with-css */
 .hint {
   color: white;
-  font-size: calc(10px + 5vmin);
+  // font-size: calc(10px + 5vmin);
+  font-size: 1.5rem;
   font-weight: normal;
   background-color: black;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' preserveAspectRatio='none' viewBox='0 0 100 100'><line x1='0' y1='0' x2='100' y2='100' stroke='lightgray' stroke-width='2' vector-effect='non-scaling-stroke'/></svg>");

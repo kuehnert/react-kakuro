@@ -1,6 +1,9 @@
-.gamegrid {
-  height: 100%;
-  background-color: #fadecb;
+.gameBackground {
+  align-self: center;
+  flex-grow: 1;
+
+  display: flex;
+  justify-content: center;
 }
 
 .grid {
@@ -9,16 +12,3 @@
   grid-template-rows: repeat(5, 1fr);
   grid-gap: 0px;
 }
-
-// .grid::before {
-//   content: '';
-//   width: 0;
-//   padding-bottom: 100%;
-//   grid-row: 1 / 1;
-//   grid-column: 1 / 1;
-// }
-
-// .grid > *:first-child {
-//   grid-row: 1 / 1;
-//   grid-column: 1 / 1;
-// }

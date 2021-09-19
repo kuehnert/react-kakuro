@@ -8,14 +8,14 @@ import store from './store/store';
 const App: React.FC = () => {
   return (
     <Provider store={store}>
-      <div className='content'>
-        <header className='header'>Mister K.ʼs Kakuro</header>
+      <header className='header'>Mister K.ʼs Kakuro</header>
 
+      <div className='content'>
         <GameGrid />
         <Controls />
-
-        <div className='footer'>Made by Mister K.</div>
       </div>
+
+      <div className='footer'>Copyright 2021</div>
     </Provider>
   );
 };

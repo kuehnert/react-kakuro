@@ -10,7 +10,7 @@ import {
   ICell,
   IHintCell,
   INumberCell,
-  setGuess
+  setGuess,
 } from '../store/gameSlice';
 import { RootState } from '../store/store';
 import BlankCell from './BlankCell';
@@ -75,13 +75,12 @@ const GameGrid: React.FC = () => {
   }, []);
 
   return (
-    <article
-      className={classnames('main', styles.gamegrid)}
-      onKeyDown={handleKeyPress}
-      tabIndex={-1}>
-      {renderGrid()}
-      <CombinationLine />
-    </article>
+    <div className={classnames('main', styles.gameBackground)}>
+      <div className={styles.gamegrid} onKeyDown={handleKeyPress} tabIndex={-1}>
+        {renderGrid()}
+        <CombinationLine />
+      </div>
+    </div>
   );
 };
 
