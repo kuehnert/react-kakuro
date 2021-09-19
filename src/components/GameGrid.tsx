@@ -10,18 +10,17 @@ import {
   ICell,
   IHintCell,
   INumberCell,
-  setGuess,
+  setGuess
 } from '../store/gameSlice';
 import { RootState } from '../store/store';
 import BlankCell from './BlankCell';
 import './Cell.scss';
-import CombinationLine from './CombinationLine';
 import styles from './GameGrid.module.scss';
 import HintCell from './HintCell';
 import NumberCell from './NumberCell';
 
 const GameGrid: React.FC = () => {
-  const { combinations, game, selectedIndex, sumHorizontal, countHorizontal } =
+  const { combinations, game, selectedIndex } =
     useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
@@ -78,7 +77,6 @@ const GameGrid: React.FC = () => {
     <div className={classnames('main', styles.gameBackground)}>
       <div className={styles.gamegrid} onKeyDown={handleKeyPress} tabIndex={-1}>
         {renderGrid()}
-        <CombinationLine />
       </div>
     </div>
   );

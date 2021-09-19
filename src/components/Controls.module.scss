@@ -2,3 +2,8 @@
   background-color: #C6B0A1;
   width: 300px;
 }
+
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}

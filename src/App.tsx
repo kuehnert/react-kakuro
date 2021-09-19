@@ -4,6 +4,7 @@ import GameGrid from './components/GameGrid';
 import Controls from './components/Controls';
 import './App.scss';
 import store from './store/store';
+import CombinationLine from 'components/CombinationLine';
 
 const App: React.FC = () => {
   return (
@@ -15,7 +16,7 @@ const App: React.FC = () => {
         <Controls />
       </div>
 
-      <div className='footer'>Copyright 2021</div>
+      <CombinationLine />
     </Provider>
   );
 };

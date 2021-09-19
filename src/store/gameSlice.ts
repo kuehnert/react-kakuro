@@ -51,17 +51,26 @@ export interface IGuess {
   guess: number;
 }
 
+interface HintValues {
+  index: number;
+  sum: number;
+  count: number;
+}
+
 /* State */
 type GameSliceState = {
   game?: IGameData;
   combinations?: ICombinations;
   selectedIndex?: number;
-  hintHorizontal?: number;
-  sumHorizontal?: number;
-  countHorizontal?: number;
+  hints: HintValues[];
 };
 
-const initialState: GameSliceState = {};
+const initialState: GameSliceState = {
+  hints: [
+    { index: -1, sum: -1, count: -1 },
+    { index: -1, sum: -1, count: -1 },
+  ],
+};
 
 export const gameSlice = createSlice({
   name: 'game',
@@ -82,18 +91,44 @@ export const gameSlice = createSlice({
         currentIndex--;
       }
 
-      state.hintHorizontal = currentIndex;
-      state.sumHorizontal = (
-        state.game?.cells[currentIndex] as IHintCell
-      ).hintHorizontal;
+      state.hints[0].index = currentIndex;
+      state.hints[0].sum =
+        (state.game!.cells[currentIndex] as IHintCell).hintHorizontal! || -1;
 
       // Find count of cells for this hint
       currentIndex = action.payload;
-      while ((currentIndex+1) % state.game!.columnCount !== 0 && state.game?.cells[currentIndex + 1].type === CellType.Number) {
+      while (
+        (currentIndex + 1) % state.game!.columnCount !== 0 &&
+        state.game?.cells[currentIndex + 1].type === CellType.Number
+      ) {
         currentIndex++;
       }
 
-      state.countHorizontal = currentIndex - state.hintHorizontal;
+      state.hints[0].count = currentIndex - state.hints[0].index;
+
+      // Find corresponding hint cell vertically
+      currentIndex = action.payload;
+      while (state.game?.cells[currentIndex].type === CellType.Number) {
+        currentIndex -= state.game!.columnCount;
+      }
+
+      state.hints[1].index = currentIndex;
+      state.hints[1].sum =
+        (state.game!.cells[currentIndex] as IHintCell).hintVertical! || -1;
+
+      // Find count of cells for this hint
+      currentIndex = action.payload;
+      let nextRow = currentIndex + state.game!.columnCount;
+      while (
+        nextRow < state.game!.cells.length &&
+        state.game!.cells[nextRow].type === CellType.Number
+      ) {
+        currentIndex = nextRow;
+        nextRow = currentIndex + state.game!.columnCount;
+      }
+
+      const count = (currentIndex - state.hints[1].index) / state.game!.columnCount;
+      state.hints[1].count = count;
     },
     setGuess(state, action: PayloadAction<IGuess>) {
       const { index, guess } = action.payload;
