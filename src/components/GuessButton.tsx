@@ -1,11 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import classnames from 'classnames';
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { RootState } from '../store/store';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setGuess } from '../store/gameSlice';
-// import styles from './BlankCell.module.scss';
+import { RootState } from '../store/store';
+import styles from './GuessButton.module.scss';
 
 export interface Props {
   digit: number;
@@ -22,13 +20,9 @@ const GuessButton: React.FC<Props> = ({ digit }) => {
   };
 
   return (
-    <div className='column is-4'>
-      <button
-        className={classnames('button', 'is-info', 'is-large')}
-        onClick={handleGuessClick}>
-        {digit}
-      </button>
-    </div>
+    <button className={styles.guessButton} onClick={handleGuessClick}>
+      {digit}
+    </button>
   );
 };
 

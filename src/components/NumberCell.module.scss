@@ -5,13 +5,10 @@
 }
 
 .guess {
-  font-size: calc(8rem);
-  font-weight: bold;
+  font-size: 4rem;
+  font-weight: normal;
   align-content: center;
+  overflow: hidden;
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  // position: absolute;
-  // top: 50%;
-  // left: 50%;
 }

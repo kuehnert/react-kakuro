@@ -30,8 +30,8 @@ const Controls: React.FC = () => {
 
   return (
     <aside className={classnames('controls', styles.controls)}>
-      <div className='guesses'>
-        <div className='columns is-1 is-multiline'>
+      <div className={styles.guessButtons}>
+        <div className={styles.columns}>
           {digits.map(d => renderButton(d))}
         </div>
 

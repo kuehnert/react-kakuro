@@ -4,18 +4,19 @@ import GameGrid from './components/GameGrid';
 import Controls from './components/Controls';
 import './App.scss';
 import store from './store/store';
+import CombinationLine from 'components/CombinationLine';
 
 const App: React.FC = () => {
   return (
     <Provider store={store}>
-      <div className='content'>
-        <header className='header'>Mister K.ʼs Kakuro</header>
+      <header className='header'>Mister K.ʼs Kakuro</header>
 
+      <div className='content'>
         <GameGrid />
         <Controls />
-
-        <div className='footer'>Made by Mister K.</div>
       </div>
+
+      <CombinationLine />
     </Provider>
   );
 };
