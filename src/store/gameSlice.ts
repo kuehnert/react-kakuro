@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import getHints from 'helpers/getHints';
-import makePencilmarks from 'helpers/makePencilmarks';
+import makePencilmarks, { makePencilmarksForCell } from 'helpers/makePencilmarks';
 import makeCombinations, { ICombinations } from '../helpers/makeCombinations';
 import { AppThunk } from './store';
 
@@ -95,12 +95,27 @@ export const gameSlice = createSlice({
       const newGame: IGameData = JSON.parse(JSON.stringify(state.game));
       const currentCell: INumberCell = newGame.cells[index] as INumberCell;
       if (currentCell.type === CellType.Number) {
-        currentCell.guess = +guess;
+        currentCell.guess = guess;
+        if (guess === 0) {
+          // currentCell.pencilMarks = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+          makePencilmarksForCell(currentCell, index, newGame, state.combinations!);
+        }
         state.game = newGame;
       }
       state.hints = getHints(state.game!, index);
     },
     autoPencil(state, action: PayloadAction) {
+      // set guesses where there is only one pencil mark option
+      state.game!.cells.forEach(c => {
+        if (c.type === CellType.Number) {
+          const cell = c as INumberCell;
+          if (cell.pencilMarks?.length === 1) {
+            cell.guess = cell.pencilMarks[0];
+          }
+        }
+      });
+
+      // calculate pencil marks
       makePencilmarks(state.game!, state.combinations!);
     },
   },

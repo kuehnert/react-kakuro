@@ -10,8 +10,6 @@ export default function getCombinations(
   hints: IHintValues,
   combinations: ICombinations
 ) {
-  // const { combinations } = useSelector((state: RootState) => state.game);
-  // let combs = JSON.parse(JSON.stringify(combinations[hints.count][hints.sum]));
   let combs = combinations[hints.count][hints.sum];
 
   // only select those combinations which contain every used digit

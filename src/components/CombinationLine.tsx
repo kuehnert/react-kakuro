@@ -34,17 +34,22 @@ const CombinationLine: React.FC = () => {
 
   const renderLine = (direction: number) => (
     <div className=''>
-      <span>{hints[direction].sum}:</span>
+      <span className={styles.sum}>{hints[direction].sum}:</span>
       {renderPossibilities(possibilities[direction], direction)}
     </div>
   );
 
-  const possibilities = [getCombinations(hints[0], combinations!), getCombinations(hints[1], combinations!)];
+  const possibilities = [
+    getCombinations(hints[0], combinations!),
+    getCombinations(hints[1], combinations!),
+  ];
 
   return (
     <div className={styles.combinations}>
-      {renderLine(0)}
-      {renderLine(1)}
+      <div className={styles.text}>
+        {renderLine(0)}
+        {renderLine(1)}
+      </div>
     </div>
   );
 };

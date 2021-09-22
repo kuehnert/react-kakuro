@@ -1,8 +1,24 @@
 .combinations {
   background-color: #282c34;
-  color: white;
   padding: 10px;
   font-size: 1.5rem;
+  display: flex;
+  align-content: center;
+}
+
+.text {
+  margin: auto;
+  color: white;
+  padding: 4px;
+  font-size: 1.5rem;
+  text-align: left;
+}
+
+.sum {
+  display: inline-block;
+  color: #5f5;
+  width: 3rem;
+  text-align: right;
 }
 
 .possibility {
