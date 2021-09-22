@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppThunk } from './store';
 import axios from 'axios';
-import makeCombinations, { ICombinations } from '../helpers/makeCombinations';
+import getHints from 'helpers/getHints';
 import makePencilmarks from 'helpers/makePencilmarks';
-import findCombinations from 'helpers/findCombinations';
+import makeCombinations, { ICombinations } from '../helpers/makeCombinations';
+import { AppThunk } from './store';
 
 /* Types */
 export enum Difficulty {
@@ -53,10 +53,11 @@ export interface IGuess {
   guess: number;
 }
 
-interface HintValues {
+export interface IHintValues {
   index: number;
   sum: number;
   count: number;
+  used: number[];
 }
 
 /* State */
@@ -64,13 +65,13 @@ type GameSliceState = {
   game?: IGameData;
   combinations?: ICombinations;
   selectedIndex?: number;
-  hints: HintValues[];
+  hints: IHintValues[];
 };
 
 const initialState: GameSliceState = {
   hints: [
-    { index: -1, sum: -1, count: -1 },
-    { index: -1, sum: -1, count: -1 },
+    { index: -1, sum: -1, count: -1, used: new Array<number>() },
+    { index: -1, sum: -1, count: -1, used: new Array<number>() },
   ],
 };
 
@@ -87,7 +88,7 @@ export const gameSlice = createSlice({
     setSelectedIndex(state, action: PayloadAction<number>) {
       let currentIndex = action.payload;
       state.selectedIndex = currentIndex;
-      state.hints = findCombinations(state.game!, currentIndex);
+      state.hints = getHints(state.game!, currentIndex);
     },
     setGuess(state, action: PayloadAction<IGuess>) {
       const { index, guess } = action.payload;
@@ -97,6 +98,7 @@ export const gameSlice = createSlice({
         currentCell.guess = +guess;
         state.game = newGame;
       }
+      state.hints = getHints(state.game!, index);
     },
     autoPencil(state, action: PayloadAction) {
       makePencilmarks(state.game!, state.combinations!);

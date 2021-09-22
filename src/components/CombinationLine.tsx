@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import getCombinations from 'helpers/getCombinations';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
@@ -7,35 +8,43 @@ import styles from './CombinationLine.module.scss';
 const CombinationLine: React.FC = () => {
   const { combinations, hints } = useSelector((state: RootState) => state.game);
 
-  const renderPossibility = (a: number[]) => {
+  const renderDigit = (d: number, direction: number) => {
+    if (hints[direction].used.includes(d)) {
+      return <span className={styles.highlight}>{d}</span>;
+    } else {
+      return <span>{d}</span>;
+    }
+  };
+
+  const renderPossibility = (a: number[], direction: number) => {
     return (
       <span className={styles.possibility} key={a.join('')}>
-        {a.join('')}
+        {a.map(d => renderDigit(d, direction))}
       </span>
     );
   };
 
-  const renderPossibilities = (a: number[][]) => {
-    return <span>{a.map(b => renderPossibility(b))}</span>;
+  const renderPossibilities = (a: number[][], direction: number) => {
+    return <span>{a.map(b => renderPossibility(b, direction))}</span>;
   };
 
   if (hints[0].index === -1) {
     return null;
   }
 
-  const possibilitiesH = combinations![hints[0].count!][hints[0].sum!];
-  const possibilitiesV = combinations![hints[1].count!][hints[1].sum!];
+  const renderLine = (direction: number) => (
+    <div className=''>
+      <span>{hints[direction].sum}:</span>
+      {renderPossibilities(possibilities[direction], direction)}
+    </div>
+  );
+
+  const possibilities = [getCombinations(hints[0], combinations!), getCombinations(hints[1], combinations!)];
 
   return (
     <div className={styles.combinations}>
-      <div className=''>
-        <span>{hints[0].sum}:</span>
-        {renderPossibilities(possibilitiesH)}
-      </div>
-      <div className=''>
-        <span>{hints[1].sum}:</span>
-        {renderPossibilities(possibilitiesV)}
-      </div>
+      {renderLine(0)}
+      {renderLine(1)}
     </div>
   );
 };

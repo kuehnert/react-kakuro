@@ -33,7 +33,7 @@ const GameGrid: React.FC = () => {
     if (event.key >= '0' && event.key <= '9') {
       dispatch(setGuess({ index: selectedIndex, guess: +event.key }));
     } else if (event.key === 'Delete') {
-      dispatch(setGuess({ index: selectedIndex, guess: -1 }));
+      dispatch(setGuess({ index: selectedIndex, guess: 0 }));
     } else {
       console.log('Key pressed:', event.key);
     }

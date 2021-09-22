@@ -1,14 +1,18 @@
-import { CellType, IGameData, IHintCell } from 'store/gameSlice';
+import { CellType, IGameData, IHintCell, INumberCell } from 'store/gameSlice';
 
-export default function findCombinations(game: IGameData, index: number) {
+export default function getHints(game: IGameData, index: number) {
   const hints = [
-    { index: -1, sum: -1, count: -1 },
-    { index: -1, sum: -1, count: -1 },
+    { index: -1, sum: -1, count: -1, used: new Array<number>() },
+    { index: -1, sum: -1, count: -1, used: new Array<number>() },
   ];
   let hIndex = index;
 
   // Find corresponding hint cell horizontally
   while (game.cells[hIndex].type === CellType.Number) {
+    const cell = game.cells[hIndex] as INumberCell;
+    if (cell.guess > 0) {
+      hints[0].used.push(cell.guess);
+    }
     hIndex--;
   }
 
@@ -22,6 +26,10 @@ export default function findCombinations(game: IGameData, index: number) {
     game.cells[hIndex + 1].type === CellType.Number
   ) {
     hIndex++;
+    const cell = game.cells[hIndex] as INumberCell;
+    if (cell.guess > 0) {
+      hints[0].used.push(cell.guess);
+    }
   }
 
   hints[0].count = hIndex - hints[0].index;
@@ -29,6 +37,10 @@ export default function findCombinations(game: IGameData, index: number) {
   // Find corresponding hint cell vertically
   let vIndex = index;
   while (game.cells[vIndex].type === CellType.Number) {
+    const cell = game.cells[vIndex] as INumberCell;
+    if (cell.guess > 0) {
+      hints[1].used.push(cell.guess);
+    }
     vIndex -= game.columnCount;
   }
 
@@ -43,6 +55,10 @@ export default function findCombinations(game: IGameData, index: number) {
     game.cells[nextRow].type === CellType.Number
   ) {
     vIndex = nextRow;
+    const cell = game.cells[vIndex] as INumberCell;
+    if (cell.guess > 0) {
+      hints[1].used.push(cell.guess);
+    }
     nextRow = vIndex + game.columnCount;
   }
 

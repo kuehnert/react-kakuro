@@ -1,5 +1,5 @@
 import { CellType, IGameData, INumberCell } from 'store/gameSlice';
-import findCombinations from './findCombinations';
+import getHints from './getHints';
 import { ICombinations } from './makeCombinations';
 
 function makePencilmarks(game: IGameData, combinations: ICombinations) {
@@ -13,7 +13,10 @@ function makePencilmarks(game: IGameData, combinations: ICombinations) {
       return;
     }
 
-    const hints = findCombinations(game, index);
+    // Filter out impossible combinations
+    const hints = getHints(game, index);
+
+    // Get possible digits
     const hComb = Array.from(
       new Set(combinations[hints[0].count][hints[0].sum].flat())
     );
@@ -21,7 +24,11 @@ function makePencilmarks(game: IGameData, combinations: ICombinations) {
       new Set(combinations[hints[1].count][hints[1].sum].flat())
     );
 
-    const poss = hComb.filter(e => vComb.includes(e)).sort();
+    const used = [...hints[0].used, ...hints[1].used];
+    const poss = hComb
+      .filter(e => vComb.includes(e) && !used.includes(e))
+      .sort();
+
     nCell.pencilMarks = poss;
   });
 }
