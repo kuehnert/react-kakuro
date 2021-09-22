@@ -2,6 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk } from './store';
 import axios from 'axios';
 import makeCombinations, { ICombinations } from '../helpers/makeCombinations';
+import makePencilmarks from 'helpers/makePencilmarks';
+import findCombinations from 'helpers/findCombinations';
 
 /* Types */
 export enum Difficulty {
@@ -34,7 +36,7 @@ export interface IHintCell extends ICell {
 
 export interface INumberCell extends ICell {
   type: CellType.Number;
-  pencilMarks: boolean[];
+  pencilMarks: number[];
   guess: number;
   solution: number;
 }
@@ -85,62 +87,19 @@ export const gameSlice = createSlice({
     setSelectedIndex(state, action: PayloadAction<number>) {
       let currentIndex = action.payload;
       state.selectedIndex = currentIndex;
-
-      // Find corresponding hint cell horizontally
-      while (state.game?.cells[currentIndex].type === CellType.Number) {
-        currentIndex--;
-      }
-
-      state.hints[0].index = currentIndex;
-      state.hints[0].sum =
-        (state.game!.cells[currentIndex] as IHintCell).hintHorizontal! || -1;
-
-      // Find count of cells for this hint
-      currentIndex = action.payload;
-      while (
-        (currentIndex + 1) % state.game!.columnCount !== 0 &&
-        state.game?.cells[currentIndex + 1].type === CellType.Number
-      ) {
-        currentIndex++;
-      }
-
-      state.hints[0].count = currentIndex - state.hints[0].index;
-
-      // Find corresponding hint cell vertically
-      currentIndex = action.payload;
-      while (state.game?.cells[currentIndex].type === CellType.Number) {
-        currentIndex -= state.game!.columnCount;
-      }
-
-      state.hints[1].index = currentIndex;
-      state.hints[1].sum =
-        (state.game!.cells[currentIndex] as IHintCell).hintVertical! || -1;
-
-      // Find count of cells for this hint
-      currentIndex = action.payload;
-      let nextRow = currentIndex + state.game!.columnCount;
-      while (
-        nextRow < state.game!.cells.length &&
-        state.game!.cells[nextRow].type === CellType.Number
-      ) {
-        currentIndex = nextRow;
-        nextRow = currentIndex + state.game!.columnCount;
-      }
-
-      const count = (currentIndex - state.hints[1].index) / state.game!.columnCount;
-      state.hints[1].count = count;
+      state.hints = findCombinations(state.game!, currentIndex);
     },
     setGuess(state, action: PayloadAction<IGuess>) {
       const { index, guess } = action.payload;
       const newGame: IGameData = JSON.parse(JSON.stringify(state.game));
       const currentCell: INumberCell = newGame.cells[index] as INumberCell;
       if (currentCell.type === CellType.Number) {
-        currentCell.guess = guess;
+        currentCell.guess = +guess;
         state.game = newGame;
       }
     },
     autoPencil(state, action: PayloadAction) {
-      console.log('autoPencil Not Implemented Yet!');
+      makePencilmarks(state.game!, state.combinations!);
     },
   },
 });

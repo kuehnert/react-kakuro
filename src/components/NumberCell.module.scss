@@ -2,13 +2,14 @@
 .number {
   background-color: white;
   color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .guess {
   font-size: 4rem;
   font-weight: normal;
-  align-content: center;
-  overflow: hidden;
   margin: 0;
   padding: 0;
 }

@@ -16,7 +16,7 @@ const Controls: React.FC = () => {
 
   const handleDeleteClick = (event: React.MouseEvent) => {
     if (selectedIndex) {
-      dispatch(setGuess({ index: selectedIndex, guess: -1 }));
+      dispatch(setGuess({ index: selectedIndex, guess: 0 }));
     }
   };
 

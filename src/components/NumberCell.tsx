@@ -28,8 +28,11 @@ const NumberCell: React.FC<Props> = ({ cell, index }) => {
         selected: index === selectedIndex,
       })}
       onClick={handleClick}>
-      {cell.guess >= 0 && (
+      {cell.guess > 0 && (
         <div className={classnames(styles.guess)}>{cell.guess}</div>
+      )}
+      {!cell.guess && cell.pencilMarks?.length > 0 && (
+        <div className={classnames(styles.pencilMarks)}>{cell.pencilMarks.join('')}</div>
       )}
     </div>
   );
