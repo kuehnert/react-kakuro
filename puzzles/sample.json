@@ -26,12 +26,12 @@
     },
     {
       "type": 2,
-      "guess": 1,
+      "guess": 0,
       "solution": 1
     },
     {
       "type": 2,
-      "guess": "",
+      "guess": 0,
       "solution": 2
     },
     {
@@ -47,17 +47,17 @@
     },
     {
       "type": 2,
-      "guess": "",
+      "guess": 0,
       "solution": 2
     },
     {
       "type": 2,
-      "guess": "",
+      "guess": 0,
       "solution": 2
     },
     {
       "type": 2,
-      "guess": "",
+      "guess": 0,
       "solution": 2
     },
     {
@@ -73,17 +73,17 @@
     },
     {
       "type": 2,
-      "guess": "",
+      "guess": 0,
       "solution": 2
     },
     {
       "type": 2,
-      "guess": "",
+      "guess": 0,
       "solution": 2
     },
     {
       "type": 2,
-      "guess": "",
+      "guess": 0,
       "solution": 2
     },
     {
@@ -98,12 +98,12 @@
     },
     {
       "type": 2,
-      "guess": "",
+      "guess": 0,
       "solution": 2
     },
     {
       "type": 2,
-      "guess": "",
+      "guess": 0,
       "solution": 2
     }
   ]
