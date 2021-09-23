@@ -1,0 +1,58 @@
+.createGame {
+  background-color: white;
+  flex-grow: 1;
+}
+
+@media screen and (max-width: 640px) {
+  .createGame .p-steps {
+    height: 350px;
+  }
+  .createGame .p-steps > ul {
+    flex-direction: column;
+    height: 100%;
+  }
+  .createGame .p-steps > ul .p-steps-item {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .createGame .p-steps > ul .p-steps-item:before {
+    position: static;
+    left: auto;
+    top: auto;
+    margin-top: 0;
+    border-left: 1px solid var(--surface-d);
+    border-top: 0 none;
+    width: auto;
+    height: 100%;
+    margin-left: 1rem;
+  }
+  .createGame .p-steps > ul .p-steps-item .p-menuitem-link {
+    flex-direction: row;
+    overflow: visible;
+  }
+  .createGame .p-steps > ul .p-steps-item .p-menuitem-link .p-steps-title {
+    margin: 0 0.5rem 0;
+  }
+  .createGame .p-steps > ul .p-steps-item:last-child {
+    flex-grow: 0;
+  }
+  .createGame .p-steps > ul .p-steps-item:last-child .p-menuitem-link {
+    padding: 0;
+  }
+  .createGame .p-steps > ul .p-steps-item:last-child:before {
+    display: none;
+  }
+}
+
+.gameBackground {
+  align-self: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.grid {
+  display: grid;
+  grid-gap: 0px;
+}
