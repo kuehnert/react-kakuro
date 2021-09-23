@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setGuess } from '../store/gameSlice';
-import { RootState } from '../store/store';
+import { setGuess } from  '../../store/gameSlice';
+import { RootState } from '../../store/store';
 import styles from './GuessButton.module.scss';
 import { Button } from 'primereact/button';
 

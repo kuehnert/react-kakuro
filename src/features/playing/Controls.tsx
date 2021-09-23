@@ -3,8 +3,8 @@ import styles from './Controls.module.scss';
 import classnames from 'classnames';
 import GuessButton from './GuessButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store/store';
-import { autoPencil, setGuess } from '../store/gameSlice';
+import { RootState } from '../../store/store';
+import { autoPencil, setGuess } from '../../store/gameSlice';
 import { Button } from 'primereact/button';
 
 /*
