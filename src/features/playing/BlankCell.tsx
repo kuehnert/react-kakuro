@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import classnames from 'classnames';
 import React from 'react';
-import { IBlankCell } from '../store/gameSlice';
+import { IBlankCell } from '../../store/gameSlice';
 import styles from './BlankCell.module.scss';
 
 export interface Props {

@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux';
 import React from 'react';
-import GameGrid from './components/GameGrid';
+import GameGrid from './features/playing/GameGrid';
 import Controls from './components/Controls';
 import './App.scss';
 import store from './store/store';

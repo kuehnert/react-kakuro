@@ -5,6 +5,7 @@ import GuessButton from './GuessButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { autoPencil, setGuess } from '../store/gameSlice';
+import { Button } from 'primereact/button';
 
 /*
  * Here be number buttons for guesses and pencil marks
@@ -35,17 +36,17 @@ const Controls: React.FC = () => {
           {digits.map(d => renderButton(d))}
         </div>
 
-        <button
+        <Button
           className={classnames('button', 'is-warning', 'is-large')}
           onClick={handleDeleteClick}>
           X
-        </button>
+        </Button>
 
-        <button
+        <Button
           className={classnames('button is-large')}
           onClick={handleAutoPencil}>
           Auto Pencil
-        </button>
+        </Button>
       </div>
 
       <div className='pencilmarks'></div>

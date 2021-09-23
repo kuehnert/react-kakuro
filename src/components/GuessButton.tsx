@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setGuess } from '../store/gameSlice';
 import { RootState } from '../store/store';
 import styles from './GuessButton.module.scss';
+import { Button } from 'primereact/button';
 
 export interface Props {
   digit: number;
@@ -20,9 +21,9 @@ const GuessButton: React.FC<Props> = ({ digit }) => {
   };
 
   return (
-    <button className={styles.guessButton} onClick={handleGuessClick}>
+    <Button className={styles.guessButton} onClick={handleGuessClick}>
       {digit}
-    </button>
+    </Button>
   );
 };
 

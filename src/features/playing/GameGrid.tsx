@@ -11,8 +11,8 @@ import {
   IHintCell,
   INumberCell,
   setGuess
-} from '../store/gameSlice';
-import { RootState } from '../store/store';
+} from '../../store/gameSlice';
+import { RootState } from '../../store/store';
 import BlankCell from './BlankCell';
 import './Cell.scss';
 import styles from './GameGrid.module.scss';

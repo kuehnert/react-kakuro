@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import classnames from 'classnames';
 import React from 'react';
-import { IHintCell } from '../store/gameSlice';
+import { IHintCell } from '../../store/gameSlice';
 import styles from './HintCell.module.scss';
 
 export interface Props {

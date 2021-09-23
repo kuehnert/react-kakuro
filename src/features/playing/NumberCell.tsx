@@ -2,9 +2,9 @@
 import classnames from 'classnames';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { INumberCell, setSelectedIndex } from '../store/gameSlice';
+import { INumberCell, setSelectedIndex } from '../../store/gameSlice';
 import styles from './NumberCell.module.scss';
-import { RootState } from '../store/store';
+import { RootState } from '../../store/store';
 import { useSelector } from 'react-redux';
 
 export interface Props {
