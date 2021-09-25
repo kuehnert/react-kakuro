@@ -8,7 +8,7 @@ export default function getHints(game: IGameData, index: number) {
   let hIndex = index;
 
   // Find corresponding hint cell horizontally
-  while (game.cells[hIndex].type === CellType.Number) {
+  while (game.cells[hIndex].type === CellType.NumberCell) {
     const cell = game.cells[hIndex] as INumberCell;
     if (cell.guess > 0) {
       hints[0].used.push(cell.guess);
@@ -23,7 +23,7 @@ export default function getHints(game: IGameData, index: number) {
   hIndex = index;
   while (
     (hIndex + 1) % game.columnCount !== 0 &&
-    game.cells[hIndex + 1].type === CellType.Number
+    game.cells[hIndex + 1].type === CellType.NumberCell
   ) {
     hIndex++;
     const cell = game.cells[hIndex] as INumberCell;
@@ -36,7 +36,7 @@ export default function getHints(game: IGameData, index: number) {
 
   // Find corresponding hint cell vertically
   let vIndex = index;
-  while (game.cells[vIndex].type === CellType.Number) {
+  while (game.cells[vIndex].type === CellType.NumberCell) {
     const cell = game.cells[vIndex] as INumberCell;
     if (cell.guess > 0) {
       hints[1].used.push(cell.guess);
@@ -52,7 +52,7 @@ export default function getHints(game: IGameData, index: number) {
   let nextRow = vIndex + game.columnCount;
   while (
     nextRow < game.cells.length &&
-    game.cells[nextRow].type === CellType.Number
+    game.cells[nextRow].type === CellType.NumberCell
   ) {
     vIndex = nextRow;
     const cell = game.cells[vIndex] as INumberCell;

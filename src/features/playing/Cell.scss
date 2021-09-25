@@ -13,3 +13,16 @@ $selectedColor: rgb(200, 200, 0);
   border: 4px $selectedColor solid;
   background-color: lighten($selectedColor, 40%) !important;
 }
+
+.blankCell {
+  background-color: black;
+}
+
+.hintCell {
+  background-color: black;
+  color: white;
+}
+
+.numberCell {
+  background-color: white;
+}

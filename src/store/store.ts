@@ -1,8 +1,15 @@
-import { Action, combineReducers, configureStore, ThunkAction } from '@reduxjs/toolkit';
+import {
+  Action,
+  combineReducers,
+  configureStore,
+  ThunkAction,
+} from '@reduxjs/toolkit';
 import gameReducer from './gameSlice';
+import designReducer from './designSlice';
 
 export const rootReducer = combineReducers({
   game: gameReducer,
+  design: designReducer,
 });
 
 const store = configureStore({

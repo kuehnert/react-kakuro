@@ -15,9 +15,9 @@ export enum Difficulty {
 }
 
 export enum CellType {
-  Blank = 0,
-  Hint = 1,
-  Number = 2,
+  BlankCell = "blankCell",
+  HintCell = "hintCell",
+  NumberCell = "numberCell",
 }
 
 export interface ICell {
@@ -25,17 +25,17 @@ export interface ICell {
 }
 
 export interface IBlankCell extends ICell {
-  type: CellType.Blank;
+  type: CellType.BlankCell;
 }
 
 export interface IHintCell extends ICell {
-  type: CellType.Hint;
+  type: CellType.HintCell;
   hintHorizontal?: number;
   hintVertical?: number;
 }
 
 export interface INumberCell extends ICell {
-  type: CellType.Number;
+  type: CellType.NumberCell;
   pencilMarks: number[];
   guess: number;
   solution: number;
@@ -45,6 +45,7 @@ export interface IGameData {
   name: string;
   level: Difficulty;
   columnCount: number;
+  rowCount: number;
   cells: ICell[];
 }
 
@@ -94,10 +95,9 @@ export const gameSlice = createSlice({
       const { index, guess } = action.payload;
       const newGame: IGameData = JSON.parse(JSON.stringify(state.game));
       const currentCell: INumberCell = newGame.cells[index] as INumberCell;
-      if (currentCell.type === CellType.Number) {
+      if (currentCell.type === CellType.NumberCell) {
         currentCell.guess = guess;
         if (guess === 0) {
-          // currentCell.pencilMarks = [1, 2, 3, 4, 5, 6, 7, 8, 9];
           makePencilmarksForCell(currentCell, index, newGame, state.combinations!);
         }
         state.game = newGame;
@@ -107,7 +107,7 @@ export const gameSlice = createSlice({
     autoPencil(state, action: PayloadAction) {
       // set guesses where there is only one pencil mark option
       state.game!.cells.forEach(c => {
-        if (c.type === CellType.Number) {
+        if (c.type === CellType.NumberCell) {
           const cell = c as INumberCell;
           if (cell.pencilMarks?.length === 1) {
             cell.guess = cell.pencilMarks[0];

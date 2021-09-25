@@ -26,7 +26,7 @@ export function makePencilmarksForCell(nCell: INumberCell, index: number, game: 
 
 export function makePencilmarks(game: IGameData, combinations: ICombinations) {
   game.cells.forEach((cell, index) => {
-    if (cell.type === CellType.Number) {
+    if (cell.type === CellType.NumberCell) {
       makePencilmarksForCell(cell as INumberCell, index, game, combinations)
     }
   });

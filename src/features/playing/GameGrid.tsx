@@ -40,9 +40,9 @@ const GameGrid: React.FC = () => {
   };
 
   const renderCell = (cell: ICell, index: number) => {
-    if (cell.type === CellType.Blank) {
+    if (cell.type === CellType.BlankCell) {
       return <BlankCell cell={cell as IBlankCell} index={index} key={index} />;
-    } else if (cell.type === CellType.Hint) {
+    } else if (cell.type === CellType.HintCell) {
       return <HintCell cell={cell as IHintCell} index={index} key={index} />;
     } else {
       // type == Number

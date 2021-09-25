@@ -7,22 +7,22 @@ const game: IGameData = {
     {
       cells: [
         {
-          type: CellType.Blank,
+          type: CellType.BlankCell,
         },
         {
-          type: CellType.Blank,
+          type: CellType.BlankCell,
         },
         {
-          type: CellType.Blank,
+          type: CellType.BlankCell,
         },
         {
-          type: CellType.Blank,
+          type: CellType.BlankCell,
         },
         {
-          type: CellType.Blank,
+          type: CellType.BlankCell,
         },
         {
-          type: CellType.Blank,
+          type: CellType.BlankCell,
         },
       ],
     },
