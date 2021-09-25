@@ -14,7 +14,7 @@ body, #root {
   text-align: center;
   touch-action: none;
 
-  background: red;
+  background: #ddf;
   display: flex;
   flex-direction: column;
 }
@@ -30,4 +30,11 @@ body, #root {
   flex-grow: 1;
   display: flex;
   justify-content: center;
+}
+
+.p-panel {
+  margin-bottom: 16px;
+  margin-top: 16px;
+  margin-left: 16px;
+  margin-right: 16px;
 }

@@ -1,22 +1,26 @@
 .createGame {
-  background-color: white;
+  margin: 8px;
   flex-grow: 1;
 }
 
+.createSteps {
+  background-color: white;
+}
+
 @media screen and (max-width: 640px) {
-  .createGame .p-steps {
+  .createSteps .p-steps {
     height: 350px;
   }
-  .createGame .p-steps > ul {
+  .createSteps .p-steps > ul {
     flex-direction: column;
     height: 100%;
   }
-  .createGame .p-steps > ul .p-steps-item {
+  .createSteps .p-steps > ul .p-steps-item {
     flex-direction: column-reverse;
     align-items: flex-start;
     justify-content: center;
   }
-  .createGame .p-steps > ul .p-steps-item:before {
+  .createSteps .p-steps > ul .p-steps-item:before {
     position: static;
     left: auto;
     top: auto;
@@ -27,20 +31,20 @@
     height: 100%;
     margin-left: 1rem;
   }
-  .createGame .p-steps > ul .p-steps-item .p-menuitem-link {
+  .createSteps .p-steps > ul .p-steps-item .p-menuitem-link {
     flex-direction: row;
     overflow: visible;
   }
-  .createGame .p-steps > ul .p-steps-item .p-menuitem-link .p-steps-title {
+  .createSteps .p-steps > ul .p-steps-item .p-menuitem-link .p-steps-title {
     margin: 0 0.5rem 0;
   }
-  .createGame .p-steps > ul .p-steps-item:last-child {
+  .createSteps .p-steps > ul .p-steps-item:last-child {
     flex-grow: 0;
   }
-  .createGame .p-steps > ul .p-steps-item:last-child .p-menuitem-link {
+  .createSteps .p-steps > ul .p-steps-item:last-child .p-menuitem-link {
     padding: 0;
   }
-  .createGame .p-steps > ul .p-steps-item:last-child:before {
+  .createSteps .p-steps > ul .p-steps-item:last-child:before {
     display: none;
   }
 }

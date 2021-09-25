@@ -12,26 +12,32 @@ const SetSize: React.FC = () => {
   } = useSelector((state: RootState) => state.design);
 
   return (
-    <>
-      <h5>Spielname</h5>
-      <InputText value={name} onChange={e => setName(e.target.value)} />
+    <div className='p-grid'>
+      <div className='p-col'>
+        <h5>Spielname</h5>
+        <InputText value={name} onChange={e => setName(e.target.value)} />
+      </div>
 
-      <h5>Breite: {columnCount}</h5>
-      <Slider
-        value={columnCount}
-        onChange={e => dispatch(setColumnCount(e.value as number))}
-        min={5}
-        max={40}
-      />
+      <div className='p-col'>
+        <h5>Breite: {columnCount}</h5>
+        <Slider
+          value={columnCount}
+          onChange={e => dispatch(setColumnCount(e.value as number))}
+          min={5}
+          max={40}
+        />
+      </div>
 
-      <h5>Höhe: {rowCount}</h5>
-      <Slider
-        value={rowCount}
-        onChange={e => dispatch(setRowCount(e.value as number))}
-        min={5}
-        max={40}
-      />
-    </>
+      <div className='p-col'>
+        <h5>Höhe: {rowCount}</h5>
+        <Slider
+          value={rowCount}
+          onChange={e => dispatch(setRowCount(e.value as number))}
+          min={5}
+          max={40}
+        />
+      </div>
+    </div>
   );
 };
 

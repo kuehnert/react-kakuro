@@ -1,5 +1,5 @@
 import { Button } from 'primereact/button';
-import { Card } from 'primereact/card';
+import { Panel } from 'primereact/panel';
 import { Steps } from 'primereact/steps';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,7 +24,7 @@ const CreateGame: React.FC = () => {
   useEffect(() => {
     const puzzleJSON = localStorage.getItem('puzzle');
     if (puzzleJSON) {
-      console.log("Found puzzle in local storage");
+      console.log('Found puzzle in local storage');
       const loadedPuzzle = JSON.parse(puzzleJSON);
       dispatch(setPuzzle(loadedPuzzle));
     }
@@ -33,17 +33,15 @@ const CreateGame: React.FC = () => {
 
   return (
     <div className={styles.createGame}>
-      <Card>
-        <h1>Create a new game</h1>
-        <Steps model={designSteps} activeIndex={activeStep} />
-      </Card>
+      <Panel header={`Create A New Puzzle: ${designSteps[activeStep].label}`}>
+        <div className={styles.createSteps}>
+          <Steps model={designSteps} activeIndex={activeStep} />
+        </div>
 
-      <Card title={designSteps[activeStep].label}>
         {activeStep === 0 && <SetSize />}
         {activeStep === 1 && <SetCells />}
-      </Card>
-
-      <DrawGrid />
+        <DrawGrid />
+      </Panel>
 
       <Button
         label='Zurück'

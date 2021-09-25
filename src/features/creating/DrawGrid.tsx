@@ -1,4 +1,3 @@
-import { Card } from 'primereact/card';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { IDesignCell } from 'store/designSlice';
@@ -12,7 +11,7 @@ const DrawGrid: React.FC = () => {
   } = useSelector((state: RootState) => state.design);
 
   return (
-    <Card title='Grid'>
+    <div>
       <div className={styles.gameBackground}>
         <div
           className={styles.grid}
@@ -24,7 +23,7 @@ const DrawGrid: React.FC = () => {
           ))}
         </div>
       </div>
-    </Card>
+    </div>
   );
 };
 
