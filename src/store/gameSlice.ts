@@ -86,10 +86,29 @@ export const gameSlice = createSlice({
   initialState,
   reducers: {
     setCurrentGame(state, action: PayloadAction<IGameData>) {
-      state.game = action.payload;
+      const game: IGameData = JSON.parse(JSON.stringify(action.payload));
+      // create pencilmarks for all number cells
+      game.cells
+        .filter(c => c.type === CellType.NumberCell)
+        .forEach(cell => {
+          const nCell = cell as INumberCell;
+          if (!nCell.pencilMarks) {
+            nCell.pencilMarks = [];
+          }
+        });
+      state.game = game;
     },
     fetchGameSuccess(state, action: PayloadAction<IGameData>) {
-      state.game = action.payload;
+      state.game = { ...action.payload };
+      // create pencilmarks for all number cells
+      state.game.cells
+        .filter(c => c.type === CellType.NumberCell)
+        .forEach(cell => {
+          const nCell = cell as INumberCell;
+          if (!nCell.pencilMarks) {
+            nCell.pencilMarks = [];
+          }
+        });
     },
     fetchCombinations(state, action: PayloadAction) {
       state.combinations = makeCombinations();
@@ -117,6 +136,23 @@ export const gameSlice = createSlice({
       }
       state.hints = getHints(state.game!, index);
     },
+    togglePencilMark(state, action: PayloadAction<IGuess>) {
+      const { index, guess } = action.payload;
+      const newGame: IGameData = JSON.parse(JSON.stringify(state.game));
+      const currentCell: INumberCell = newGame.cells[index] as INumberCell;
+
+      if (currentCell.type === CellType.NumberCell) {
+        const index = currentCell.pencilMarks.indexOf(guess);
+
+        if (index < 0) {
+          currentCell.pencilMarks.push(guess);
+          currentCell.pencilMarks.sort();
+        } else {
+          currentCell.pencilMarks.splice(index, 1);
+        }
+        state.game = newGame;
+      }
+    },
     autoPencil(state, action: PayloadAction) {
       // set guesses where there is only one pencil mark option
       state.game!.cells.forEach(c => {
@@ -141,6 +177,7 @@ export const {
   setCurrentGame,
   setGuess,
   autoPencil,
+  togglePencilMark,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

@@ -43,7 +43,7 @@ const CreateGame: React.FC = () => {
     dispatch(setCurrentGame(puzzle));
     dispatch(clearDesignGame());
     localStorage.removeItem('puzzle');
-    myHistory.push('/');
+    myHistory.push('/play');
   };
 
   const leftButtons = (

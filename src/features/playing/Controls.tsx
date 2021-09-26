@@ -25,15 +25,19 @@ const Controls: React.FC = () => {
     dispatch(autoPencil());
   };
 
-  const renderButton = (digit: number) => {
-    return <GuessButton key={digit} digit={digit} />;
+  const renderButton = (digit: number, pencilMark: boolean) => {
+    return <GuessButton key={digit} digit={digit} pencilMark={pencilMark} />;
   };
 
   return (
     <aside className={classnames('controls', styles.controls)}>
       <div className={styles.guessButtons}>
         <div className={styles.columns}>
-          {digits.map(d => renderButton(d))}
+          {digits.map(d => renderButton(d, true))}
+        </div>
+
+        <div className={styles.columns}>
+          {digits.map(d => renderButton(d, false))}
         </div>
 
         <Button

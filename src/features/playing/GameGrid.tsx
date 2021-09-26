@@ -10,7 +10,7 @@ import {
   ICell,
   IHintCell,
   INumberCell,
-  setGuess
+  setGuess,
 } from '../../store/gameSlice';
 import { RootState } from '../../store/store';
 import BlankCell from './BlankCell';
@@ -20,8 +20,9 @@ import HintCell from './HintCell';
 import NumberCell from './NumberCell';
 
 const GameGrid: React.FC = () => {
-  const { combinations, game, selectedIndex } =
-    useSelector((state: RootState) => state.game);
+  const { combinations, game, selectedIndex } = useSelector(
+    (state: RootState) => state.game
+  );
   const dispatch = useDispatch();
 
   const handleKeyPress = (event: any) => {
@@ -58,7 +59,12 @@ const GameGrid: React.FC = () => {
     }
 
     return (
-      <div className={styles.grid}>
+      <div
+        className={styles.grid}
+        style={{
+          gridTemplateColumns: `repeat(${game!.columnCount}, 1fr)`,
+          gridTemplateRows: `repeat(${game!.rowCount}, 1fr)`,
+        }}>
         {game.cells.map((cell, i) => renderCell(cell, i))}
       </div>
     );
