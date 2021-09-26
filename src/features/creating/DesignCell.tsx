@@ -6,8 +6,8 @@ import { RootState } from '../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { CellType } from 'store/gameSlice';
 import HintDialog from './HintDialog';
-import '../playing/Cell.scss'
-import '../playing/HintCell.scss'
+import '../playing/Cell.scss';
+import '../playing/HintCell.scss';
 
 export interface Props {
   cell: IDesignCell;
@@ -20,7 +20,8 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
   );
   const dispatch = useDispatch();
   const [dialogVisible, setDialogVisible] = useState(false);
-  const [direction, setDirection] = useState<Direction>(Direction.Both);
+  const [across, setAcross] = useState<boolean>(false);
+  const [down, setDown] = useState<boolean>(false);
 
   const hide = () => {
     setDialogVisible(false);
@@ -31,26 +32,27 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
       // Toggle between blank and number cell
       const newCell = {
         ...cell,
-        type: cell.type === CellType.BlankCell ? CellType.NumberCell : CellType.BlankCell,
+        type:
+          cell.type === CellType.BlankCell
+            ? CellType.NumberCell
+            : CellType.BlankCell,
       };
       dispatch(updateCell(newCell));
     } else if (activeStep === 2 && cell.type !== CellType.NumberCell) {
       // Show dialog to pick hint value
       // Find out if the hint is vertical or horizontal
-      if (
+      setAcross(
         cell.index + 1 < puzzle.cells.length &&
-        puzzle.cells[cell.index + 1].type === CellType.NumberCell
-      ) {
-        setDirection(Direction.Horizontal);
-      }
-      if (
-        cell.index + puzzle.columnCount < puzzle.cells.length &&
-        puzzle.cells[cell.index + puzzle.columnCount].type === CellType.NumberCell
-      ) {
-        setDirection(Direction.Vertical);
-      }
+          puzzle.cells[cell.index + 1].type === CellType.NumberCell
+      );
 
-      setDialogVisible(true);
+      setDown(
+        cell.index + puzzle.columnCount < puzzle.cells.length &&
+          puzzle.cells[cell.index + puzzle.columnCount].type ===
+            CellType.NumberCell
+      );
+
+      (across || down) && setDialogVisible(true);
     }
   };
 
@@ -59,10 +61,16 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
       <div
         className={classnames(styles.designCell, cell.type)}
         onClick={handleClick}>
-        <div className="horizontalHint">{cell.hintHorizontal}</div>
-        <div className="verticalHint">{cell.hintVertical}</div>
+        <div className='horizontalHint'>{cell.hintHorizontal}</div>
+        <div className='verticalHint'>{cell.hintVertical}</div>
       </div>
-      <HintDialog cell={cell} visible={dialogVisible} onHide={hide} direction={direction} />
+      <HintDialog
+        cell={cell}
+        visible={dialogVisible}
+        onHide={hide}
+        across={across}
+        down={down}
+      />
     </>
   );
 };

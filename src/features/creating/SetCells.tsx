@@ -10,7 +10,6 @@ const SetCells: React.FC = () => {
   return (
     <>
       <h5>{name}</h5>
-
     </>
   );
 };
