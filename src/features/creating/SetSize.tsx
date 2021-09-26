@@ -1,43 +1,103 @@
+import MyInput from 'components/MyInput';
+import MySelectButton from 'components/MySelectButton';
+import MySlider from 'components/MySlider';
+import { Form, Formik } from 'formik';
+import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
-import { Slider } from 'primereact/slider';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setColumnCount, setName, setRowCount } from 'store/designSlice';
+import { setBaseGame } from 'store/designSlice';
+import { IBaseGame } from 'store/gameSlice';
+import * as Yup from 'yup';
 import { RootState } from '../../store/store';
+
+const difficulties = [
+  {
+    label: 'Easy',
+    value: 0,
+  },
+  {
+    label: 'Medium',
+    value: 1,
+  },
+  {
+    label: 'Medium Plus',
+    value: 2,
+  },
+  {
+    label: 'Hard',
+    value: 3,
+  },
+  {
+    label: 'Very Hard',
+    value: 4,
+  },
+];
+
+const PuzzleSchema = Yup.object().shape({
+  name: Yup.string()
+    .max(50, 'Must be 50 characters or less')
+    .required('Required'),
+  level: Yup.number().min(0).max(4).required(),
+  columnCount: Yup.number()
+    .min(4, 'Must be between 4 and 30')
+    .max(30)
+    .required('Required'),
+  rowCount: Yup.number()
+    .min(4, 'Must be between 4 and 30')
+    .max(30)
+    .required('Required'),
+});
 
 const SetSize: React.FC = () => {
   const dispatch = useDispatch();
-  const {
-    puzzle: { name, columnCount, rowCount },
-  } = useSelector((state: RootState) => state.design);
+  const { puzzle } = useSelector((state: RootState) => state.design);
+  const initialValues: IBaseGame = puzzle;
+
+  const handleSubmit = (values: IBaseGame) => {
+    dispatch(setBaseGame(values));
+  };
 
   return (
-    <div className='p-grid'>
-      <div className='p-col'>
-        <h5>Spielname</h5>
-        <InputText value={name} onChange={e => setName(e.target.value)} />
-      </div>
+    <Formik
+      enableReinitialize
+      initialValues={initialValues}
+      onSubmit={handleSubmit}
+      validationSchema={PuzzleSchema}>
+      {({ setFieldValue, values }) => (
+        <Form className='p-fluid'>
+          <MyInput name='name' label='Puzzle Name' as={InputText} />
 
-      <div className='p-col'>
-        <h5>Breite: {columnCount}</h5>
-        <Slider
-          value={columnCount}
-          onChange={e => dispatch(setColumnCount(e.value as number))}
-          min={5}
-          max={40}
-        />
-      </div>
+          <MySelectButton
+            field='level'
+            label='Difficulty'
+            setFieldValue={setFieldValue}
+            options={difficulties}
+            values={values}
+          />
 
-      <div className='p-col'>
-        <h5>Höhe: {rowCount}</h5>
-        <Slider
-          value={rowCount}
-          onChange={e => dispatch(setRowCount(e.value as number))}
-          min={5}
-          max={40}
-        />
-      </div>
-    </div>
+          <MySlider
+            field='columnCount'
+            label='Breite'
+            setFieldValue={setFieldValue}
+            min={5}
+            max={40}
+            values={values}
+          />
+
+          <MySlider
+            field='rowCount'
+            label='Höhe'
+            setFieldValue={setFieldValue}
+            min={5}
+            max={40}
+            values={values}
+          />
+
+          <Button type='submit' label='Set Size' className='p-mt-2' />
+        </Form>
+      )}
+    </Formik>
   );
 };
 

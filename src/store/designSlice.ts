@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { CellType, IGameData } from './gameSlice';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { CellType, IBaseGame, IGameData } from './gameSlice';
 
 export enum Direction {
   Horizontal = 0,
@@ -35,7 +35,7 @@ const createGrid = (columns: number, rows: number) =>
 const initialState: DesignSliceState = {
   activeStep: 0,
   puzzle: {
-    name: 'Unbenanntes Puzzle',
+    name: 'Unnamed',
     level: 4,
     columnCount: 10,
     rowCount: 10,
@@ -50,28 +50,18 @@ export const designSlice = createSlice({
     setActiveStep: (state, action) => {
       state.activeStep = action.payload;
     },
-    setName: (state, action) => {
-      state.puzzle.name = action.payload;
-    },
-    setColumnCount: (state, action) => {
-      state.puzzle.columnCount = action.payload;
+    setBaseGame: (state, action: PayloadAction<IBaseGame>) => {
+      state.puzzle = { ...state.puzzle, ...action.payload };
       state.puzzle.cells = createGrid(
         state.puzzle.columnCount,
         state.puzzle.rowCount
       );
     },
-    clearDesignGame: (state) => {
+    clearDesignGame: state => {
       state = initialState;
     },
     setDesignGame: (state, action) => {
       state.puzzle = action.payload;
-    },
-    setRowCount: (state, action) => {
-      state.puzzle.rowCount = action.payload;
-      state.puzzle.cells = createGrid(
-        state.puzzle.columnCount,
-        state.puzzle.rowCount
-      );
     },
     updateCell: (state, action) => {
       const newCell = action.payload;
@@ -83,10 +73,8 @@ export const designSlice = createSlice({
 export const {
   clearDesignGame,
   setActiveStep,
-  setName,
-  setColumnCount,
+  setBaseGame,
   setDesignGame,
-  setRowCount,
   updateCell,
 } = designSlice.actions;
 

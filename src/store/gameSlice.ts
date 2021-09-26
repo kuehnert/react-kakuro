@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import getHints from 'helpers/getHints';
-import makePencilmarks, { makePencilmarksForCell } from 'helpers/makePencilmarks';
+import makePencilmarks, {
+  makePencilmarksForCell,
+} from 'helpers/makePencilmarks';
 import makeCombinations, { ICombinations } from '../helpers/makeCombinations';
 import { AppThunk } from './store';
 
@@ -15,9 +17,9 @@ export enum Difficulty {
 }
 
 export enum CellType {
-  BlankCell = "blankCell",
-  HintCell = "hintCell",
-  NumberCell = "numberCell",
+  BlankCell = 'blankCell',
+  HintCell = 'hintCell',
+  NumberCell = 'numberCell',
 }
 
 export interface ICell {
@@ -41,11 +43,14 @@ export interface INumberCell extends ICell {
   solution: number;
 }
 
-export interface IGameData {
+export type IBaseGame = {
   name: string;
-  level: Difficulty;
   columnCount: number;
   rowCount: number;
+  level: Difficulty;
+};
+
+export interface IGameData extends IBaseGame {
   cells: ICell[];
 }
 
@@ -101,7 +106,12 @@ export const gameSlice = createSlice({
       if (currentCell.type === CellType.NumberCell) {
         currentCell.guess = guess;
         if (guess === 0) {
-          makePencilmarksForCell(currentCell, index, newGame, state.combinations!);
+          makePencilmarksForCell(
+            currentCell,
+            index,
+            newGame,
+            state.combinations!
+          );
         }
         state.game = newGame;
       }
