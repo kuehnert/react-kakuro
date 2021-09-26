@@ -80,6 +80,9 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
+    setCurrentGame(state, action: PayloadAction<IGameData>) {
+      state.game = action.payload;
+    },
     fetchGameSuccess(state, action: PayloadAction<IGameData>) {
       state.game = action.payload;
     },
@@ -125,6 +128,7 @@ export const {
   fetchGameSuccess,
   fetchCombinations,
   setSelectedIndex,
+  setCurrentGame,
   setGuess,
   autoPencil,
 } = gameSlice.actions;

@@ -60,7 +60,10 @@ export const designSlice = createSlice({
         state.puzzle.rowCount
       );
     },
-    setPuzzle: (state, action) => {
+    clearDesignGame: (state) => {
+      state = initialState;
+    },
+    setDesignGame: (state, action) => {
       state.puzzle = action.payload;
     },
     setRowCount: (state, action) => {
@@ -78,10 +81,11 @@ export const designSlice = createSlice({
 });
 
 export const {
+  clearDesignGame,
   setActiveStep,
   setName,
   setColumnCount,
-  setPuzzle,
+  setDesignGame,
   setRowCount,
   updateCell,
 } = designSlice.actions;

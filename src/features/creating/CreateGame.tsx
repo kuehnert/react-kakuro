@@ -3,12 +3,20 @@ import { Panel } from 'primereact/panel';
 import { Steps } from 'primereact/steps';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { designSteps, setActiveStep, setPuzzle } from 'store/designSlice';
+import {
+  designSteps,
+  setActiveStep,
+  setDesignGame,
+  clearDesignGame,
+} from 'store/designSlice';
 import { RootState } from '../../store/store';
 import styles from './CreateGame.module.scss';
 import DrawGrid from './DrawGrid';
 import SetCells from './SetCells';
 import SetSize from './SetSize';
+import { Toolbar } from 'primereact/toolbar';
+import { setCurrentGame } from 'store/gameSlice';
+import myHistory from 'myHistory';
 
 const CreateGame: React.FC = () => {
   const dispatch = useDispatch();
@@ -26,10 +34,40 @@ const CreateGame: React.FC = () => {
     if (puzzleJSON) {
       console.log('Found puzzle in local storage');
       const loadedPuzzle = JSON.parse(puzzleJSON);
-      dispatch(setPuzzle(loadedPuzzle));
+      dispatch(setDesignGame(loadedPuzzle));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleSubmit = () => {
+    dispatch(setCurrentGame(puzzle));
+    dispatch(clearDesignGame());
+    localStorage.removeItem('puzzle');
+    myHistory.push('/');
+  };
+
+  const leftButtons = (
+    <>
+      <Button
+        label='Zurück'
+        icon='mdi mdi-arrow-left'
+        onClick={e => flipView(activeStep - 1)}
+        disabled={activeStep === 0}
+      />
+      <Button
+        label='Weiter'
+        icon='mdi mdi-arrow-right'
+        onClick={e => flipView(activeStep + 1)}
+        disabled={activeStep === designSteps.length - 1}
+      />
+      <Button
+        label='Übernehmen'
+        icon='mdi mdi-hand-okay'
+        onClick={handleSubmit}
+        disabled={activeStep !== designSteps.length - 1}
+      />
+    </>
+  );
 
   return (
     <div className={styles.createGame}>
@@ -43,16 +81,7 @@ const CreateGame: React.FC = () => {
         <DrawGrid />
       </Panel>
 
-      <Button
-        label='Zurück'
-        onClick={e => flipView(activeStep - 1)}
-        disabled={activeStep === 0}
-      />
-      <Button
-        label='Weiter'
-        onClick={e => flipView(activeStep + 1)}
-        disabled={activeStep === designSteps.length - 1}
-      />
+      <Toolbar left={leftButtons} />
     </div>
   );
 };
