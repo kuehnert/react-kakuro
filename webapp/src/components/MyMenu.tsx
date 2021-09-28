@@ -1,4 +1,5 @@
 import myHistory from 'myHistory';
+import { Button } from 'primereact/button';
 import { Menubar } from 'primereact/menubar';
 import React from 'react';
 
@@ -21,7 +22,15 @@ const MyMenu: React.FC = () => {
     },
   ];
 
-  return <Menubar model={menuItems} start={<h3>Mr K.'s Kakuro</h3>} />;
+  const endItem = (
+    <Button
+      label='Sign Up/Sign In'
+      icon='mdi mdi-login'
+      onClick={() => myHistory.push('/signin')}
+    />
+  );
+
+  return <Menubar model={menuItems} start={<h3>Mr K.'s Kakuro</h3>} end={endItem} />;
 };
 
 export default MyMenu;

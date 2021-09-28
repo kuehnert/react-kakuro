@@ -2,6 +2,8 @@ import MyMenu from 'components/MyMenu';
 import CreateGame from 'features/creating/CreateGame';
 import MainMenu from 'features/menu/MainMenu';
 import PlayGame from 'features/playing/PlayGame';
+import SignIn from 'features/users/SignIn';
+import SignUp from 'features/users/SignUp';
 import myHistory from 'myHistory';
 import React from 'react';
 import { Provider } from 'react-redux';
@@ -21,6 +23,12 @@ const App: React.FC = () => {
           </Route>
           <Route path='/play'>
             <PlayGame />
+          </Route>
+          <Route path='/signin'>
+            <SignIn />
+          </Route>
+          <Route path='/signup'>
+            <SignUp />
           </Route>
           <Route path='/'>
             <MainMenu />

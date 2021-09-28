@@ -9,17 +9,23 @@ interface Props {
   [key: string]: any;
 }
 
-const MyInput: React.FC<Props> = (props) => {
+const MyInput: React.FC<Props> = props => {
   const { label, name, hint } = props;
 
   return (
-    <div className="p-field">
-      <label htmlFor={name}>{label}</label>
+    <div className='p-field'>
+      <label htmlFor={name} className='block text-900 font-medium mb-2'>
+        {label}
+      </label>
 
       <div>
-        <Field {...props} />
+        <Field {...props} className='w-full mb-3' />
         {hint && <div dangerouslySetInnerHTML={{ __html: hint }} />}
-        <ErrorMessage name={name} component="div" className="fieldErrorMessage" />
+        <ErrorMessage
+          name={name}
+          component='div'
+          className='fieldErrorMessage'
+        />
       </div>
     </div>
   );
