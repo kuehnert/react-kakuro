@@ -6,10 +6,12 @@ import {
 } from '@reduxjs/toolkit';
 import gameReducer from './gameSlice';
 import designReducer from './designSlice';
+import userReducer from './userSlice';
 
 export const rootReducer = combineReducers({
   game: gameReducer,
   design: designReducer,
+  user: userReducer,
 });
 
 const store = configureStore({

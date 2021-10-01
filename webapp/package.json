@@ -7,7 +7,9 @@
     "@reduxjs/toolkit": "1.6.1",
     "axios": "0.21.4",
     "classnames": "2.3.1",
+    "date-fns": "2.24.0",
     "formik": "2.2.9",
+    "jsonwebtoken": "8.5.1",
     "primeflex": "3.0.1",
     "primeicons": "4.1.0",
     "primereact": "6.5.1",
@@ -21,6 +23,7 @@
     "yup": "0.32.9"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "8.5.5",
     "@types/node": "16.10.1",
     "@types/react": "17.0.24",
     "@types/react-dom": "17.0.9",

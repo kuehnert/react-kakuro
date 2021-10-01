@@ -12,21 +12,22 @@ router.post('/users/login', async (req, res) => {
 
     res.send({ user, token });
   } catch (error) {
-    res.status(400).send({ error: "Unable to login" });
+    res.status(400).send({ error: 'Unable to login' });
   }
 });
 
 // CREATE
 router.post('/users', async (req, res) => {
   const user = new User(req.body);
-
   try {
     await user.save();
     const token = await user.generateAuthToken();
+    console.log('user', user);
+    console.log('token', token);
 
     res.status(201).send({ user, token });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({ error: 'Unable to create user' });
   }
 });
 
@@ -67,10 +68,10 @@ router.get('/users/:id', auth, async (req, res) => {
 router.patch('/users/:id', auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ['name', 'email', 'password'];
-  const isValidOperation = updates.every((attr) => allowedUpdates.includes(attr));
+  const isValidOperation = updates.every(attr => allowedUpdates.includes(attr));
 
   if (!isValidOperation) {
-    return res.status(400).send({ error: "Invalid updates" });
+    return res.status(400).send({ error: 'Invalid updates' });
   }
 
   try {
@@ -79,7 +80,7 @@ router.patch('/users/:id', auth, async (req, res) => {
       return res.sendStatus(404);
     }
 
-    updates.forEach(update => user[update] = req.body[update]);
+    updates.forEach(update => (user[update] = req.body[update]));
     await user.save();
 
     res.send(user);

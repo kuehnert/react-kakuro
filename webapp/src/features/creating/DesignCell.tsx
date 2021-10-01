@@ -1,13 +1,13 @@
 import classnames from 'classnames';
 import React, { useState } from 'react';
-import { Direction, IDesignCell, updateCell } from '../../store/designSlice';
-import styles from './DesignCell.module.scss';
-import { RootState } from '../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { CellType } from 'store/gameSlice';
-import HintDialog from './HintDialog';
+import { IDesignCell, updateCell } from '../../store/designSlice';
+import { RootState } from '../../store/store';
 import '../playing/Cell.scss';
 import '../playing/HintCell.scss';
+import styles from './DesignCell.module.scss';
+import HintDialog from './HintDialog';
 
 export interface Props {
   cell: IDesignCell;

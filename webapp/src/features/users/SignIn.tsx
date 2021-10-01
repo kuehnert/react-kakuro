@@ -1,11 +1,35 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import MyInput from 'components/MyInput';
+import { Form, Formik } from 'formik';
+import myHistory from 'myHistory';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { RootState } from 'store/store';
+import { ISigninValues, login } from 'store/userSlice';
 
 const SignIn: React.FC = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.user);
   // const [checked, setChecked] = useState(false);
+
+  const initialValues: ISigninValues = {
+    email: '',
+    password: '',
+  };
+
+  const handleSubmit = (values: ISigninValues) => {
+    dispatch(login(values));
+  };
+
+  useEffect(() => {
+    if (user) {
+      myHistory.push('/');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <div
@@ -32,34 +56,37 @@ const SignIn: React.FC = () => {
           </Link>
         </div>
 
-        <div>
-          <label htmlFor='email' className='block text-900 font-medium mb-2'>
-            Email
-          </label>
-          <InputText id='email' type='text' className='w-full mb-3' />
-
-          <label htmlFor='password' className='block text-900 font-medium mb-2'>
-            Password
-          </label>
-          <InputText id='password' type='password' className='w-full mb-3' />
-
-          <div className='flex align-items-center justify-content-between mb-6'>
-            {/* <div className='flex align-items-center'>
-              <Checkbox
-                id='rememberme'
-                onChange={e => setChecked(e.checked)}
-                checked={checked}
-                className='mr-2'
+        <Formik
+          // enableReinitialize
+          initialValues={initialValues}
+          onSubmit={handleSubmit}
+          // validationSchema={UserSchema}
+        >
+          {({ setFieldValue, values }) => (
+            <Form className='p-fluid'>
+              <MyInput
+                name='email'
+                label='Email'
+                as={InputText}
+                className='block text-900 font-medium mb-2'
               />
-              <label htmlFor='rememberme'>Remember me</label>
-            </div> */}
-            {/* <a className='font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer'>
-              Forgot your password?
-            </a> */}
-          </div>
+              <MyInput
+                name='password'
+                label='Password'
+                type='password'
+                as={InputText}
+                className='block text-900 font-medium mb-2'
+              />
 
-          <Button label='Sign In' icon='mdi mdi-login' className='w-full' />
-        </div>
+              <Button
+                type='submit'
+                label='Sign In!'
+                icon='mdi mdi-login-variant'
+                className='w-full'
+              />
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );

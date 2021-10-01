@@ -1,10 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import MyInput from 'components/MyInput';
 import { Form, Formik } from 'formik';
+import myHistory from 'myHistory';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { ISignUpValues, signUp } from 'store/userSlice';
 import * as Yup from 'yup';
 
 const UserSchema = Yup.object().shape({
@@ -22,9 +25,18 @@ const UserSchema = Yup.object().shape({
 });
 
 const SignUp: React.FC = () => {
+  const dispatch = useDispatch();
   // const [checked, setChecked] = useState(false);
-  const handleSubmit = (values: any) => {
-    // dispatch(setBaseGame(values));
+
+  const handleSubmit = (values: ISignUpValues) => {
+    dispatch(signUp(values));
+    myHistory.push('/')
+  };
+
+  const initialValues: ISignUpValues = {
+    name: '',
+    email: '',
+    password: '',
   };
 
   return (
@@ -54,7 +66,7 @@ const SignUp: React.FC = () => {
 
         <Formik
           enableReinitialize
-          initialValues={{}}
+          initialValues={initialValues}
           onSubmit={handleSubmit}
           validationSchema={UserSchema}>
           {({ setFieldValue, values }) => (
