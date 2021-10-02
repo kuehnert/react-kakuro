@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import React, { useEffect, useState } from 'react';
@@ -41,7 +42,7 @@ const HintDialog: React.FC<Props> = ({
   const renderButtons = (across: boolean) => {
     return (
       <div className=''>
-        <div className='label'>{across ? 'Hint Across' : 'Hint Down'}</div>
+        <div className={styles.label}>{across ? 'Across' : 'Down'}</div>
         <div className={styles.buttonGrid}>
           {options.map(n => (
             <Button
@@ -49,6 +50,7 @@ const HintDialog: React.FC<Props> = ({
               label={'' + n}
               onClick={() => handleClick(n, across)}
               disabled={n < 3}
+              className={classNames('p-button-rounded', styles.button, across ? 'p-button-success' : 'p-button-info')}
             />
           ))}
         </div>

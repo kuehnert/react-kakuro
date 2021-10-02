@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { setErrorAlert, setSuccessAlert } from 'features/alerts/alertSlice';
-import combinations from 'helpers/combinations';
+import checkPuzzle from 'helpers/checkPuzzle';
+import doMakeHintCells from 'helpers/doMakeHintCells';
 import solvePuzzle from 'helpers/solvePuzzle';
 import { CellType, IBaseGame, IGameData, StateType } from './gameSlice';
 import { AppThunk } from './store';
@@ -16,6 +17,13 @@ export interface IDesignCell {
   index: number;
   hintHorizontal?: number;
   hintVertical?: number;
+}
+
+export enum DesignStepsEnum {
+  SetSize = 0,
+  DrawGrid = 1,
+  InsertHints = 2,
+  CheckPuzzle = 3,
 }
 
 export const designSteps = [
@@ -37,7 +45,7 @@ const createGrid = (columns: number, rows: number) =>
   }));
 
 const initialState: DesignSliceState = {
-  activeStep: 0,
+  activeStep: 3,
   puzzle: {
     name: 'Unnamed',
     level: 4,
@@ -72,27 +80,47 @@ export const designSlice = createSlice({
       const newCell = action.payload;
       state.puzzle.cells[newCell.index] = newCell;
     },
+    makeHintCells: state => {
+      doMakeHintCells(state.puzzle);
+    },
     solveGameSuccess: (state, action: PayloadAction<IGameData>) => {
       state.puzzle = action.payload;
       state.puzzle.state = StateType.Solved;
+    },
+    checkGameSuccess: (state, action: PayloadAction<boolean>) => {
+      state.puzzle.state = StateType.Valid;
     },
   },
 });
 
 export const {
+  checkGameSuccess,
   clearDesignGame,
   setActiveStep,
   setBaseGame,
   setDesignGame,
+  makeHintCells,
   solveGameSuccess,
   updateCell,
 } = designSlice.actions;
 
 export default designSlice.reducer;
 
+export const checkGame = (): AppThunk => async (dispatch: any, getState) => {
+  const { puzzle } = getState().design;
+  const isValid = checkPuzzle(puzzle);
+
+  if (isValid) {
+    dispatch(setSuccessAlert('Puzzle is valid.'));
+    dispatch(checkGameSuccess(isValid));
+  } else {
+    dispatch(setErrorAlert(`Puzzle invalid`));
+  }
+};
+
 export const solveGame = (): AppThunk => async (dispatch: any, getState) => {
   const { puzzle } = getState().design;
-  const result = solvePuzzle(puzzle, combinations);
+  const result = solvePuzzle(puzzle);
 
   if (result.error) {
     dispatch(setErrorAlert(`Puzzle invalid: ${result.error}`));

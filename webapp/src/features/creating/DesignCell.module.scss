@@ -3,7 +3,9 @@
   max-width: 64px;
   aspect-ratio: 1;
   border: 0.05rem lightgray solid;
+}
 
-  // text-align: center;
-  // font-size: 2vw;
+.hintMissing {
+  color: yellow;
+  font-weight: bold;
 }

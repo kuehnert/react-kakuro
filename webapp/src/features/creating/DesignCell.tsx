@@ -15,13 +15,9 @@ export interface Props {
 }
 
 const DesignCell: React.FC<Props> = ({ cell, index }) => {
-  const { activeStep, puzzle } = useSelector(
-    (state: RootState) => state.design
-  );
+  const { activeStep } = useSelector((state: RootState) => state.design);
   const dispatch = useDispatch();
   const [dialogVisible, setDialogVisible] = useState(false);
-  const [across, setAcross] = useState<boolean>(false);
-  const [down, setDown] = useState<boolean>(false);
 
   const hide = () => {
     setDialogVisible(false);
@@ -38,21 +34,19 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
             : CellType.BlankCell,
       };
       dispatch(updateCell(newCell));
-    } else if (activeStep === 2 && cell.type !== CellType.NumberCell) {
+    } else if (activeStep === 2 && cell.type === CellType.HintCell) {
       // Show dialog to pick hint value
-      // Find out if the hint is vertical or horizontal
-      setAcross(
-        cell.index + 1 < puzzle.cells.length &&
-          puzzle.cells[cell.index + 1].type === CellType.NumberCell
-      );
+      setDialogVisible(true);
+    }
+  };
 
-      setDown(
-        cell.index + puzzle.columnCount < puzzle.cells.length &&
-          puzzle.cells[cell.index + puzzle.columnCount].type ===
-            CellType.NumberCell
-      );
-
-      (across || down) && setDialogVisible(true);
+  const renderHint = (value: number | undefined) => {
+    if (value) {
+      const hintStr = value > 0 ? value : '?';
+      const hintClass = value > 0 ? '' : styles.hintMissing;
+      return <div className={hintClass}>{hintStr}</div>;
+    } else {
+      return null;
     }
   };
 
@@ -61,15 +55,15 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
       <div
         className={classnames(styles.designCell, cell.type)}
         onClick={handleClick}>
-        <div className='horizontalHint'>{cell.hintHorizontal}</div>
-        <div className='verticalHint'>{cell.hintVertical}</div>
+        <div className='horizontalHint'>{renderHint(cell.hintHorizontal)}</div>
+        <div className='verticalHint'>{renderHint(cell.hintVertical)}</div>
       </div>
       <HintDialog
         cell={cell}
         visible={dialogVisible}
         onHide={hide}
-        across={across}
-        down={down}
+        across={cell.hintHorizontal != null}
+        down={cell.hintVertical != null}
       />
     </>
   );

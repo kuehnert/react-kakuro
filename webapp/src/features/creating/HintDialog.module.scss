@@ -1,8 +1,14 @@
+.label {
+  font-weight: bold;
+  margin: 0 0 12px 0;
+}
+
 .buttonGrid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(10, 1fr);
 }
 
 .button {
-
+  display: flex;
+  flex-direction: column;
 }

@@ -3,12 +3,11 @@ import { Panel } from 'primereact/panel';
 import { Steps } from 'primereact/steps';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { designSteps, setActiveStep, setDesignGame } from 'store/designSlice';
+import { designSteps, DesignStepsEnum, makeHintCells, setActiveStep, setDesignGame } from 'store/designSlice';
 import { RootState } from '../../store/store';
 import styles from './CreateGame.module.scss';
 import DrawGrid from './DrawGrid';
 import SaveGame from './SaveGame';
-import SetCells from './SetCells';
 import SetSize from './SetSize';
 
 const CreateGame: React.FC = () => {
@@ -18,7 +17,12 @@ const CreateGame: React.FC = () => {
   );
 
   const flipView = (nextStep: number) => {
+    if (activeStep === DesignStepsEnum.DrawGrid && nextStep === DesignStepsEnum.InsertHints ) {
+      dispatch(makeHintCells());
+    }
+
     dispatch(setActiveStep(nextStep));
+    // TODO: remove localStorage
     localStorage.setItem('puzzle', JSON.stringify(puzzle));
   };
 
@@ -70,7 +74,7 @@ const CreateGame: React.FC = () => {
 
       <Panel headerTemplate={headerTemplate}>
         {activeStep === 0 && <SetSize />}
-        {activeStep === 1 && <SetCells />}
+        {/* {activeStep === 1 && <SetCells />} */}
         {activeStep === 3 && <SaveGame />}
 
         {activeStep > 0 && <DrawGrid />}

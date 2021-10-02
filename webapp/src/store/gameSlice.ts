@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import getHints from 'helpers/getHints';
-import makePencilmarks, {
+import {
+  makePencilmarks,
   makePencilmarksForCell,
   singlePencilmarksToGuess,
-} from 'helpers/makePencilmarks';
+} from 'helpers/pencilmarks';
 import { AppThunk } from './store';
 
 /* Types */
@@ -24,11 +25,12 @@ export enum CellType {
 
 export enum StateType {
   Raw = 0,
-  Complete = 1,
+  Valid = 1,
   Solved = 2,
 }
 
 export interface ICell {
+  index: number;
   type: CellType;
 }
 

@@ -11,6 +11,8 @@ import { IBaseGame } from 'store/gameSlice';
 import * as Yup from 'yup';
 import { RootState } from '../../store/store';
 
+const minColumns = 3;
+
 const difficulties = [
   {
     label: 'Easy',
@@ -40,11 +42,11 @@ const PuzzleSchema = Yup.object().shape({
     .required('Required'),
   level: Yup.number().min(0).max(4).required(),
   columnCount: Yup.number()
-    .min(4, 'Must be between 4 and 30')
+    .min(minColumns, `Must be between ${minColumns} and 30`)
     .max(30)
     .required('Required'),
   rowCount: Yup.number()
-    .min(4, 'Must be between 4 and 30')
+    .min(minColumns, `Must be between ${minColumns} and 30`)
     .max(30)
     .required('Required'),
 });
@@ -80,7 +82,7 @@ const SetSize: React.FC = () => {
             field='columnCount'
             label='Columns Across'
             setFieldValue={setFieldValue}
-            min={5}
+            min={minColumns}
             max={40}
             values={values}
           />
@@ -89,7 +91,7 @@ const SetSize: React.FC = () => {
             field='rowCount'
             label='Rows Down'
             setFieldValue={setFieldValue}
-            min={5}
+            min={minColumns}
             max={40}
             values={values}
           />
