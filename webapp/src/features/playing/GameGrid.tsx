@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   CellType,
-  fetchCombinations,
   fetchGame,
   IBlankCell,
   ICell,
@@ -20,9 +19,7 @@ import HintCell from './HintCell';
 import NumberCell from './NumberCell';
 
 const GameGrid: React.FC = () => {
-  const { combinations, game, selectedIndex } = useSelector(
-    (state: RootState) => state.game
-  );
+  const { game, selectedIndex } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
   const handleKeyPress = (event: any) => {
@@ -73,9 +70,6 @@ const GameGrid: React.FC = () => {
   useEffect(() => {
     if (game == null) {
       dispatch(fetchGame());
-    }
-    if (combinations == null) {
-      dispatch(fetchCombinations());
     }
   }, []);
 

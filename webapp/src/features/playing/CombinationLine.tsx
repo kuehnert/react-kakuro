@@ -6,7 +6,7 @@ import { RootState } from '../../store/store';
 import styles from './CombinationLine.module.scss';
 
 const CombinationLine: React.FC = () => {
-  const { combinations, hints } = useSelector((state: RootState) => state.game);
+  const { hints } = useSelector((state: RootState) => state.game);
   const [possibilities, setPossibilities] = useState<number[][][]>([[], []]);
 
   const renderDigit = (d: number, direction: number) => {
@@ -39,8 +39,8 @@ const CombinationLine: React.FC = () => {
   useEffect(() => {
     if (hints[0].index > -1) {
       setPossibilities([
-        getCombinations(hints[0], combinations!),
-        getCombinations(hints[1], combinations!),
+        getCombinations(hints[0]),
+        getCombinations(hints[1]),
       ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

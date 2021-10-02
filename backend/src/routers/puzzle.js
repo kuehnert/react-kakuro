@@ -8,7 +8,7 @@ const debug = require('../utils/debug');
 // FETCH ALL
 router.get('/puzzles', async (req, res) => {
   try {
-    const puzzles = await Puzzle.find({ puzzleed: false }).sort('orderIndex');
+    const puzzles = await Puzzle.find({}).sort('createdAt');
     res.send(puzzles);
   } catch (error) {
     res.sendStatus(500);

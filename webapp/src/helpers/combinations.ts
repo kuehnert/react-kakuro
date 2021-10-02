@@ -56,4 +56,7 @@ const makeCombinations = () => {
   return combinations;
 };
 
-export default makeCombinations;
+const combinations: ICombinations = makeCombinations();
+Object.freeze(combinations);
+
+export default combinations;

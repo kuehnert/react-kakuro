@@ -1,4 +1,7 @@
-import { SelectButton, SelectButtonChangeParams } from 'primereact/selectbutton';
+import {
+  SelectButton,
+  SelectButtonChangeParams,
+} from 'primereact/selectbutton';
 import React from 'react';
 
 interface Props {
@@ -21,15 +24,20 @@ const MySlider: React.FC<Props> = ({
   };
 
   return (
-    <div className='p-field'>
-      <label htmlFor={field}>{label}</label>
+    <div className='field grid'>
+      <label htmlFor={field} className='col-12 mb-2 md:col-2 md:mb-0'>
+        {label}
+      </label>
 
-      <SelectButton
-        id={field}
-        value={values[field]}
-        options={options}
-        onChange={event => handleChange(event)}
-      />
+      <div className='col-12 md:col-10'>
+        <SelectButton
+          id={field}
+          value={values[field]}
+          options={options}
+          onChange={event => handleChange(event)}
+          className='justify-content-start'
+        />
+      </div>
     </div>
   );
 };

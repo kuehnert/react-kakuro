@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CellType, IBaseGame, IGameData } from './gameSlice';
+import { setErrorAlert, setSuccessAlert } from 'features/alerts/alertSlice';
+import combinations from 'helpers/combinations';
+import solvePuzzle from 'helpers/solvePuzzle';
+import { CellType, IBaseGame, IGameData, StateType } from './gameSlice';
+import { AppThunk } from './store';
 
 export enum Direction {
   Horizontal = 0,
@@ -40,6 +44,7 @@ const initialState: DesignSliceState = {
     columnCount: 10,
     rowCount: 10,
     cells: createGrid(10, 10),
+    state: StateType.Raw,
   },
 };
 
@@ -67,6 +72,10 @@ export const designSlice = createSlice({
       const newCell = action.payload;
       state.puzzle.cells[newCell.index] = newCell;
     },
+    solveGameSuccess: (state, action: PayloadAction<IGameData>) => {
+      state.puzzle = action.payload;
+      state.puzzle.state = StateType.Solved;
+    },
   },
 });
 
@@ -75,7 +84,20 @@ export const {
   setActiveStep,
   setBaseGame,
   setDesignGame,
+  solveGameSuccess,
   updateCell,
 } = designSlice.actions;
 
 export default designSlice.reducer;
+
+export const solveGame = (): AppThunk => async (dispatch: any, getState) => {
+  const { puzzle } = getState().design;
+  const result = solvePuzzle(puzzle, combinations);
+
+  if (result.error) {
+    dispatch(setErrorAlert(`Puzzle invalid: ${result.error}`));
+  } else {
+    dispatch(setSuccessAlert('Puzzle solved.'));
+    dispatch(solveGameSuccess(result.solution!));
+  }
+};

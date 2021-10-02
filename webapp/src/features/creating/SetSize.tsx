@@ -65,7 +65,7 @@ const SetSize: React.FC = () => {
       onSubmit={handleSubmit}
       validationSchema={PuzzleSchema}>
       {({ setFieldValue, values }) => (
-        <Form className='p-fluid'>
+        <Form className=''>
           <MyInput name='name' label='Puzzle Name' as={InputText} />
 
           <MySelectButton
@@ -78,7 +78,7 @@ const SetSize: React.FC = () => {
 
           <MySlider
             field='columnCount'
-            label='Breite'
+            label='Columns Across'
             setFieldValue={setFieldValue}
             min={5}
             max={40}
@@ -87,14 +87,15 @@ const SetSize: React.FC = () => {
 
           <MySlider
             field='rowCount'
-            label='Höhe'
+            label='Rows Down'
             setFieldValue={setFieldValue}
             min={5}
             max={40}
             values={values}
           />
 
-          <Button type='submit' label='Set Size' className='p-mt-2' />
+          {/* <Button type='submit' label='Set Size' className='p-mt-2' /> */}
+          <Button type='submit' label='Set Size' className='' />
         </Form>
       )}
     </Formik>

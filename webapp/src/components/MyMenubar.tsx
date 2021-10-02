@@ -5,14 +5,22 @@ import React from 'react';
 import { RootState } from 'store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from 'store/userSlice';
+import styles from './MyMenubar.module.scss';
 
-const MyMenu: React.FC = () => {
+const MyMenubar: React.FC = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.users);
+
+  const startItem = (
+    <div className={styles.startItem}>
+      <h3>Mr K.'s Kakuro</h3>
+    </div>
+  );
+
   const menuItems = [
     {
       label: 'Menu',
-      icon: 'mdi mdi-dots-horizontal',
+      icon: 'mdi mdi-hamburger',
       command: () => myHistory.push('/'),
     },
     {
@@ -42,9 +50,7 @@ const MyMenu: React.FC = () => {
     />
   );
 
-  return (
-    <Menubar model={menuItems} start={<h3>Mr K.'s Kakuro</h3>} end={endItem} />
-  );
+  return <Menubar model={menuItems} start={startItem} end={endItem} />;
 };
 
-export default MyMenu;
+export default MyMenubar;

@@ -4,14 +4,16 @@ import {
   configureStore,
   ThunkAction,
 } from '@reduxjs/toolkit';
+import alertReducer from '../features/alerts/alertSlice';
 import gameReducer from './gameSlice';
 import designReducer from './designSlice';
 import userReducer from './userSlice';
 
 export const rootReducer = combineReducers({
+  alerts: alertReducer,
   game: gameReducer,
   design: designReducer,
-  user: userReducer,
+  users: userReducer,
 });
 
 const store = configureStore({

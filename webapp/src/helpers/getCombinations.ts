@@ -1,5 +1,5 @@
 import { IHintValues } from 'store/gameSlice';
-import { ICombinations } from './makeCombinations';
+import combinations from './combinations';
 
 /**
  *
@@ -8,7 +8,6 @@ import { ICombinations } from './makeCombinations';
  */
 export default function getCombinations(
   hints: IHintValues,
-  combinations: ICombinations
 ) {
   let combs = combinations[hints.count][hints.sum];
 

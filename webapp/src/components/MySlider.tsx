@@ -1,3 +1,4 @@
+import { InputNumber } from 'primereact/inputnumber';
 import { Slider, SliderChangeParams } from 'primereact/slider';
 import React from 'react';
 
@@ -23,18 +24,27 @@ const MySlider: React.FC<Props> = ({
   };
 
   return (
-    <div className='p-field'>
-      <label htmlFor={field}>
-        {label}: {values[field]}
+    <div className='field grid'>
+      <label htmlFor={field} className='col-12 mb-2 md:col-2 md:mb-0'>
+        {label}
       </label>
 
-      <Slider
-        id={field}
-        value={values[field]}
-        onChange={event => handleChange(event)}
-        min={min}
-        max={max}
-      />
+      <div className='col-12 md:col-10'>
+        <InputNumber
+          value={values[field]}
+          onChange={event => handleChange(event)}
+          className='inputfield w-full'
+        />
+
+        <Slider
+          id={field}
+          value={values[field]}
+          onChange={event => handleChange(event)}
+          min={min}
+          max={max}
+          className='inputfield w-full'
+        />
+      </div>
     </div>
   );
 };

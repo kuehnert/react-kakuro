@@ -1,4 +1,5 @@
-import MyMenu from 'components/MyMenu';
+import MyMenubar from 'components/MyMenubar';
+import Alerts from 'features/alerts/Alerts';
 import CreateGame from 'features/creating/CreateGame';
 import MainMenu from 'features/menu/MainMenu';
 import PlayGame from 'features/playing/PlayGame';
@@ -14,7 +15,8 @@ import store from './store/store';
 const App: React.FC = () => {
   return (
     <Provider store={store}>
-      <MyMenu />
+      <MyMenubar />
+      <Alerts />
 
       <Router history={myHistory}>
         <Switch>

@@ -3,20 +3,13 @@ import { Panel } from 'primereact/panel';
 import { Steps } from 'primereact/steps';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  designSteps,
-  setActiveStep,
-  setDesignGame,
-  clearDesignGame,
-} from 'store/designSlice';
+import { designSteps, setActiveStep, setDesignGame } from 'store/designSlice';
 import { RootState } from '../../store/store';
 import styles from './CreateGame.module.scss';
 import DrawGrid from './DrawGrid';
+import SaveGame from './SaveGame';
 import SetCells from './SetCells';
 import SetSize from './SetSize';
-import { Toolbar } from 'primereact/toolbar';
-import { setCurrentGame } from 'store/gameSlice';
-import myHistory from 'myHistory';
 
 const CreateGame: React.FC = () => {
   const dispatch = useDispatch();
@@ -39,49 +32,49 @@ const CreateGame: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSubmit = () => {
-    dispatch(setCurrentGame(puzzle));
-    dispatch(clearDesignGame());
-    localStorage.removeItem('puzzle');
-    myHistory.push('/play');
-  };
+  const headerTemplate = (options: any) => {
+    const className = `${options.className} p-jc-start`;
+    const titleClassName = `${options.titleClassName} p-pl-1`;
 
-  const leftButtons = (
-    <>
-      <Button
-        label='Zurück'
-        icon='mdi mdi-arrow-left'
-        onClick={e => flipView(activeStep - 1)}
-        disabled={activeStep === 0}
-      />
-      <Button
-        label='Weiter'
-        icon='mdi mdi-arrow-right'
-        onClick={e => flipView(activeStep + 1)}
-        disabled={activeStep === designSteps.length - 1}
-      />
-      <Button
-        label='Übernehmen'
-        icon='mdi mdi-hand-okay'
-        onClick={handleSubmit}
-        disabled={activeStep !== designSteps.length - 1}
-      />
-    </>
-  );
+    return (
+      <div className={className}>
+        <span className={titleClassName}>
+          Step {activeStep + 1}: {designSteps[activeStep].label}
+        </span>
+
+        <span className={titleClassName}>
+          <Button
+            label='Back'
+            icon='mdi mdi-arrow-left'
+            onClick={e => flipView(activeStep - 1)}
+            disabled={activeStep === 0}
+          />
+          <Button
+            label='Next'
+            icon='mdi mdi-arrow-right'
+            onClick={e => flipView(activeStep + 1)}
+            disabled={activeStep === designSteps.length - 1}
+          />
+        </span>
+      </div>
+    );
+  };
 
   return (
     <div className={styles.createGame}>
-      <Panel header={`Create A New Puzzle: ${designSteps[activeStep].label}`}>
+      <Panel header='Create a new Kakuro puzzle'>
         <div className={styles.createSteps}>
           <Steps model={designSteps} activeIndex={activeStep} />
         </div>
-
-        {activeStep === 0 && <SetSize />}
-        {activeStep === 1 && <SetCells />}
-        <DrawGrid />
       </Panel>
 
-      <Toolbar left={leftButtons} />
+      <Panel headerTemplate={headerTemplate}>
+        {activeStep === 0 && <SetSize />}
+        {activeStep === 1 && <SetCells />}
+        {activeStep === 3 && <SaveGame />}
+
+        {activeStep > 0 && <DrawGrid />}
+      </Panel>
     </div>
   );
 };

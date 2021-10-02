@@ -3,8 +3,8 @@ import axios from 'axios';
 import getHints from 'helpers/getHints';
 import makePencilmarks, {
   makePencilmarksForCell,
+  singlePencilmarksToGuess,
 } from 'helpers/makePencilmarks';
-import makeCombinations, { ICombinations } from '../helpers/makeCombinations';
 import { AppThunk } from './store';
 
 /* Types */
@@ -20,6 +20,12 @@ export enum CellType {
   BlankCell = 'blankCell',
   HintCell = 'hintCell',
   NumberCell = 'numberCell',
+}
+
+export enum StateType {
+  Raw = 0,
+  Complete = 1,
+  Solved = 2,
 }
 
 export interface ICell {
@@ -51,6 +57,7 @@ export type IBaseGame = {
 };
 
 export interface IGameData extends IBaseGame {
+  state: StateType;
   cells: ICell[];
 }
 
@@ -69,7 +76,6 @@ export interface IHintValues {
 /* State */
 type GameSliceState = {
   game?: IGameData;
-  combinations?: ICombinations;
   selectedIndex?: number;
   hints: IHintValues[];
 };
@@ -110,9 +116,6 @@ export const gameSlice = createSlice({
           }
         });
     },
-    fetchCombinations(state, action: PayloadAction) {
-      state.combinations = makeCombinations();
-    },
     setSelectedIndex(state, action: PayloadAction<number>) {
       let currentIndex = action.payload;
       state.selectedIndex = currentIndex;
@@ -125,12 +128,7 @@ export const gameSlice = createSlice({
       if (currentCell.type === CellType.NumberCell) {
         currentCell.guess = guess;
         if (guess === 0) {
-          makePencilmarksForCell(
-            currentCell,
-            index,
-            newGame,
-            state.combinations!
-          );
+          makePencilmarksForCell(currentCell, index, newGame);
         }
         state.game = newGame;
       }
@@ -155,24 +153,16 @@ export const gameSlice = createSlice({
     },
     autoPencil(state, action: PayloadAction) {
       // set guesses where there is only one pencil mark option
-      state.game!.cells.forEach(c => {
-        if (c.type === CellType.NumberCell) {
-          const cell = c as INumberCell;
-          if (cell.pencilMarks?.length === 1) {
-            cell.guess = cell.pencilMarks[0];
-          }
-        }
-      });
+      singlePencilmarksToGuess(state.game!);
 
       // calculate pencil marks
-      makePencilmarks(state.game!, state.combinations!);
+      makePencilmarks(state.game!);
     },
   },
 });
 
 export const {
   fetchGameSuccess,
-  fetchCombinations,
   setSelectedIndex,
   setCurrentGame,
   setGuess,

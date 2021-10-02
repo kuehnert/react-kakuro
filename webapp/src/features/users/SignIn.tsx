@@ -12,7 +12,7 @@ import { ISigninValues, login } from 'store/userSlice';
 
 const SignIn: React.FC = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.users);
   // const [checked, setChecked] = useState(false);
 
   const initialValues: ISigninValues = {
