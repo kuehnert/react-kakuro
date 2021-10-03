@@ -1,0 +1,27 @@
+# /etc/nginx/sites-available/kakuro-api
+server {
+  server_name kakuro.kuehnert.it;
+
+  location / {
+    proxy_pass http://localhost:5000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+  }
+
+  proxy_hide_header X-Frame-Options;
+  add_header Content-Security-Policy "default-src 'self'";
+  add_header X-Content-Type-Options nosniff;
+  add_header X-Frame-Options SAMEORIGIN always;
+  add_header Strict-Transport-Security "max-age=31536000" always;
+  add_header Referrer-Policy strict-origin-when-cross-origin always;
+  add_header Feature-Policy "fullscreen none;geolocation none;midi none;notifications none;push none;sync-xhr none;microphone none;camera none;magnetometer none;gyroscope none;speaker none;vibrate none;payment none;" always;
+
+  # listen 5443 ssl; # managed by Certbot
+  # ssl_certificate /etc/letsencrypt/live/bbc.kuehnert.it/fullchain.pem; # managed by Certbot
+  # ssl_certificate_key /etc/letsencrypt/live/bbc.kuehnert.it/privkey.pem; # managed by Certbot
+  # include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+  # ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}

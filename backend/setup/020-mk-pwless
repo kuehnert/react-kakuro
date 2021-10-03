@@ -1,0 +1,1 @@
+deploy ALL=NOPASSWD:/home/deploy/sites/kakuro-api/current/bin/restart-api.sh

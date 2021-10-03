@@ -5,7 +5,7 @@ module.exports = shipit => {
   shipit.initConfig({
     default: {
       dirToCopy: 'backend',
-      repositoryUrl: 'https://github.com/kuehnert/bbcloader.git',
+      repositoryUrl: 'https://github.com/kuehnert/react-kakuro.git',
       keepReleases: 5,
       shared: {
         overwrite: true,
@@ -14,9 +14,9 @@ module.exports = shipit => {
       deleteOnRollback: false,
     },
     production: {
-      servers: 'mk@bbc.kuehnert.it',
-      deployTo: '/home/mk/sites/bbcloader-api',
-      branch: 'master',
+      servers: 'kuehnert.it',
+      deployTo: '/home/deploy/sites/kakuro-api',
+      branch: 'main',
     },
   });
 
@@ -56,3 +56,4 @@ module.exports = shipit => {
 */
 
 // source: https://www.digitalocean.com/community/tutorials/how-to-automate-your-node-js-production-deployments-with-shipit-on-centos-7
+Floete94Poem28Kiwi96Sand12Rauper15versprechen

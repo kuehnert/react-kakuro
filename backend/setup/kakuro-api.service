@@ -1,0 +1,22 @@
+# /etc/systemd/system/kakuro-api.service
+# sudo syscontrol enable kakuro-api
+# sudo syscontrol start kakuro-api
+[Unit]
+Description=NodeJS Kakuro Application
+After=network-online.target
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=30
+ExecStart=/home/deploy/sites/kakuro-api/current/bin/start.sh
+WorkingDirectory=/home/deploy/sites/kakuro-api/current
+User=deploy
+KillSignal=SIGQUIT
+StandardOutput=syslog
+StandardError=syslog
+# Change this to find app logs in /var/log/syslog
+SyslogIdentifier=kakuro-api
+
+[Install]
+WantedBy=multi-user.target
