@@ -56,4 +56,3 @@ module.exports = shipit => {
 */
 
 // source: https://www.digitalocean.com/community/tutorials/how-to-automate-your-node-js-production-deployments-with-shipit-on-centos-7
-Floete94Poem28Kiwi96Sand12Rauper15versprechen
