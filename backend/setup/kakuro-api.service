@@ -1,6 +1,6 @@
 # /etc/systemd/system/kakuro-api.service
-# sudo syscontrol enable kakuro-api
-# sudo syscontrol start kakuro-api
+# sudo systemctl enable kakuro-api
+# sudo systemctl start kakuro-api
 [Unit]
 Description=NodeJS Kakuro Application
 After=network-online.target

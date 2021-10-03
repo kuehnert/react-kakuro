@@ -1,5 +1,7 @@
 module.exports = shipit => {
   require('shipit-deploy')(shipit);
+  // require('shipit-npm')(shipit);
+  // require('shipit-nvm')(shipit);
   require('shipit-shared')(shipit);
 
   shipit.initConfig({
@@ -12,6 +14,13 @@ module.exports = shipit => {
         dirs: ['node_modules', 'data'],
       },
       deleteOnRollback: false,
+      nvm: {
+        remote: true,
+        sh: '~/.nvm/nvm.sh',
+        triggerEvents: {
+          unaliasDefault: 'npm_installed',
+        },
+      },
     },
     production: {
       servers: 'kuehnert.it',
@@ -44,7 +53,9 @@ module.exports = shipit => {
   });
 
   shipit.blTask('reload', async () => {
-    await shipit.remote(`sudo ${shipit.releasePath}/bin/restart_bbcloader.sh`, { tty: true });
+    await shipit.remote(`sudo ${shipit.releasePath}/bin/restart-api.sh`, {
+      tty: true,
+    });
   });
 };
 
