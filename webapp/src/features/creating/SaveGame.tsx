@@ -1,17 +1,27 @@
+import classNames from 'classnames';
 import { Button } from 'primereact/button';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { checkGame, createGame, solveGame } from 'store/designSlice';
+import {
+  clearDesignGame,
+  createGame,
+  setActiveStep,
+  solveGame,
+} from 'store/designSlice';
 import { PuzzleStates, setCurrentGame } from 'store/gameSlice';
 import { RootState } from '../../store/store';
+import DesignPanel from './DesignPanel';
+import DrawGrid from './DrawGrid';
 import styles from './SaveGame.module.scss';
 
 const SaveGame: React.FC = () => {
-  const { puzzle } = useSelector((state: RootState) => state.design);
+  const { activeStep, puzzle } = useSelector(
+    (state: RootState) => state.design
+  );
   const dispatch = useDispatch();
 
-  const handleCheck = () => {
-    dispatch(checkGame());
+  const handleBack = () => {
+    dispatch(setActiveStep(activeStep - 1));
   };
 
   const handleSolve = () => {
@@ -23,35 +33,42 @@ const SaveGame: React.FC = () => {
     dispatch(createGame(puzzle));
   };
 
+  const handleClear = () => {
+    dispatch(clearDesignGame());
+  };
+
   return (
-    <>
-      <h5>
-        Save {puzzle.name} {puzzle.state}
-      </h5>
-      <Button
-        label='Check Validity'
-        icon='mdi mdi-hand-okay'
-        onClick={handleCheck}
-        className={styles.button}
-        disabled={puzzle.state >= PuzzleStates.Valid}
-      />
+    <DesignPanel handleBack={handleBack}>
+      <>
+        <Button
+          label='Solve'
+          icon='mdi mdi-brain'
+          onClick={handleSolve}
+          className={styles.button}
+        />
 
-      <Button
-        label='Solve'
-        icon='mdi mdi-brain'
-        onClick={handleSolve}
-        className={styles.button}
-        disabled={puzzle.state !== PuzzleStates.Valid}
-      />
+        <Button
+          label='Send to Server & Play'
+          icon='mdi mdi-send'
+          onClick={handleSend}
+          className={styles.button}
+          disabled={puzzle.state !== PuzzleStates.Solved}
+        />
 
-      <Button
-        label='Send to Server & Play'
-        icon='mdi mdi-send'
-        onClick={handleSend}
-        className={styles.button}
-        disabled={puzzle.state !== PuzzleStates.Solved}
-      />
-    </>
+        <Button
+          label='Start Over'
+          icon='mdi mdi-restart'
+          onClick={handleClear}
+          className={classNames(
+            styles.button,
+            'p-button-warning',
+            'p-button-success'
+          )}
+        />
+      </>
+
+      <DrawGrid />
+    </DesignPanel>
   );
 };
 

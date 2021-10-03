@@ -73,6 +73,7 @@ export const designSlice = createSlice({
   reducers: {
     setActiveStep: (state, action) => {
       state.activeStep = action.payload;
+      localStorage.setItem('puzzleState', JSON.stringify(state));
     },
     setBaseGame: (state, action: PayloadAction<IBaseGame>) => {
       state.puzzle = { ...state.puzzle, ...action.payload };
@@ -81,11 +82,12 @@ export const designSlice = createSlice({
         state.puzzle.rowCount
       );
     },
-    clearDesignGame: state => {
-      state = JSON.parse(JSON.stringify(initialState));
+    clearDesignGame: () => {
+      localStorage.removeItem('puzzleState');
+      return initialState;
     },
-    setDesignGame: (state, action) => {
-      state.puzzle = action.payload;
+    setPuzzleState: (state, action: PayloadAction<DesignSliceState>) => {
+      return action.payload;
     },
     updateCell: (state, action) => {
       const newCell = action.payload;
@@ -95,7 +97,6 @@ export const designSlice = createSlice({
       ) {
         (newCell as INumberCell).guess = 0;
       }
-      // console.log('newCell:', newCell);
       state.puzzle.cells[newCell.index] = newCell;
       state.puzzle.state = PuzzleStates.Raw;
     },
@@ -110,12 +111,13 @@ export const designSlice = createSlice({
       state.puzzle.state = PuzzleStates.Raw;
       state.activeStep = DesignStepsEnum.InsertHints;
     },
-    checkGameSuccess: (state, action: PayloadAction<boolean>) => {
+    checkGameSuccess: state => {
       state.puzzle.state = PuzzleStates.Valid;
     },
-    createGameSuccess: state => {
-      state = { ...initialState };
+    createGameSuccess: () => {
       myHistory.push('/');
+      localStorage.removeItem('puzzleState');
+      return initialState;
     },
   },
 });
@@ -126,7 +128,7 @@ export const {
   createGameSuccess,
   setActiveStep,
   setBaseGame,
-  setDesignGame,
+  setPuzzleState,
   makeHintCells,
   solveGameSuccess,
   solveGameFailed,
@@ -141,7 +143,7 @@ export const checkGame = (): AppThunk => async (dispatch: any, getState) => {
 
   if (isValid) {
     dispatch(setSuccessAlert('Puzzle is valid.'));
-    dispatch(checkGameSuccess(isValid));
+    dispatch(checkGameSuccess());
   } else {
     dispatch(setErrorAlert(`Puzzle invalid`));
   }

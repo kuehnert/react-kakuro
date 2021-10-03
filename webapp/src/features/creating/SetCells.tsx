@@ -1,16 +1,35 @@
+import { setErrorAlert } from 'features/alerts/alertSlice';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setActiveStep } from 'store/designSlice';
+import validatePuzzle from 'utils/validateGrid';
 import { RootState } from '../../store/store';
+import DesignPanel from './DesignPanel';
+import DrawGrid from './DrawGrid';
 
 const SetCells: React.FC = () => {
-  const {
-    puzzle: { name },
-  } = useSelector((state: RootState) => state.design);
+  const { activeStep, puzzle } = useSelector(
+    (state: RootState) => state.design
+  );
+  const dispatch = useDispatch();
+
+  const handleBack = () => {
+    dispatch(setActiveStep(activeStep - 1));
+  };
+
+  const handleNext = () => {
+    const res = validatePuzzle(puzzle);
+    if (res.valid) {
+      dispatch(setActiveStep(activeStep + 1));
+    } else {
+      dispatch(setErrorAlert(res.message));
+    }
+  };
 
   return (
-    <>
-      <h5>{name}</h5>
-    </>
+    <DesignPanel handleBack={handleBack} handleNext={handleNext}>
+      <DrawGrid />
+    </DesignPanel>
   );
 };
 

@@ -49,6 +49,10 @@ const HintDialog: React.FC<Props> = ({
       cell.index + (across ? 1 : puzzle.columnCount),
       across
     );
+
+    // console.log('groupData.index', groupData.index, 'groupData.count', groupData.count);
+    // const minSum = 3;
+    // const maxSum = 45;
     const combs = Object.keys(combinations[groupData.count]).map(e => +e);
     const minSum = Math.min(...combs);
     const maxSum = Math.max(...combs);

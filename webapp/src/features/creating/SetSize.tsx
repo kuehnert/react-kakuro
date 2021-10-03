@@ -1,15 +1,15 @@
 import MyInput from 'components/MyInput';
 import MySelectButton from 'components/MySelectButton';
 import MySlider from 'components/MySlider';
-import { Form, Formik } from 'formik';
-import { Button } from 'primereact/button';
+import { Form, Formik, FormikProps } from 'formik';
 import { InputText } from 'primereact/inputtext';
-import React from 'react';
+import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setBaseGame } from 'store/designSlice';
+import { setActiveStep, setBaseGame } from 'store/designSlice';
 import { IBaseGame } from 'store/gameSlice';
 import * as Yup from 'yup';
 import { RootState } from '../../store/store';
+import DesignPanel from './DesignPanel';
 
 const minColumns = 4;
 
@@ -53,8 +53,21 @@ const PuzzleSchema = Yup.object().shape({
 
 const SetSize: React.FC = () => {
   const dispatch = useDispatch();
-  const { puzzle } = useSelector((state: RootState) => state.design);
+  const { activeStep, puzzle } = useSelector(
+    (state: RootState) => state.design
+  );
   const initialValues: IBaseGame = puzzle;
+  // const formikRef = useRef<FormikProps<FormikValues>>(null);
+  const formikRef = useRef<FormikProps<IBaseGame>>(null);
+
+  const handleNext = () => {
+    console.log('Click');
+    if (formikRef.current) {
+      formikRef.current.handleSubmit();
+    }
+
+    dispatch(setActiveStep(activeStep + 1));
+  };
 
   const handleSubmit = (values: IBaseGame) => {
     dispatch(setBaseGame(values));
@@ -65,40 +78,42 @@ const SetSize: React.FC = () => {
       enableReinitialize
       initialValues={initialValues}
       onSubmit={handleSubmit}
-      validationSchema={PuzzleSchema}>
+      validationSchema={PuzzleSchema}
+      innerRef={formikRef}>
       {({ setFieldValue, values }) => (
-        <Form className=''>
-          <MyInput name='name' label='Puzzle Name' as={InputText} />
+        <DesignPanel handleNext={handleNext}>
+          <Form>
+            <MyInput name='name' label='Puzzle Name' as={InputText} />
 
-          <MySelectButton
-            field='level'
-            label='Difficulty'
-            setFieldValue={setFieldValue}
-            options={difficulties}
-            values={values}
-          />
+            <MySelectButton
+              field='level'
+              label='Difficulty'
+              setFieldValue={setFieldValue}
+              options={difficulties}
+              values={values}
+            />
 
-          <MySlider
-            field='columnCount'
-            label='Columns Across'
-            setFieldValue={setFieldValue}
-            min={minColumns}
-            max={40}
-            values={values}
-          />
+            <MySlider
+              field='columnCount'
+              label='Columns Across'
+              setFieldValue={setFieldValue}
+              min={minColumns}
+              max={40}
+              values={values}
+            />
 
-          <MySlider
-            field='rowCount'
-            label='Rows Down'
-            setFieldValue={setFieldValue}
-            min={minColumns}
-            max={40}
-            values={values}
-          />
+            <MySlider
+              field='rowCount'
+              label='Rows Down'
+              setFieldValue={setFieldValue}
+              min={minColumns}
+              max={40}
+              values={values}
+            />
 
-          {/* <Button type='submit' label='Set Size' className='p-mt-2' /> */}
-          <Button type='submit' label='Set Size' className='' />
-        </Form>
+            {/* <Button type='submit' label='Set Size' className='' /> */}
+          </Form>
+        </DesignPanel>
       )}
     </Formik>
   );

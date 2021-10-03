@@ -55,6 +55,7 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
       <div
         className={classnames(styles.designCell, cell.type)}
         onClick={handleClick}>
+        {/* <div className={styles.index}>{cell.index}</div> */}
         <div className='horizontalHint'>{renderHint(cell.hintHorizontal)}</div>
         <div className='verticalHint'>{renderHint(cell.hintVertical)}</div>
         <div className={styles.solution}>{renderHint(cell.solution)}</div>
