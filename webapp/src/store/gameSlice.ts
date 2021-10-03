@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import getHints from 'helpers/getHints';
+import getHints from 'utils/getHints';
 import {
   makePencilmarks,
   makePencilmarksForCell,
   singlePencilmarksToGuess,
-} from 'helpers/pencilmarks';
+} from 'utils/pencilmarks';
 import { AppThunk } from './store';
 
 /* Types */

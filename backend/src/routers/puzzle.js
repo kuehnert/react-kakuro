@@ -4,6 +4,7 @@ const router = new express.Router();
 const _ = require('lodash');
 const Puzzle = require('../models/puzzle');
 const debug = require('../utils/debug');
+const auth = require('../middleware/auth');
 
 // FETCH ALL
 router.get('/puzzles', async (req, res) => {
@@ -16,8 +17,23 @@ router.get('/puzzles', async (req, res) => {
 });
 
 // CREATE
-router.post('/puzzles', async (req, res) => {
-  const { url } = req.body;
+router.post('/puzzles', auth, async (req, res) => {
+  const values = req.body;
+
+  const ALLOWED = ["name", "level", "columnCount", "rowCount", "cellString"];
+  const updates = Object.keys(values);
+  const isValid = updates.every(a => ALLOWED.includes(a));
+
+  if (!isValid) {
+    return res.status(400).send({ error: "Invalid values" });
+  }
+
+  try {
+
+  } catch (error) {
+    console.log('error', error);
+    res.sendStatus(500);
+  }
 });
 
 // UPDATE

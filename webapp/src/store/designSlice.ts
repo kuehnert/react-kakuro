@@ -1,13 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import kakuroApi from 'api/kakuroApi';
-import {
-  setErrorAlert,
-  setSuccessAlert
-} from 'features/alerts/alertSlice';
-import checkPuzzle from 'helpers/checkPuzzle';
-import doMakeHintCells from 'helpers/doMakeHintCells';
-import solvePuzzle from 'helpers/solvePuzzle';
+import { setErrorAlert, setSuccessAlert } from 'features/alerts/alertSlice';
+import checkPuzzle from 'utils/checkPuzzle';
+import doMakeHintCells from 'utils/doMakeHintCells';
+import solvePuzzle from 'utils/solvePuzzle';
 import myHistory from 'myHistory';
+import authHeader from 'utils/authHeader';
 import { CellType, IBaseGame, IGameData, PuzzleStates } from './gameSlice';
 import { AppThunk } from './store';
 
@@ -148,17 +146,28 @@ export const solveGame = (): AppThunk => async (dispatch: any, getState) => {
   }
 };
 
+export interface IApiError {
+  status: number;
+  statusText: string;
+}
+
 export const createGame =
   (values: IGameData): AppThunk =>
   async (dispatch: any) => {
     // dispatch(submitting());
     let puzzle;
     try {
-      const response = await kakuroApi.post('/puzzles', values);
+      const response = await kakuroApi.post('/puzzles', values, {
+        headers: authHeader(),
+      });
       puzzle = response.data;
-    } catch ({ response }: any) {
-      console.log('response:', response);
-      dispatch(setErrorAlert(`Error trying to save puzzle: ${response}`));
+    } catch (error) {
+      console.log('error:', JSON.stringify(error));
+      dispatch(
+        setErrorAlert(
+          `Error trying to save puzzle: ${(error as Error).message}`
+        )
+      );
       return;
     }
 

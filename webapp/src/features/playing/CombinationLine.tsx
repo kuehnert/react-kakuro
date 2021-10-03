@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import getCombinations from 'helpers/getCombinations';
+import getCombinations from 'utils/getCombinations';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
