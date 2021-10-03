@@ -11,7 +11,7 @@ import { IBaseGame } from 'store/gameSlice';
 import * as Yup from 'yup';
 import { RootState } from '../../store/store';
 
-const minColumns = 3;
+const minColumns = 4;
 
 const difficulties = [
   {

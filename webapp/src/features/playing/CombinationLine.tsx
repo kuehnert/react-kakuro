@@ -10,23 +10,29 @@ const CombinationLine: React.FC = () => {
   const [possibilities, setPossibilities] = useState<number[][][]>([[], []]);
 
   const renderDigit = (d: number, direction: number) => {
+    const key = 'd' + d + '' + direction;
+
     if (hints[direction].used.includes(d)) {
-      return <span className={styles.highlight}>{d}</span>;
+      return <span className={styles.highlight} key={key}>{d}</span>;
     } else {
-      return <span>{d}</span>;
+      return <span key={key}>{d}</span>;
     }
   };
 
   const renderPossibility = (a: number[], index: number, direction: number) => {
+    const key = 'p' + a[0] + '' + index + '' + direction;
+
     return (
-      <span className={styles.possibility} key={index}>
+      <span className={styles.possibility} key={key}>
         {a.map(d => renderDigit(d, direction))}
       </span>
     );
   };
 
   const renderPossibilities = (a: number[][], direction: number) => {
-    return <span>{a.map((b, i) => renderPossibility(b, i, direction))}</span>;
+    const key = 'ps' + a[0] + '' + direction;
+
+    return <span key={key}>{a.map((b, i) => renderPossibility(b, i, direction))}</span>;
   };
 
   const renderLine = (direction: number) => (

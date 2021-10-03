@@ -58,6 +58,11 @@ export type IBaseGame = {
   level: Difficulty;
 };
 
+export interface IServerGameData extends IBaseGame {
+  state: PuzzleStates;
+  cellString: string;
+}
+
 export interface IGameData extends IBaseGame {
   state: PuzzleStates;
   cells: ICell[];
@@ -100,6 +105,9 @@ export const gameSlice = createSlice({
         .filter(c => c.type === CellType.NumberCell)
         .forEach(cell => {
           const nCell = cell as INumberCell;
+          if (!nCell.guess) {
+            nCell.guess = 0;
+          }
           if (!nCell.pencilMarks) {
             nCell.pencilMarks = [];
           }
@@ -113,6 +121,9 @@ export const gameSlice = createSlice({
         .filter(c => c.type === CellType.NumberCell)
         .forEach(cell => {
           const nCell = cell as INumberCell;
+          if (!nCell.guess) {
+            nCell.guess = 0;
+          }
           if (!nCell.pencilMarks) {
             nCell.pencilMarks = [];
           }

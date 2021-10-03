@@ -21,16 +21,16 @@ export function guessNumber(game: IGameData, index: number, guess: number) {
   });
 }
 
-function logBoard(game: IGameData) {
-  console.log(
-    'Board',
-    JSON.stringify(
-      game.cells
-        .filter(c => c.type === CellType.NumberCell)
-        .map(c => (c as INumberCell).guess)
-    )
-  );
-}
+// function logBoard(game: IGameData) {
+//   console.log(
+//     'Board',
+//     JSON.stringify(
+//       game.cells
+//         .filter(c => c.type === CellType.NumberCell)
+//         .map(c => (c as INumberCell).guess)
+//     )
+//   );
+// }
 
 function logSolution(game: IGameData) {
   console.log(
@@ -79,6 +79,9 @@ function _solvePuzzle(game: IGameData, index: number) {
           return;
         }
 
+        // logBoard(game);
+        // console.log(p, rowData.usedDigits, columnData.usedDigits);
+
         if (
           (rowData.usedDigits.length === rowData.count - 1 &&
             rowData.sum + p !== rowData.hint) ||
@@ -95,9 +98,8 @@ function _solvePuzzle(game: IGameData, index: number) {
         const tempGame: IGameData = JSON.parse(JSON.stringify(game));
         makePencilmarks(tempGame);
         singlePencilmarksToGuess(tempGame);
-        logBoard(tempGame);
         _solvePuzzle(tempGame, index + 1);
-        nCell.guess = -1;
+        nCell.guess = 0;
       });
     }
   }

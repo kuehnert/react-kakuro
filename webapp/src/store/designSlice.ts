@@ -1,12 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import kakuroApi from 'api/kakuroApi';
 import { setErrorAlert, setSuccessAlert } from 'features/alerts/alertSlice';
-import checkPuzzle from 'utils/checkPuzzle';
-import doMakeHintCells from 'utils/doMakeHintCells';
-import solvePuzzle from 'utils/solvePuzzle';
 import myHistory from 'myHistory';
 import authHeader from 'utils/authHeader';
-import { CellType, IBaseGame, IGameData, PuzzleStates } from './gameSlice';
+import checkPuzzle from 'utils/checkPuzzle';
+import doMakeHintCells from 'utils/doMakeHintCells';
+import preparePuzzle from 'utils/preparePuzzle';
+import solvePuzzle from 'utils/solvePuzzle';
+import {
+  CellType,
+  IBaseGame,
+  IGameData,
+  INumberCell,
+  PuzzleStates,
+} from './gameSlice';
 import { AppThunk } from './store';
 
 export enum Direction {
@@ -49,7 +56,7 @@ const createGrid = (columns: number, rows: number) =>
   }));
 
 const initialState: DesignSliceState = {
-  activeStep: 3,
+  activeStep: 0,
   puzzle: {
     name: 'Unnamed',
     level: 4,
@@ -82,6 +89,13 @@ export const designSlice = createSlice({
     },
     updateCell: (state, action) => {
       const newCell = action.payload;
+      if (
+        newCell.type === CellType.NumberCell &&
+        !(newCell as INumberCell).guess
+      ) {
+        (newCell as INumberCell).guess = 0;
+      }
+      // console.log('newCell:', newCell);
       state.puzzle.cells[newCell.index] = newCell;
       state.puzzle.state = PuzzleStates.Raw;
     },
@@ -99,8 +113,8 @@ export const designSlice = createSlice({
     checkGameSuccess: (state, action: PayloadAction<boolean>) => {
       state.puzzle.state = PuzzleStates.Valid;
     },
-    createGameSuccess: (state, action: PayloadAction<IGameData>) => {
-      state = JSON.parse(JSON.stringify(initialState));
+    createGameSuccess: state => {
+      state = { ...initialState };
       myHistory.push('/');
     },
   },
@@ -155,9 +169,10 @@ export const createGame =
   (values: IGameData): AppThunk =>
   async (dispatch: any) => {
     // dispatch(submitting());
-    let puzzle;
+    let puzzle = preparePuzzle(values);
+
     try {
-      const response = await kakuroApi.post('/puzzles', values, {
+      const response = await kakuroApi.post('/puzzles', puzzle, {
         headers: authHeader(),
       });
       puzzle = response.data;
@@ -171,6 +186,6 @@ export const createGame =
       return;
     }
 
-    dispatch(createGameSuccess(puzzle));
+    dispatch(createGameSuccess());
     dispatch(setSuccessAlert('Puzzle erzeugt.'));
   };
