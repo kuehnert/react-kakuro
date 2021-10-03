@@ -2,8 +2,11 @@ import classNames from 'classnames';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { CellType } from 'store/gameSlice';
+import { RootState } from 'store/store';
+import combinations from 'utils/combinations';
+import { getRowForCell } from 'utils/pencilmarks';
 import { IDesignCell, updateCell } from '../../store/designSlice';
 import styles from './HintDialog.module.scss';
 
@@ -22,6 +25,7 @@ const HintDialog: React.FC<Props> = ({
   visible,
   onHide,
 }) => {
+  const { puzzle } = useSelector((state: RootState) => state.design);
   const [options, setOptions] = useState<number[]>([]);
   const dispatch = useDispatch();
 
@@ -40,6 +44,15 @@ const HintDialog: React.FC<Props> = ({
   };
 
   const renderButtons = (across: boolean) => {
+    const groupData = getRowForCell(
+      puzzle,
+      cell.index + (across ? 1 : puzzle.columnCount),
+      across
+    );
+    const combs = Object.keys(combinations[groupData.count]).map(e => +e);
+    const minSum = Math.min(...combs);
+    const maxSum = Math.max(...combs);
+
     return (
       <div className=''>
         <div className={styles.label}>{across ? 'Across' : 'Down'}</div>
@@ -47,10 +60,14 @@ const HintDialog: React.FC<Props> = ({
           {options.map(n => (
             <Button
               key={n}
-              label={'' + n}
+              label={n < minSum || n > maxSum ? '' : '' + n}
               onClick={() => handleClick(n, across)}
-              disabled={n < 3}
-              className={classNames('p-button-rounded', styles.button, across ? 'p-button-success' : 'p-button-info')}
+              disabled={n < minSum || n > maxSum}
+              className={classNames(
+                'p-button-rounded',
+                styles.button,
+                across ? 'p-button-success' : 'p-button-info'
+              )}
             />
           ))}
         </div>
@@ -60,7 +77,7 @@ const HintDialog: React.FC<Props> = ({
 
   useEffect(() => {
     // const numbers = Array.from({ length: 43 }, (e, i) => i + 3);
-    const numbers = Array.from({ length: 45 }, (e, i) => i + 1);
+    const numbers = Array.from({ length: 46 }, (e, i) => i);
     setOptions(numbers);
   }, []);
 
