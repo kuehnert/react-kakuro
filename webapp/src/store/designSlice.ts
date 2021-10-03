@@ -1,9 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { setErrorAlert, setSuccessAlert } from 'features/alerts/alertSlice';
+import kakuroApi from 'api/kakuroApi';
+import {
+  setErrorAlert,
+  setSuccessAlert
+} from 'features/alerts/alertSlice';
 import checkPuzzle from 'helpers/checkPuzzle';
 import doMakeHintCells from 'helpers/doMakeHintCells';
 import solvePuzzle from 'helpers/solvePuzzle';
-import { CellType, IBaseGame, IGameData, StateType } from './gameSlice';
+import myHistory from 'myHistory';
+import { CellType, IBaseGame, IGameData, PuzzleStates } from './gameSlice';
 import { AppThunk } from './store';
 
 export enum Direction {
@@ -17,6 +22,7 @@ export interface IDesignCell {
   index: number;
   hintHorizontal?: number;
   hintVertical?: number;
+  solution?: number;
 }
 
 export enum DesignStepsEnum {
@@ -52,7 +58,7 @@ const initialState: DesignSliceState = {
     columnCount: 10,
     rowCount: 10,
     cells: createGrid(10, 10),
-    state: StateType.Raw,
+    state: PuzzleStates.Raw,
   },
 };
 
@@ -71,7 +77,7 @@ export const designSlice = createSlice({
       );
     },
     clearDesignGame: state => {
-      state = initialState;
+      state = JSON.parse(JSON.stringify(initialState));
     },
     setDesignGame: (state, action) => {
       state.puzzle = action.payload;
@@ -79,16 +85,25 @@ export const designSlice = createSlice({
     updateCell: (state, action) => {
       const newCell = action.payload;
       state.puzzle.cells[newCell.index] = newCell;
+      state.puzzle.state = PuzzleStates.Raw;
     },
     makeHintCells: state => {
       doMakeHintCells(state.puzzle);
     },
     solveGameSuccess: (state, action: PayloadAction<IGameData>) => {
       state.puzzle = action.payload;
-      state.puzzle.state = StateType.Solved;
+      state.puzzle.state = PuzzleStates.Solved;
+    },
+    solveGameFailed: state => {
+      state.puzzle.state = PuzzleStates.Raw;
+      state.activeStep = DesignStepsEnum.InsertHints;
     },
     checkGameSuccess: (state, action: PayloadAction<boolean>) => {
-      state.puzzle.state = StateType.Valid;
+      state.puzzle.state = PuzzleStates.Valid;
+    },
+    createGameSuccess: (state, action: PayloadAction<IGameData>) => {
+      state = JSON.parse(JSON.stringify(initialState));
+      myHistory.push('/');
     },
   },
 });
@@ -96,11 +111,13 @@ export const designSlice = createSlice({
 export const {
   checkGameSuccess,
   clearDesignGame,
+  createGameSuccess,
   setActiveStep,
   setBaseGame,
   setDesignGame,
   makeHintCells,
   solveGameSuccess,
+  solveGameFailed,
   updateCell,
 } = designSlice.actions;
 
@@ -124,8 +141,27 @@ export const solveGame = (): AppThunk => async (dispatch: any, getState) => {
 
   if (result.error) {
     dispatch(setErrorAlert(`Puzzle invalid: ${result.error}`));
+    dispatch(solveGameFailed());
   } else {
     dispatch(setSuccessAlert('Puzzle solved.'));
     dispatch(solveGameSuccess(result.solution!));
   }
 };
+
+export const createGame =
+  (values: IGameData): AppThunk =>
+  async (dispatch: any) => {
+    // dispatch(submitting());
+    let puzzle;
+    try {
+      const response = await kakuroApi.post('/puzzles', values);
+      puzzle = response.data;
+    } catch ({ response }: any) {
+      console.log('response:', response);
+      dispatch(setErrorAlert(`Error trying to save puzzle: ${response}`));
+      return;
+    }
+
+    dispatch(createGameSuccess(puzzle));
+    dispatch(setSuccessAlert('Puzzle erzeugt.'));
+  };

@@ -1,8 +1,8 @@
 import { Button } from 'primereact/button';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { checkGame, solveGame } from 'store/designSlice';
-import { setCurrentGame } from 'store/gameSlice';
+import { checkGame, createGame, solveGame } from 'store/designSlice';
+import { PuzzleStates, setCurrentGame } from 'store/gameSlice';
 import { RootState } from '../../store/store';
 import styles from './SaveGame.module.scss';
 
@@ -20,19 +20,20 @@ const SaveGame: React.FC = () => {
 
   const handleSend = () => {
     dispatch(setCurrentGame(puzzle));
-    // dispatch(clearDesignGame());
-    // localStorage.removeItem('puzzle');
-    // myHistory.push('/play');
+    dispatch(createGame(puzzle));
   };
 
   return (
     <>
-      <h5>Save {puzzle.name}</h5>
+      <h5>
+        Save {puzzle.name} {puzzle.state}
+      </h5>
       <Button
         label='Check Validity'
         icon='mdi mdi-hand-okay'
         onClick={handleCheck}
         className={styles.button}
+        disabled={puzzle.state >= PuzzleStates.Valid}
       />
 
       <Button
@@ -40,13 +41,15 @@ const SaveGame: React.FC = () => {
         icon='mdi mdi-brain'
         onClick={handleSolve}
         className={styles.button}
+        disabled={puzzle.state !== PuzzleStates.Valid}
       />
 
       <Button
-        label='Send to Server'
+        label='Send to Server & Play'
         icon='mdi mdi-send'
         onClick={handleSend}
         className={styles.button}
+        disabled={puzzle.state !== PuzzleStates.Solved}
       />
     </>
   );

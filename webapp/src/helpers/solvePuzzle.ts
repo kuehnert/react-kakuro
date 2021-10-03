@@ -90,7 +90,7 @@ function _solvePuzzle(game: IGameData, index: number) {
         }
 
         nCell.guess = p;
-        console.log(`Cell no. ${index}: Guessing ${p}...`);
+        // console.log(`Cell no. ${index}: Guessing ${p}...`);
 
         const tempGame: IGameData = JSON.parse(JSON.stringify(game));
         makePencilmarks(tempGame);
@@ -118,26 +118,22 @@ function solvePuzzle(original: IGameData): ISolvePuzzleResult {
   // create copy of entered game
   const game: IGameData = JSON.parse(JSON.stringify(original));
   // create initial pencil marks
-  logBoard(game);
+  // logBoard(game);
   makePencilmarks(game);
   while (singlePencilmarksToGuess(game)) {}
 
   solutions = new Array<IGameData>();
   _solvePuzzle(game, 0);
-  console.log(`Found ${solutions.length}:`);
-  // solutions.forEach((s) => logSolution(s));
+  // console.log(`Found ${solutions.length}:`);
 
   if (solutions.length === 0) {
-    console.log('Puzzle invalid; no solution.');
     return { error: 'Puzzle invalid; no solution.' };
   } else if (solutions.length > 1) {
-    console.log('Puzzle invalid; more than one solution.');
     return {
       error: `Puzzle invalid; more than one solution (${solutions.length}).`,
     };
   } else {
-    console.log('solution:', logSolution(solutions[0]));
-
+    logSolution(solutions[0]);
     return { solution: solutions[0] };
   }
 }

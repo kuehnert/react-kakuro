@@ -23,7 +23,7 @@ export enum CellType {
   NumberCell = 'numberCell',
 }
 
-export enum StateType {
+export enum PuzzleStates {
   Raw = 0,
   Valid = 1,
   Solved = 2,
@@ -59,7 +59,7 @@ export type IBaseGame = {
 };
 
 export interface IGameData extends IBaseGame {
-  state: StateType;
+  state: PuzzleStates;
   cells: ICell[];
 }
 
