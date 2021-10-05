@@ -41,13 +41,13 @@ const Controls: React.FC = () => {
         </div>
 
         <Button
-          className={classnames('button', 'is-warning', 'is-large')}
+          className={classnames('button', 'is-warning', 'is-large', styles.button)}
           onClick={handleDeleteClick}>
           X
         </Button>
 
         <Button
-          className={classnames('button is-large')}
+          className={classnames('button is-large', styles.button)}
           onClick={handleAutoPencil}>
           Auto Pencil
         </Button>

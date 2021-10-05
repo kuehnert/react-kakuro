@@ -1,8 +1,13 @@
+@import '../../layout/variables';
+
 .gameBackground {
+  display: flex;
   align-self: center;
   flex-grow: 1;
-  display: flex;
   justify-content: center;
+
+  touch-action: manipulation;
+  // overflow: scroll;
 }
 
 .grid {

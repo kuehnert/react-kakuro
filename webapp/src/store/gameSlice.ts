@@ -2,9 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import getHints from 'utils/getHints';
 import {
-  makePencilmarks,
-  makePencilmarksForCell,
-  singlePencilmarksToGuess,
+  makePencilmarks, singlePencilmarksToGuess
 } from 'utils/pencilmarks';
 import { AppThunk } from './store';
 
@@ -140,9 +138,9 @@ export const gameSlice = createSlice({
       const currentCell: INumberCell = newGame.cells[index] as INumberCell;
       if (currentCell.type === CellType.NumberCell) {
         currentCell.guess = guess;
-        if (guess === 0) {
-          makePencilmarksForCell(currentCell, index, newGame);
-        }
+        // if (guess === 0) {
+        //   makePencilmarksForCell(currentCell, index, newGame);
+        // }
         state.game = newGame;
       }
       state.hints = getHints(state.game!, index);
