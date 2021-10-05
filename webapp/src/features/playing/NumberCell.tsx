@@ -22,6 +22,8 @@ const NumberCell: React.FC<Props> = ({ cell, index }) => {
     dispatch(setSelectedIndex(index));
   };
 
+  const wrongGuess = cell.solution > 0 && cell.guess !== cell.solution;
+
   return (
     <div
       className={classnames('gamecell', styles.number, {
@@ -29,10 +31,14 @@ const NumberCell: React.FC<Props> = ({ cell, index }) => {
       })}
       onClick={handleClick}>
       {cell.guess > 0 && (
-        <div className={classnames(styles.guess)}>{cell.guess}</div>
+        <div className={classnames(styles.guess, { wrongGuess })}>
+          {cell.guess}
+        </div>
       )}
       {!cell.guess && cell.pencilMarks?.length > 0 && (
-        <div className={classnames(styles.pencilMarks)}>{cell.pencilMarks.join('')}</div>
+        <div className={classnames(styles.pencilMarks)}>
+          {cell.pencilMarks.join('')}
+        </div>
       )}
     </div>
   );

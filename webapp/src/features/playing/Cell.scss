@@ -1,3 +1,4 @@
+@import '../../layout/variables';
 $selectedColor: rgb(200, 200, 0);
 
 .gamecell {
@@ -25,4 +26,9 @@ $selectedColor: rgb(200, 200, 0);
 
 .numberCell {
   background-color: white;
+}
+
+.wrongGuess {
+  color: $color1;
+  font-weight: bold;
 }
