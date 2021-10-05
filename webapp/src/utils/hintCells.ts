@@ -1,6 +1,7 @@
 import { CellType, ICell, IGameData, IHintCell } from 'store/gameSlice';
+import { getColumnForCell, getRowForCell } from './pencilmarks';
 
-function doMakeHintCells(puzzle: IGameData) {
+export function doMakeHintCells(puzzle: IGameData) {
   const { cells } = puzzle;
 
   // no hint cells in last cell
@@ -34,4 +35,22 @@ function doMakeHintCells(puzzle: IGameData) {
   }
 }
 
-export default doMakeHintCells;
+export function doFillHintsFromSolution(puzzle: IGameData) {
+  const { cells } = puzzle;
+
+  cells
+    .filter(c => c.type === CellType.HintCell)
+    .forEach(c => {
+      const hintCell = c as IHintCell;
+
+      if (hintCell.hintHorizontal === -1) {
+        const rowGroup = getRowForCell(puzzle, hintCell.index + 1);
+        hintCell.hintHorizontal = rowGroup.sumSolved;
+      }
+
+      if (hintCell.hintVertical === -1) {
+        const columnGroup = getColumnForCell(puzzle, hintCell.index + puzzle.columnCount);
+        hintCell.hintVertical = columnGroup.sumSolved;
+      }
+    });
+}

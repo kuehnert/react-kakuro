@@ -10,34 +10,12 @@ import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveStep, setBaseGame, setPuzzleState } from 'store/designSlice';
 import { IBaseGame, IGameData } from 'store/gameSlice';
+import { difficultyLabels } from 'types/puzzle';
 import * as Yup from 'yup';
 import { RootState } from '../../store/store';
 import DesignPanel from './DesignPanel';
 
 const minColumns = 4;
-
-const difficulties = [
-  {
-    label: 'Easy',
-    value: 0,
-  },
-  {
-    label: 'Medium',
-    value: 1,
-  },
-  {
-    label: 'Medium Plus',
-    value: 2,
-  },
-  {
-    label: 'Hard',
-    value: 3,
-  },
-  {
-    label: 'Very Hard',
-    value: 4,
-  },
-];
 
 const PuzzleSchema = Yup.object().shape({
   name: Yup.string()
@@ -111,7 +89,7 @@ const SetSize: React.FC = () => {
               field='level'
               label='Difficulty'
               setFieldValue={setFieldValue}
-              options={difficulties}
+              options={difficultyLabels}
               values={values}
             />
 

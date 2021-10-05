@@ -8,11 +8,13 @@ import alertReducer from '../features/alerts/alertSlice';
 import gameReducer from './gameSlice';
 import designReducer from './designSlice';
 import userReducer from './userSlice';
+import listReducer from '../features/list/listSlice';
 
 export const rootReducer = combineReducers({
   alerts: alertReducer,
-  game: gameReducer,
   design: designReducer,
+  list: listReducer,
+  game: gameReducer,
   users: userReducer,
 });
 

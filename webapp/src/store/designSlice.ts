@@ -4,7 +4,7 @@ import { setErrorAlert, setSuccessAlert } from 'features/alerts/alertSlice';
 import myHistory from 'myHistory';
 import authHeader from 'utils/authHeader';
 import checkPuzzle from 'utils/checkPuzzle';
-import doMakeHintCells from 'utils/doMakeHintCells';
+import {doMakeHintCells} from 'utils/hintCells';
 import preparePuzzle from 'utils/preparePuzzle';
 import solvePuzzle from 'utils/solvePuzzle';
 import {

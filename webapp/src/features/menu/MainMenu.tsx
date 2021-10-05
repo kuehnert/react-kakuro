@@ -1,11 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import classNames from 'classnames';
+import PuzzleList from 'features/list/PuzzleList';
+import myHistory from 'myHistory';
 import { Button } from 'primereact/button';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentGame } from 'store/gameSlice';
+import { RootState } from 'store/store';
+import makePlayable from 'utils/makePlayable';
 import styles from './MainMenu.module.scss';
 
 const MainMenu: React.FC = () => {
+  const { choice } = useSelector((state: RootState) => state.list);
+  const dispatch = useDispatch();
+
+  const handlePlay = () => {
+    const newPuzzle = makePlayable(choice!);
+    dispatch(setCurrentGame(newPuzzle))
+    myHistory.push('/play');
+  };
+
   return (
     <div className={styles.content}>
       <div className={classNames('text-center')}>
@@ -17,21 +31,29 @@ const MainMenu: React.FC = () => {
         <div className='text-700 text-sm mb-6'>
           All of this is work in progress, so be patient and stay tuned.
         </div>
-        <div className='grid'>
-          <div className='col-12 md:col-4 mb-4 px-5'>
-            <Link to='/create'>
-              <Button icon='mdi mdi-pencil' className='p-button-lg' />
-            </Link>
-            <div className='text-900 mb-3 font-medium'>Create new game</div>
+
+        <div className=''>
+          <PuzzleList />
+        </div>
+
+        <div className='flex flex-row justify-content-center'>
+          <div className='w-10rem h-4rem'>
+            <Button
+              label='Create game'
+              icon='mdi mdi-pencil'
+              className='p-button-lg'
+              onClick={e => myHistory.push('/create')}
+            />
           </div>
-          <div className='col-12 md:col-4 mb-4 px-5'>
-            <Link to='/play'>
-              <Button
-                icon='mdi mdi-controller-classic'
-                className='p-button-lg'
-              />
-            </Link>
-            <div className='text-900 mb-3 font-medium'>Play Game!</div>
+
+          <div className='w-10rem h-4rem'>
+            <Button
+              label='Play Game!'
+              icon='mdi mdi-controller-classic'
+              className='p-button-lg'
+              onClick={handlePlay}
+              disabled={!choice}
+            />
           </div>
         </div>
       </div>

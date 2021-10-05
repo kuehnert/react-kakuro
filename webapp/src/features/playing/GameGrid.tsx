@@ -1,15 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import classnames from 'classnames';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   CellType,
-  fetchGame,
   IBlankCell,
   ICell,
   IHintCell,
   INumberCell,
-  setGuess,
+  setGuess
 } from '../../store/gameSlice';
 import { RootState } from '../../store/store';
 import BlankCell from './BlankCell';
@@ -66,12 +65,6 @@ const GameGrid: React.FC = () => {
       </div>
     );
   };
-
-  useEffect(() => {
-    if (game == null) {
-      dispatch(fetchGame());
-    }
-  }, []);
 
   return (
     <div className={classnames('main', styles.gameBackground)}>

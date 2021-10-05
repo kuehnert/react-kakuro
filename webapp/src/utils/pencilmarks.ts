@@ -13,6 +13,7 @@ export function getRowForCell(
   let cellIndexes = [];
   let usedDigits = [];
   let sum = 0;
+  let sumSolved = 0;
 
   while (cells[x].type === CellType.NumberCell) {
     x -= delta;
@@ -30,6 +31,10 @@ export function getRowForCell(
       usedDigits.push(nCell.guess);
       sum += nCell.guess;
     }
+
+    if (nCell.solution) {
+      sumSolved += nCell.solution;
+    }
   }
 
   const hint = across
@@ -37,7 +42,7 @@ export function getRowForCell(
     : (cells[x] as IHintCell).hintVertical;
   const count = (y - x) / delta;
 
-  return { index, hint, count, sum, cellIndexes, usedDigits };
+  return { index, hint, count, sum, sumSolved, cellIndexes, usedDigits };
 }
 
 export function getColumnForCell(game: IGameData, index: number) {
