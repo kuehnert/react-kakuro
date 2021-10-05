@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/react-kakuro/static/css/main.ea35748c.chunk.css",
-    "main.js": "/react-kakuro/static/js/main.8d770189.chunk.js",
-    "main.js.map": "/react-kakuro/static/js/main.8d770189.chunk.js.map",
-    "runtime-main.js": "/react-kakuro/static/js/runtime-main.52e4911c.js",
-    "runtime-main.js.map": "/react-kakuro/static/js/runtime-main.52e4911c.js.map",
+    "main.css": "/react-kakuro/static/css/main.23bc9151.chunk.css",
+    "main.js": "/react-kakuro/static/js/main.d68ddef8.chunk.js",
+    "main.js.map": "/react-kakuro/static/js/main.d68ddef8.chunk.js.map",
+    "runtime-main.js": "/react-kakuro/static/js/runtime-main.2f456f0f.js",
+    "runtime-main.js.map": "/react-kakuro/static/js/runtime-main.2f456f0f.js.map",
     "static/css/2.017ecfc4.chunk.css": "/react-kakuro/static/css/2.017ecfc4.chunk.css",
-    "static/js/2.ff1341b9.chunk.js": "/react-kakuro/static/js/2.ff1341b9.chunk.js",
-    "static/js/2.ff1341b9.chunk.js.map": "/react-kakuro/static/js/2.ff1341b9.chunk.js.map",
-    "static/js/3.26d25636.chunk.js": "/react-kakuro/static/js/3.26d25636.chunk.js",
-    "static/js/3.26d25636.chunk.js.map": "/react-kakuro/static/js/3.26d25636.chunk.js.map",
+    "static/js/2.7f4964d4.chunk.js": "/react-kakuro/static/js/2.7f4964d4.chunk.js",
+    "static/js/2.7f4964d4.chunk.js.map": "/react-kakuro/static/js/2.7f4964d4.chunk.js.map",
+    "static/js/3.f058c8fc.chunk.js": "/react-kakuro/static/js/3.f058c8fc.chunk.js",
+    "static/js/3.f058c8fc.chunk.js.map": "/react-kakuro/static/js/3.f058c8fc.chunk.js.map",
     "index.html": "/react-kakuro/index.html",
     "static/css/2.017ecfc4.chunk.css.map": "/react-kakuro/static/css/2.017ecfc4.chunk.css.map",
-    "static/css/main.ea35748c.chunk.css.map": "/react-kakuro/static/css/main.ea35748c.chunk.css.map",
-    "static/js/2.ff1341b9.chunk.js.LICENSE.txt": "/react-kakuro/static/js/2.ff1341b9.chunk.js.LICENSE.txt",
+    "static/css/main.23bc9151.chunk.css.map": "/react-kakuro/static/css/main.23bc9151.chunk.css.map",
+    "static/js/2.7f4964d4.chunk.js.LICENSE.txt": "/react-kakuro/static/js/2.7f4964d4.chunk.js.LICENSE.txt",
     "static/media/App.scss": "/react-kakuro/static/media/primeicons.e61f3495.woff"
   },
   "entrypoints": [
-    "static/js/runtime-main.52e4911c.js",
+    "static/js/runtime-main.2f456f0f.js",
     "static/css/2.017ecfc4.chunk.css",
-    "static/js/2.ff1341b9.chunk.js",
-    "static/css/main.ea35748c.chunk.css",
-    "static/js/main.8d770189.chunk.js"
+    "static/js/2.7f4964d4.chunk.js",
+    "static/css/main.23bc9151.chunk.css",
+    "static/js/main.d68ddef8.chunk.js"
   ]
 }
