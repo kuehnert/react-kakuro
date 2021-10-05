@@ -36,14 +36,15 @@ const Controls: React.FC = () => {
           {digits.map(d => renderButton(d, true))}
         </div>
 
-        <div className={styles.columns}>
-          {digits.map(d => renderButton(d, false))}
-        </div>
-
         <Button
-          className={classnames('button', 'is-warning', 'is-large', styles.button)}
+          className={classnames(
+            'button',
+            'is-warning',
+            'is-large',
+            styles.button
+          )}
           onClick={handleDeleteClick}>
-          X
+          Delete
         </Button>
 
         <Button
@@ -51,6 +52,10 @@ const Controls: React.FC = () => {
           onClick={handleAutoPencil}>
           Auto Pencil
         </Button>
+
+        <div className={styles.columns}>
+          {digits.map(d => renderButton(d, false))}
+        </div>
       </div>
 
       <div className='pencilmarks'></div>
