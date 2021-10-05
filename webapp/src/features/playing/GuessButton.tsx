@@ -1,11 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import classNames from 'classnames';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setGuess, togglePencilMark } from '../../store/gameSlice';
 import { RootState } from '../../store/store';
 import styles from './GuessButton.module.scss';
-import { Button } from 'primereact/button';
-import classNames from 'classnames';
 
 export interface Props {
   digit: number;
@@ -27,11 +26,17 @@ const GuessButton: React.FC<Props> = ({ digit, pencilMark }) => {
   };
 
   return (
-    <Button
-      className={classNames(styles.guessButton, { pencilMark })}
+    <div
+      className={classNames(
+        styles.guessButton,
+        pencilMark && styles.pencilMark,
+        styles.pencilMark1
+      )}
       onClick={handleGuessClick}>
-      {digit}
-    </Button>
+      <div className={classNames(styles.digit, pencilMark && styles[`digit${digit}`])}>
+        {digit}
+      </div>
+    </div>
   );
 };
 
