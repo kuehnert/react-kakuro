@@ -62,6 +62,7 @@ export interface IServerGameData extends IBaseGame {
 export interface IGameData extends IBaseGame {
   state: PuzzleStates;
   cells: ICell[];
+  hintCount: number;
 }
 
 export interface IGuess {
@@ -91,6 +92,7 @@ const initialState: GameSliceState = {
     rowCount: -1,
     name: 'Dummy',
     level: -1,
+    hintCount: -1,
   },
   hints: [
     { index: -1, sum: -1, count: -1, used: new Array<number>() },

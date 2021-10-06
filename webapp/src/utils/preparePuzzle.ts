@@ -13,9 +13,8 @@ function preparePuzzle(game: IGameData): IServerGameData {
     .join('');
 
   const { cells, ...newGame } = game;
-  const newServerGame = newGame as IServerGameData;
-  newServerGame.cellString = cellString;
-  console.log('newServerGame:', newServerGame);
+  const newServerGame = { ...newGame, cellString } as IServerGameData;
+
   return newServerGame;
 }
 

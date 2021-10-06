@@ -21,8 +21,7 @@ const CreateGame: React.FC = () => {
       const state = JSON.parse(puzzleStateJSON);
       dispatch(setPuzzleState(state));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className={styles.createGame}>

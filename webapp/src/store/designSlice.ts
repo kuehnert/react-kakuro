@@ -4,7 +4,7 @@ import { setErrorAlert, setSuccessAlert } from 'features/alerts/alertSlice';
 import myHistory from 'myHistory';
 import authHeader from 'utils/authHeader';
 import checkPuzzle from 'utils/checkPuzzle';
-import {doMakeHintCells} from 'utils/hintCells';
+import { doCountMissingHints, doMakeHintCells } from 'utils/hintCells';
 import preparePuzzle from 'utils/preparePuzzle';
 import solvePuzzle from 'utils/solvePuzzle';
 import {
@@ -64,6 +64,7 @@ const initialState: DesignSliceState = {
     rowCount: 10,
     cells: createGrid(10, 10),
     state: PuzzleStates.Raw,
+    hintCount: -1,
   },
 };
 
@@ -91,14 +92,17 @@ export const designSlice = createSlice({
     },
     updateCell: (state, action) => {
       const newCell = action.payload;
+
       if (
         newCell.type === CellType.NumberCell &&
         !(newCell as INumberCell).guess
       ) {
         (newCell as INumberCell).guess = 0;
       }
+
       state.puzzle.cells[newCell.index] = newCell;
       state.puzzle.state = PuzzleStates.Raw;
+      state.puzzle.hintCount = doCountMissingHints(state.puzzle);
     },
     makeHintCells: state => {
       doMakeHintCells(state.puzzle);

@@ -8,13 +8,14 @@ import DesignPanel from './DesignPanel';
 import DrawGrid from './DrawGrid';
 
 const SetHints: React.FC = () => {
-  const { activeStep, puzzle } = useSelector((state: RootState) => state.design);
+  const { activeStep, puzzle } = useSelector(
+    (state: RootState) => state.design
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(makeHintCells());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   const handleBack = () => {
     dispatch(setActiveStep(activeStep - 1));
@@ -26,13 +27,14 @@ const SetHints: React.FC = () => {
     if (isValid) {
       dispatch(setActiveStep(activeStep + 1));
     } else {
-      dispatch(setErrorAlert("Not all hints provided"))
+      dispatch(setErrorAlert('Not all hints provided'));
     }
   };
 
   return (
     <DesignPanel handleNext={handleNext} handleBack={handleBack}>
       <DrawGrid />
+      <div className='notes'>Missing hints: {puzzle.hintCount}</div>
     </DesignPanel>
   );
 };

@@ -19,7 +19,13 @@ function makePlayable(input: IListGame): IGameData {
   });
 
   // make hint cells
-  const newPuzzle: IGameData = { ...input, cells, state: PuzzleStates.Solved };
+  const newPuzzle: IGameData = {
+    ...input,
+    cells,
+    state: PuzzleStates.Solved,
+    hintCount: -1,
+  };
+
   doMakeHintCells(newPuzzle);
   doFillHintsFromSolution(newPuzzle);
 
