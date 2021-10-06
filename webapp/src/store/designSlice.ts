@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import kakuroApi from 'api/kakuroApi';
 import { setErrorAlert, setSuccessAlert } from 'features/alerts/alertSlice';
-import myHistory from 'myHistory';
+import { addPuzzleToList, IListGame } from 'features/list/listSlice';
 import authHeader from 'utils/authHeader';
 import checkPuzzle from 'utils/checkPuzzle';
 import { doCountMissingHints, doMakeHintCells } from 'utils/hintCells';
@@ -11,8 +11,7 @@ import {
   CellType,
   IBaseGame,
   IGameData,
-  INumberCell,
-  PuzzleStates,
+  INumberCell, PuzzleStates
 } from './gameSlice';
 import { AppThunk } from './store';
 
@@ -119,7 +118,7 @@ export const designSlice = createSlice({
       state.puzzle.state = PuzzleStates.Valid;
     },
     createGameSuccess: () => {
-      myHistory.push('/');
+      // myHistory.push('/');
       localStorage.removeItem('puzzleState');
       return initialState;
     },
@@ -167,8 +166,8 @@ export const solveGame = (): AppThunk => async (dispatch: any, getState) => {
 };
 
 export interface IApiError {
-  status: number;
-  statusText: string;
+  code: number;
+  message: string;
 }
 
 export const createGame =
@@ -176,22 +175,25 @@ export const createGame =
   async (dispatch: any) => {
     // dispatch(submitting());
     let puzzle = preparePuzzle(values);
+    let newPuzzle: IListGame;
 
     try {
       const response = await kakuroApi.post('/puzzles', puzzle, {
         headers: authHeader(),
       });
-      puzzle = response.data;
+      newPuzzle = response.data;
     } catch (error) {
-      console.log('error:', JSON.stringify(error));
+      console.log('error:', JSON.stringify(error, null, 4));
       dispatch(
         setErrorAlert(
-          `Error trying to save puzzle: ${(error as Error).message}`
+          // `Error trying to save puzzle: ${(error as IApiError).message}`
+          `Error: Puzzle is already in database`
         )
       );
       return;
     }
 
+    dispatch(addPuzzleToList(newPuzzle));
     dispatch(createGameSuccess());
     dispatch(setSuccessAlert('Puzzle erzeugt.'));
   };

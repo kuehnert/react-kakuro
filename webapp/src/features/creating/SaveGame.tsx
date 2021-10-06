@@ -1,15 +1,15 @@
-import { InputTextarea } from 'primereact/inputtextarea';
 import classNames from 'classnames';
 import myHistory from 'myHistory';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
+import { InputTextarea } from 'primereact/inputtextarea';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   clearDesignGame,
   createGame,
   setActiveStep,
-  solveGame,
+  solveGame
 } from 'store/designSlice';
 import { PuzzleStates, setCurrentGame } from 'store/gameSlice';
 import { RootState } from '../../store/store';
@@ -44,8 +44,8 @@ const SaveGame: React.FC = () => {
   };
 
   const handleSend = () => {
-    dispatch(setCurrentGame(puzzle));
     dispatch(createGame(puzzle));
+    myHistory.push('/play');
   };
 
   const handleClear = () => {

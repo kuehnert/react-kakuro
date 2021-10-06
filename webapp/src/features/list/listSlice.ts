@@ -26,13 +26,18 @@ export const listSlice = createSlice({
     fetchListSuccess: (state, action: PayloadAction<IListGame[]>) => {
       state.list = action.payload;
     },
+    addPuzzleToList: (state, action: PayloadAction<IListGame>) => {
+      state.list.push(action.payload);
+      console.log('Me here');
+    },
     setChoiceID: (state, action: PayloadAction<IListGame>) => {
       state.choice = action.payload;
     },
   },
 });
 
-export const { fetchListSuccess, setChoiceID } = listSlice.actions;
+export const { addPuzzleToList, fetchListSuccess, setChoiceID } =
+  listSlice.actions;
 
 export default listSlice.reducer;
 

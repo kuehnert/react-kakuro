@@ -22,12 +22,12 @@ const SetHints: React.FC = () => {
   };
 
   const handleNext = () => {
-    const isValid = checkPuzzle(puzzle);
+    const res = checkPuzzle(puzzle);
 
-    if (isValid) {
+    if (res.valid) {
       dispatch(setActiveStep(activeStep + 1));
     } else {
-      dispatch(setErrorAlert('Not all hints provided'));
+      dispatch(setErrorAlert(res.error || "Error in puzzle"));
     }
   };
 

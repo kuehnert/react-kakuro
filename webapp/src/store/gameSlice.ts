@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
 import getHints from 'utils/getHints';
 import { makePencilmarks, singlePencilmarksToGuess } from 'utils/pencilmarks';
 import { AppThunk } from './store';
@@ -104,21 +103,8 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    setCurrentGame(state, action: PayloadAction<IGameData>) {
-      const game: IGameData = JSON.parse(JSON.stringify(action.payload));
-      // create pencilmarks for all number cells
-      game.cells
-        .filter(c => c.type === CellType.NumberCell)
-        .forEach(cell => {
-          const nCell = cell as INumberCell;
-          if (!nCell.guess) {
-            nCell.guess = 0;
-          }
-          if (!nCell.pencilMarks) {
-            nCell.pencilMarks = [];
-          }
-        });
-      state.game = game;
+    setCurrentGameSuccess(state, action: PayloadAction<IGameData>) {
+      state.game = action.payload;
     },
     fetchGameSuccess(state, action: PayloadAction<IGameData>) {
       state.game = { ...action.payload };
@@ -183,7 +169,7 @@ export const gameSlice = createSlice({
 export const {
   fetchGameSuccess,
   setSelectedIndex,
-  setCurrentGame,
+  setCurrentGameSuccess,
   setGuess,
   autoPencil,
   togglePencilMark,
@@ -191,18 +177,23 @@ export const {
 
 export default gameSlice.reducer;
 
-export const fetchGame = (): AppThunk => async (dispatch: any) => {
-  let game;
-  try {
-    const response = await axios.get('puzzles/sample.json', {
-      headers: { 'Access-Control-Allow-Origin': '*' },
-    });
-    game = response.data;
-  } catch (error) {
-    // TODO: Show error
-    // dispatch(setErrorAlert(`error fetching downloads`));
-    return;
-  }
+export const setCurrentGame =
+  (game: IGameData): AppThunk =>
+  async (dispatch: any) => {
+    const newGame: IGameData = JSON.parse(JSON.stringify(game));
 
-  dispatch(fetchGameSuccess(game));
-};
+    // create pencilmarks for all number cells
+    newGame.cells
+      .filter(c => c.type === CellType.NumberCell)
+      .forEach(cell => {
+        const nCell = cell as INumberCell;
+        if (!nCell.guess) {
+          nCell.guess = 0;
+        }
+        if (!nCell.pencilMarks) {
+          nCell.pencilMarks = [];
+        }
+      });
+
+    dispatch(setCurrentGameSuccess(newGame));
+  };

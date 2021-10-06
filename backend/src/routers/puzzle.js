@@ -9,7 +9,10 @@ const auth = require('../middleware/auth');
 // FETCH ALL
 router.get('/puzzles', async (req, res) => {
   try {
-    const puzzles = await Puzzle.find({}, 'name level columnCount rowCount creatorName cellString createdAt').sort('createdAt');
+    const puzzles = await Puzzle.find(
+      {},
+      'name level columnCount rowCount creatorName cellString createdAt'
+    ).sort('createdAt');
     res.send(puzzles);
   } catch (error) {
     res.sendStatus(500);
@@ -18,7 +21,7 @@ router.get('/puzzles', async (req, res) => {
 
 // CREATE
 router.post('/puzzles', auth, async (req, res) => {
-  const values = _.omit(req.body, ['state']);
+  const values = _.omit(req.body, ['state', 'hintCount']);
   const ALLOWED = ['name', 'level', 'columnCount', 'rowCount', 'cellString'];
   const keys = Object.keys(values);
   const isValid = keys.every(a => ALLOWED.includes(a));
@@ -42,7 +45,12 @@ router.post('/puzzles', auth, async (req, res) => {
     res.status(202).send(puzzle);
   } catch (error) {
     console.log('error', error);
-    res.sendStatus(500);
+
+    if (error.code === 11000) {
+      res.status(500).send({ code: 11000, message: 'Puzzle already in database' });
+    } else {
+      res.status(500).send({ error });
+    }
   }
 });
 
