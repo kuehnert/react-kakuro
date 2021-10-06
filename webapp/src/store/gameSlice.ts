@@ -1,9 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import getHints from 'utils/getHints';
-import {
-  makePencilmarks, singlePencilmarksToGuess
-} from 'utils/pencilmarks';
+import { makePencilmarks, singlePencilmarksToGuess } from 'utils/pencilmarks';
 import { AppThunk } from './store';
 
 /* Types */
@@ -80,12 +78,20 @@ export interface IHintValues {
 
 /* State */
 type GameSliceState = {
-  game?: IGameData;
+  game: IGameData;
   selectedIndex?: number;
   hints: IHintValues[];
 };
 
 const initialState: GameSliceState = {
+  game: {
+    state: -1,
+    cells: [],
+    columnCount: -1,
+    rowCount: -1,
+    name: 'Dummy',
+    level: -1,
+  },
   hints: [
     { index: -1, sum: -1, count: -1, used: new Array<number>() },
     { index: -1, sum: -1, count: -1, used: new Array<number>() },

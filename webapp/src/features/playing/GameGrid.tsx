@@ -1,14 +1,11 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import classnames from 'classnames';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   CellType,
   IBlankCell,
-  ICell,
-  IHintCell,
-  INumberCell,
-  setGuess
+  ICell, IHintCell,
+  INumberCell
 } from '../../store/gameSlice';
 import { RootState } from '../../store/store';
 import BlankCell from './BlankCell';
@@ -18,23 +15,7 @@ import HintCell from './HintCell';
 import NumberCell from './NumberCell';
 
 const GameGrid: React.FC = () => {
-  const { game, selectedIndex } = useSelector((state: RootState) => state.game);
-  const dispatch = useDispatch();
-
-  const handleKeyPress = (event: any) => {
-    if (!selectedIndex) {
-      // do nothing if no cell selected
-      return;
-    }
-
-    if (event.key >= '0' && event.key <= '9') {
-      dispatch(setGuess({ index: selectedIndex, guess: +event.key }));
-    } else if (event.key === 'Delete') {
-      dispatch(setGuess({ index: selectedIndex, guess: 0 }));
-    } else {
-      console.log('Key pressed:', event.key);
-    }
-  };
+  const { game } = useSelector((state: RootState) => state.game);
 
   const renderCell = (cell: ICell, index: number) => {
     if (cell.type === CellType.BlankCell) {
@@ -50,10 +31,6 @@ const GameGrid: React.FC = () => {
   };
 
   const renderGrid = () => {
-    if (!game) {
-      return;
-    }
-
     return (
       <div
         className={styles.grid}
@@ -68,7 +45,7 @@ const GameGrid: React.FC = () => {
 
   return (
     <div className={classnames('main', styles.gameBackground)}>
-      <div className={styles.gamegrid} onKeyDown={handleKeyPress} tabIndex={-1}>
+      <div className={styles.gamegrid} tabIndex={-1}>
         {renderGrid()}
       </div>
     </div>
