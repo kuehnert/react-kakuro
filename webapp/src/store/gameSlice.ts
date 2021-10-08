@@ -78,12 +78,14 @@ export interface IHintValues {
 
 /* State */
 type GameSliceState = {
+  zoomLevel: number;
   game: IGameData;
   selectedIndex?: number;
   hints: IHintValues[];
 };
 
 const initialState: GameSliceState = {
+  zoomLevel: 1,
   game: {
     state: -1,
     cells: [],
@@ -125,6 +127,12 @@ export const gameSlice = createSlice({
       let currentIndex = action.payload;
       state.selectedIndex = currentIndex;
       state.hints = getHints(state.game!, currentIndex);
+    },
+    increaseZoom(state) {
+      state.zoomLevel += 1;
+    },
+    decreaseZoom(state) {
+      state.zoomLevel -= 1;
     },
     setGuess(state, action: PayloadAction<IGuess>) {
       const { index, guess } = action.payload;
@@ -168,6 +176,8 @@ export const gameSlice = createSlice({
 
 export const {
   fetchGameSuccess,
+  increaseZoom,
+  decreaseZoom,
   setSelectedIndex,
   setCurrentGameSuccess,
   setGuess,

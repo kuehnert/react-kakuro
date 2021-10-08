@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux';
 import {
   CellType,
   IBlankCell,
-  ICell, IHintCell,
+  ICell,
+  IHintCell,
   INumberCell
 } from '../../store/gameSlice';
 import { RootState } from '../../store/store';

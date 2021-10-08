@@ -1,6 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import classnames from 'classnames';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/store';
+import { calcCellSize, calcHintFontSize } from 'utils/calcCellSize';
 import { IHintCell } from '../../store/gameSlice';
 import './HintCell.scss';
 
@@ -10,10 +13,18 @@ export interface Props {
 }
 
 const HintCell: React.FC<Props> = ({ cell, index }) => {
+  const { zoomLevel } = useSelector((state: RootState) => state.game);
+  const style = calcCellSize(zoomLevel);
+  const fontSize = calcHintFontSize(zoomLevel);
+
   return (
-    <div className={classnames('gamecell', 'hintCell')}>
-      <div className='horizontalHint'>{cell.hintHorizontal}</div>
-      <div className='verticalHint'>{cell.hintVertical}</div>
+    <div className={classnames('gamecell', 'hintCell')} style={style}>
+      <div className='horizontalHint' style={fontSize}>
+        {cell.hintHorizontal}
+      </div>
+      <div className='verticalHint' style={fontSize}>
+        {cell.hintVertical}
+      </div>
     </div>
   );
 };

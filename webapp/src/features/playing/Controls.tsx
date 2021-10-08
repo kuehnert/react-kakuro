@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import GuessButton from './GuessButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-import { autoPencil, setGuess } from '../../store/gameSlice';
+import { autoPencil, decreaseZoom, increaseZoom, setGuess } from '../../store/gameSlice';
 import { Button } from 'primereact/button';
 
 /*
@@ -14,6 +14,9 @@ const Controls: React.FC = () => {
   const { selectedIndex } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
   const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+  const handleZoomIn = () => dispatch(increaseZoom());
+  const handleZoomOut = () => dispatch(decreaseZoom());
 
   const handleDeleteClick = (event: React.MouseEvent) => {
     if (selectedIndex) {
@@ -31,6 +34,11 @@ const Controls: React.FC = () => {
 
   return (
     <aside className={classnames('controls', styles.controls)}>
+      <div className={styles.zoomButtons}>
+        <Button icon='mdi mdi-magnify-minus' onClick={handleZoomOut} />
+        <Button icon='mdi mdi-magnify-plus'  onClick={handleZoomIn} />
+      </div>
+
       <div className={styles.guessButtons}>
         <div className={styles.columns}>
           {digits.map(d => renderButton(d, true))}

@@ -6,6 +6,7 @@ import { INumberCell, setSelectedIndex } from '../../store/gameSlice';
 import styles from './NumberCell.module.scss';
 import { RootState } from '../../store/store';
 import { useSelector } from 'react-redux';
+import { calcGuessFontSize } from 'utils/calcCellSize';
 
 export interface Props {
   cell: INumberCell;
@@ -13,10 +14,11 @@ export interface Props {
 }
 
 const NumberCell: React.FC<Props> = ({ cell, index }) => {
-  const selectedIndex = useSelector(
-    (state: RootState) => state.game.selectedIndex
+  const { selectedIndex, zoomLevel } = useSelector(
+    (state: RootState) => state.game
   );
   const dispatch = useDispatch();
+  const guessFontSize = calcGuessFontSize(zoomLevel);
 
   const handleClick = (event: React.MouseEvent) => {
     dispatch(setSelectedIndex(index));
@@ -31,7 +33,9 @@ const NumberCell: React.FC<Props> = ({ cell, index }) => {
       })}
       onClick={handleClick}>
       {cell.guess > 0 && (
-        <div className={classnames(styles.guess, { wrongGuess })}>
+        <div
+          className={classnames(styles.guess, { wrongGuess })}
+          style={guessFontSize}>
           {cell.guess}
         </div>
       )}
