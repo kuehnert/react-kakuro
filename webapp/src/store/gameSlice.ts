@@ -85,7 +85,7 @@ type GameSliceState = {
 };
 
 const initialState: GameSliceState = {
-  zoomLevel: 1,
+  zoomLevel: 2,
   game: {
     state: -1,
     cells: [],
