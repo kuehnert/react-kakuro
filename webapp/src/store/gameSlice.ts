@@ -1,4 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { setSuccessAlert, setWarningAlert } from 'features/alerts/alertSlice';
+import checkCorrect from 'utils/checkSolution';
+import doCountMissingCells from 'utils/doCountMissingCells';
 import getHints from 'utils/getHints';
 import { makePencilmarks, singlePencilmarksToGuess } from 'utils/pencilmarks';
 import { AppThunk } from './store';
@@ -83,6 +86,7 @@ type GameSliceState = {
   selectedIndex?: number;
   hints: IHintValues[];
   markWrong: boolean;
+  missingCells: number;
 };
 
 const initialState: GameSliceState = {
@@ -101,6 +105,7 @@ const initialState: GameSliceState = {
     { index: -1, sum: -1, count: -1, used: new Array<number>() },
   ],
   markWrong: false,
+  missingCells: -1,
 };
 
 export const gameSlice = createSlice({
@@ -109,6 +114,7 @@ export const gameSlice = createSlice({
   reducers: {
     setCurrentGameSuccess(state, action: PayloadAction<IGameData>) {
       state.game = action.payload;
+      state.missingCells = doCountMissingCells(state.game);
     },
     fetchGameSuccess(state, action: PayloadAction<IGameData>) {
       state.game = { ...action.payload };
@@ -142,18 +148,14 @@ export const gameSlice = createSlice({
         }
       }
     },
-    setGuess(state, action: PayloadAction<IGuess>) {
-      const { index, guess } = action.payload;
-      const newGame: IGameData = JSON.parse(JSON.stringify(state.game));
-      const currentCell: INumberCell = newGame.cells[index] as INumberCell;
-      if (currentCell.type === CellType.NumberCell) {
-        currentCell.guess = guess;
-        // if (guess === 0) {
-        //   makePencilmarksForCell(currentCell, index, newGame);
-        // }
-        state.game = newGame;
-      }
-      state.hints = getHints(state.game!, index);
+    setGuessSuccess(
+      state,
+      action: PayloadAction<{ newGame: IGameData; newMissingCells: number }>
+    ) {
+      const { newGame, newMissingCells } = action.payload;
+      state.game = newGame;
+      state.missingCells = newMissingCells;
+      state.hints = getHints(newGame, state.selectedIndex!);
     },
     togglePencilMark(state, action: PayloadAction<IGuess>) {
       const { index, guess } = action.payload;
@@ -190,7 +192,7 @@ export const {
   increaseZoom,
   setSelectedIndex,
   setCurrentGameSuccess,
-  setGuess,
+  setGuessSuccess,
   autoPencil,
   togglePencilMark,
   toggleMarkWrong,
@@ -217,4 +219,40 @@ export const setCurrentGame =
       });
 
     dispatch(setCurrentGameSuccess(newGame));
+  };
+
+export const setGuess =
+  ({ index, guess }: IGuess): AppThunk =>
+  async (dispatch, getState) => {
+    const { game, missingCells } = getState().game;
+    const newGame: IGameData = JSON.parse(JSON.stringify(game));
+    const currentCell = newGame.cells[index] as INumberCell;
+    let newMissingCells;
+
+    if (currentCell.type === CellType.NumberCell) {
+      if (currentCell.guess === 0 && guess !== 0) {
+        newMissingCells = missingCells - 1;
+      } else if (currentCell.guess > 0 && guess === 0) {
+        newMissingCells = missingCells + 1;
+      } else {
+        newMissingCells = missingCells;
+      }
+
+      currentCell.guess = guess;
+      // if (guess === 0) {
+      //   makePencilmarksForCell(currentCell, index, newGame);
+      // }
+      // state.game = newGame;
+
+
+      if (newMissingCells === 0) {
+        if (checkCorrect(newGame)) {
+          dispatch(setSuccessAlert('Puzzle solved. Congratulations!'));
+        } else {
+          dispatch(setWarningAlert('There are still mistakes in the puzzle'));
+        }
+      }
+
+      dispatch(setGuessSuccess({ newGame, newMissingCells }));
+    }
   };

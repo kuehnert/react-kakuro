@@ -21,6 +21,7 @@ const PlayGame: React.FC = () => {
   return (
     <>
       <KeyboardListener />
+
       <div className={styles.content}>
         <GameGrid />
         <Controls />

@@ -17,7 +17,7 @@ import GuessButton from './GuessButton';
  * Here be number buttons for guesses and pencil marks
  */
 const Controls: React.FC = () => {
-  const { selectedIndex, zoomLevel, markWrong } = useSelector(
+  const { selectedIndex, zoomLevel, markWrong, missingCells } = useSelector(
     (state: RootState) => state.game
   );
   const dispatch = useDispatch();
@@ -95,6 +95,10 @@ const Controls: React.FC = () => {
           offLabel='Hide mistakes'
           onChange={() => dispatch(toggleMarkWrong())}
         />
+      </div>
+
+      <div className='debug'>
+        <div>Missing: {missingCells}</div>
       </div>
     </aside>
   );

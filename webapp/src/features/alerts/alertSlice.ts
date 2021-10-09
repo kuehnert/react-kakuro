@@ -47,6 +47,11 @@ export const alertSlice = createSlice({
       state.alerts[alert.severity] = alert;
       state.isFetching = false;
     },
+    setWarningAlert(state, action: PayloadAction<string>) {
+      const alert = { severity: 'warn', summary: action.payload };
+      state.alerts[alert.severity] = alert;
+      state.isFetching = false;
+    },
     setIsFetching(state, action: PayloadAction<boolean>) {
       state.isFetching = action.payload;
     },
@@ -61,10 +66,11 @@ export const {
   clearAlert,
   setAlert,
   setErrorAlert,
-  setSuccessAlert,
   setIsFetching,
-  setPageTitle,
   setNotFound,
+  setPageTitle,
+  setSuccessAlert,
+  setWarningAlert,
 } = alertSlice.actions;
 
 export default alertSlice.reducer;
