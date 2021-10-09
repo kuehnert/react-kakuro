@@ -1,14 +1,11 @@
 import classnames from 'classnames';
-import { Steps } from 'primereact/steps';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CellType } from 'store/gameSlice';
 import {
-  designSlice,
-  designSteps,
   DesignStepsEnum,
   IDesignCell,
-  updateCell,
+  updateCell
 } from '../../store/designSlice';
 import { RootState } from '../../store/store';
 import '../playing/Cell.scss';

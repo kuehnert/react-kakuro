@@ -4,6 +4,7 @@ import React, { FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
 import { designSteps } from 'store/designSlice';
 import { RootState } from '../../store/store';
+import ExportButton from './ExportButton';
 
 interface Props {
   children?: JSX.Element | JSX.Element[];
@@ -26,11 +27,14 @@ const DesignPanel: FunctionComponent<Props> = props => {
         </span>
 
         <span className={titleClassName}>
+          <ExportButton />
+
           <Button
             label='Back'
             icon='mdi mdi-arrow-left'
             onClick={handleBack}
             disabled={handleBack == null}
+            type='button'
           />
 
           <Button
@@ -39,6 +43,7 @@ const DesignPanel: FunctionComponent<Props> = props => {
             onClick={handleNext}
             // disabled={activeStep === designSteps.length - 1}
             disabled={handleNext == null}
+            type='button'
           />
         </span>
       </div>

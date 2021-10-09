@@ -44,7 +44,6 @@ const SetSize: React.FC = () => {
   const formikRef = useRef<FormikProps<IBaseGame>>(null);
 
   const handleNext = () => {
-    console.log('Click');
     if (formikRef.current) {
       formikRef.current.handleSubmit();
     }
