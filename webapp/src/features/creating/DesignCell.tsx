@@ -1,8 +1,15 @@
 import classnames from 'classnames';
+import { Steps } from 'primereact/steps';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CellType } from 'store/gameSlice';
-import { IDesignCell, updateCell } from '../../store/designSlice';
+import {
+  designSlice,
+  designSteps,
+  DesignStepsEnum,
+  IDesignCell,
+  updateCell,
+} from '../../store/designSlice';
 import { RootState } from '../../store/store';
 import '../playing/Cell.scss';
 import '../playing/HintCell.scss';
@@ -24,14 +31,14 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
   };
 
   const handleClick = (e: React.MouseEvent) => {
-    if (activeStep === 1) {
+    if (activeStep === DesignStepsEnum.DrawGrid) {
       // Toggle between blank and number cell
       const newCell = {
         ...cell,
         type:
-          cell.type === CellType.BlankCell
-            ? CellType.NumberCell
-            : CellType.BlankCell,
+          cell.type === CellType.NumberCell
+            ? CellType.BlankCell
+            : CellType.NumberCell,
       };
       dispatch(updateCell(newCell));
     } else if (activeStep === 2 && cell.type === CellType.HintCell) {
@@ -60,13 +67,16 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
         <div className='verticalHint'>{renderHint(cell.hintVertical)}</div>
         <div className={styles.solution}>{renderHint(cell.solution)}</div>
       </div>
-      <HintDialog
-        cell={cell}
-        visible={dialogVisible}
-        onHide={hide}
-        across={cell.hintHorizontal != null}
-        down={cell.hintVertical != null}
-      />
+
+      {activeStep === DesignStepsEnum.InsertHints && (
+        <HintDialog
+          cell={cell}
+          visible={dialogVisible}
+          onHide={hide}
+          across={cell.hintHorizontal != null}
+          down={cell.hintVertical != null}
+        />
+      )}
     </>
   );
 };
