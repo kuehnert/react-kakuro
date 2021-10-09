@@ -124,9 +124,9 @@ export const gameSlice = createSlice({
         });
     },
     setSelectedIndex(state, action: PayloadAction<number>) {
-      let currentIndex = action.payload;
-      state.selectedIndex = currentIndex;
-      state.hints = getHints(state.game!, currentIndex);
+      let newIndex = action.payload;
+      state.selectedIndex = newIndex;
+      state.hints = getHints(state.game!, newIndex);
     },
     increaseZoom(state) {
       state.zoomLevel += 1;

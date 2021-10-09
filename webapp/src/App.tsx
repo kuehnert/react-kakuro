@@ -8,7 +8,7 @@ import SignUp from 'features/users/SignUp';
 import myHistory from 'myHistory';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { Router, Route, Switch } from 'react-router-dom';
+import { Route, Router, Switch } from 'react-router-dom';
 import './App.scss';
 import store from './store/store';
 
