@@ -16,7 +16,7 @@ const MainMenu: React.FC = () => {
 
   const handlePlay = () => {
     const newPuzzle = makePlayable(choice!);
-    dispatch(setCurrentGame(newPuzzle))
+    dispatch(setCurrentGame(newPuzzle));
     myHistory.push('/play');
   };
 
@@ -32,12 +32,8 @@ const MainMenu: React.FC = () => {
           All of this is work in progress, so be patient and stay tuned.
         </div>
 
-        <div className=''>
-          <PuzzleList />
-        </div>
-
         <div className='flex flex-row justify-content-center'>
-          <div className='w-10rem h-4rem'>
+          <div className='w-15rem h-4rem'>
             <Button
               label='Create game'
               icon='mdi mdi-pencil'
@@ -46,7 +42,7 @@ const MainMenu: React.FC = () => {
             />
           </div>
 
-          <div className='w-10rem h-4rem'>
+          <div className='w-15rem h-4rem'>
             <Button
               label='Play Game!'
               icon='mdi mdi-controller-classic'
@@ -55,6 +51,10 @@ const MainMenu: React.FC = () => {
               disabled={!choice}
             />
           </div>
+        </div>
+
+        <div className=''>
+          <PuzzleList />
         </div>
       </div>
     </div>
