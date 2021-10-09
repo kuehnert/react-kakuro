@@ -14,7 +14,7 @@ export interface Props {
 }
 
 const NumberCell: React.FC<Props> = ({ cell, index }) => {
-  const { selectedIndex, zoomLevel } = useSelector(
+  const { selectedIndex, zoomLevel, markWrong } = useSelector(
     (state: RootState) => state.game
   );
   const dispatch = useDispatch();
@@ -24,7 +24,8 @@ const NumberCell: React.FC<Props> = ({ cell, index }) => {
     dispatch(setSelectedIndex(index));
   };
 
-  const wrongGuess = cell.solution > 0 && cell.guess !== cell.solution;
+  const wrongGuess =
+    markWrong && cell.solution > 0 && cell.guess !== cell.solution;
 
   return (
     <div

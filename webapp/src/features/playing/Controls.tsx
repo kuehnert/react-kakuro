@@ -1,8 +1,14 @@
+import { ToggleButton } from 'primereact/togglebutton';
 import classnames from 'classnames';
 import { Button } from 'primereact/button';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { autoPencil, increaseZoom, setGuess } from '../../store/gameSlice';
+import {
+  autoPencil,
+  increaseZoom,
+  setGuess,
+  toggleMarkWrong,
+} from '../../store/gameSlice';
 import { RootState } from '../../store/store';
 import styles from './Controls.module.scss';
 import GuessButton from './GuessButton';
@@ -11,7 +17,7 @@ import GuessButton from './GuessButton';
  * Here be number buttons for guesses and pencil marks
  */
 const Controls: React.FC = () => {
-  const { selectedIndex, zoomLevel } = useSelector(
+  const { selectedIndex, zoomLevel, markWrong } = useSelector(
     (state: RootState) => state.game
   );
   const dispatch = useDispatch();
@@ -82,7 +88,14 @@ const Controls: React.FC = () => {
         </div>
       </div>
 
-      <div className='pencilmarks'></div>
+      <div className=''>
+        <ToggleButton
+          checked={markWrong}
+          onLabel='Show mistakes'
+          offLabel='Hide mistakes'
+          onChange={() => dispatch(toggleMarkWrong())}
+        />
+      </div>
     </aside>
   );
 };

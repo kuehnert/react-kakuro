@@ -82,6 +82,7 @@ type GameSliceState = {
   game: IGameData;
   selectedIndex?: number;
   hints: IHintValues[];
+  markWrong: boolean;
 };
 
 const initialState: GameSliceState = {
@@ -99,6 +100,7 @@ const initialState: GameSliceState = {
     { index: -1, sum: -1, count: -1, used: new Array<number>() },
     { index: -1, sum: -1, count: -1, used: new Array<number>() },
   ],
+  markWrong: false,
 };
 
 export const gameSlice = createSlice({
@@ -170,6 +172,9 @@ export const gameSlice = createSlice({
         state.game = newGame;
       }
     },
+    toggleMarkWrong(state) {
+      state.markWrong = !state.markWrong;
+    },
     autoPencil(state) {
       // set guesses where there is only one pencil mark option
       singlePencilmarksToGuess(state.game!);
@@ -188,6 +193,7 @@ export const {
   setGuess,
   autoPencil,
   togglePencilMark,
+  toggleMarkWrong,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;
