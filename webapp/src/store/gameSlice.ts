@@ -80,7 +80,7 @@ export interface IHintValues {
 }
 
 /* State */
-type GameSliceState = {
+export type GameSliceState = {
   zoomLevel: number;
   game: IGameData;
   selectedIndex?: number;
@@ -112,25 +112,29 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
+    setGameState(state, action: PayloadAction<GameSliceState>) {
+      return action.payload;
+    },
     setCurrentGameSuccess(state, action: PayloadAction<IGameData>) {
       state.game = action.payload;
       state.missingCells = doCountMissingCells(state.game);
+      localStorage.setItem('gameState', JSON.stringify(state));
     },
-    fetchGameSuccess(state, action: PayloadAction<IGameData>) {
-      state.game = { ...action.payload };
-      // create pencilmarks for all number cells
-      state.game.cells
-        .filter(c => c.type === CellType.NumberCell)
-        .forEach(cell => {
-          const nCell = cell as INumberCell;
-          if (!nCell.guess) {
-            nCell.guess = 0;
-          }
-          if (!nCell.pencilMarks) {
-            nCell.pencilMarks = [];
-          }
-        });
-    },
+    // fetchGameSuccess(state, action: PayloadAction<IGameData>) {
+    //   state.game = { ...action.payload };
+    //   // create pencilmarks for all number cells
+    //   state.game.cells
+    //     .filter(c => c.type === CellType.NumberCell)
+    //     .forEach(cell => {
+    //       const nCell = cell as INumberCell;
+    //       if (!nCell.guess) {
+    //         nCell.guess = 0;
+    //       }
+    //       if (!nCell.pencilMarks) {
+    //         nCell.pencilMarks = [];
+    //       }
+    //     });
+    // },
     setSelectedIndex(state, action: PayloadAction<number>) {
       let newIndex = action.payload;
       state.selectedIndex = newIndex;
@@ -156,6 +160,7 @@ export const gameSlice = createSlice({
       state.game = newGame;
       state.missingCells = newMissingCells;
       state.hints = getHints(newGame, state.selectedIndex!);
+      localStorage.setItem('gameState', JSON.stringify(state))
     },
     togglePencilMark(state, action: PayloadAction<IGuess>) {
       const { index, guess } = action.payload;
@@ -176,6 +181,7 @@ export const gameSlice = createSlice({
     },
     toggleMarkWrong(state) {
       state.markWrong = !state.markWrong;
+      localStorage.setItem('gameState', JSON.stringify(state))
     },
     autoPencil(state) {
       // set guesses where there is only one pencil mark option
@@ -188,8 +194,9 @@ export const gameSlice = createSlice({
 });
 
 export const {
-  fetchGameSuccess,
+  // fetchGameSuccess,
   increaseZoom,
+  setGameState,
   setSelectedIndex,
   setCurrentGameSuccess,
   setGuessSuccess,
@@ -243,7 +250,6 @@ export const setGuess =
       //   makePencilmarksForCell(currentCell, index, newGame);
       // }
       // state.game = newGame;
-
 
       if (newMissingCells === 0) {
         if (checkCorrect(newGame)) {

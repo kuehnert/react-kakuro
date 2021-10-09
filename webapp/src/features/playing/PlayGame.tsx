@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import KeyboardListener from 'components/KeyboardListener';
 import myHistory from 'myHistory';
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { GameSliceState, setGameState } from 'store/gameSlice';
 import { RootState } from '../../store/store';
 import './Cell.scss';
 import CombinationLine from './CombinationLine';
@@ -11,12 +13,23 @@ import styles from './PlayGame.module.scss';
 
 const PlayGame: React.FC = () => {
   const { game } = useSelector((state: RootState) => state.game);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (game.state < 0) {
+    if (game.state >= 0) {
+      return;
+    }
+
+    console.log('Loading game state...');
+    const res = localStorage.getItem('gameState');
+
+    if (res) {
+      const newState: GameSliceState = JSON.parse(res);
+      dispatch(setGameState(newState));
+    } else {
       myHistory.push('/');
     }
-  });
+  }, []);
 
   return (
     <>
