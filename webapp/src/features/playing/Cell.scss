@@ -8,7 +8,7 @@
 }
 
 .selected {
-  border: 4px $selectedColor solid;
+  // border: 4px $selectedColor solid;
   background-color: lighten($selectedColor, 10%) !important;
 }
 
