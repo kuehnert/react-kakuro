@@ -6,7 +6,7 @@ import {
   IBlankCell,
   ICell,
   IHintCell,
-  INumberCell
+  INumberCell,
 } from '../../store/gameSlice';
 import { RootState } from '../../store/store';
 import BlankCell from './BlankCell';
@@ -45,11 +45,7 @@ const GameGrid: React.FC = () => {
   };
 
   return (
-    <div className={classnames('main', styles.gameBackground)}>
-      <div className={styles.gamegrid} tabIndex={-1}>
-        {renderGrid()}
-      </div>
-    </div>
+    <div className={classnames(styles.gameBackground)}>{renderGrid()}</div>
   );
 };
 

@@ -1,9 +1,12 @@
+@import 'layout/variables';
+
 .combinations {
   background-color: #282c34;
   padding: 10px;
   font-size: 1.5rem;
   display: flex;
   align-content: center;
+  height: $footerHeight;
 }
 
 .text {

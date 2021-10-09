@@ -1,3 +1,9 @@
+@import 'layout/variables';
+
+.header {
+  height: $headerHeight;
+}
+
 .startItem {
   margin: 0 12px;
 }

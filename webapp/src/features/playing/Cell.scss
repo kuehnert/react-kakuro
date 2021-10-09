@@ -1,5 +1,4 @@
-@import '../../layout/variables';
-$selectedColor: rgb(200, 200, 0);
+@import 'layout/variables';
 
 .gamecell {
   border: 0.05rem lightgray solid;
@@ -10,7 +9,7 @@ $selectedColor: rgb(200, 200, 0);
 
 .selected {
   border: 4px $selectedColor solid;
-  background-color: lighten($selectedColor, 40%) !important;
+  background-color: lighten($selectedColor, 10%) !important;
 }
 
 .blankCell {

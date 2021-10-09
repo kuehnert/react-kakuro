@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import kakuroApi from 'api/kakuroApi';
-import { setErrorAlert, setSuccessAlert } from 'features/alerts/alertSlice';
+import { setErrorAlert } from 'features/alerts/alertSlice';
 import { AppThunk } from 'store/store';
 import { IBaseGame } from '../../store/gameSlice';
 
@@ -52,6 +52,6 @@ export const fetchList = (): AppThunk => async (dispatch: any) => {
     dispatch(setErrorAlert('Puzzles konnten nicht geladen werden.'));
   }
 
-  dispatch(setSuccessAlert('Puzzles wurden geladen.'));
+  // dispatch(setSuccessAlert('Puzzles wurden geladen.'));
   dispatch(fetchListSuccess(list));
 };

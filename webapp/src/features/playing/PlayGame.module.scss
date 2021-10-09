@@ -1,0 +1,10 @@
+@import 'layout/variables';
+
+.content {
+  width: 100%;
+  height: calc(100% - #{$headerHeight} + #{$footerHeight});
+  background-color: blue;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  overflow: hidden;
+}

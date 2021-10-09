@@ -12,6 +12,7 @@ import './Cell.scss';
 import CombinationLine from './CombinationLine';
 import Controls from './Controls';
 import GameGrid from './GameGrid';
+import styles from './PlayGame.module.scss';
 
 const PlayGame: React.FC = () => {
   const { game, selectedIndex } = useSelector((state: RootState) => state.game);
@@ -72,7 +73,7 @@ const PlayGame: React.FC = () => {
 
   return (
     <>
-      <div className='content' onKeyDown={handleKeyPress}>
+      <div className={styles.content} onKeyDown={handleKeyPress}>
         <GameGrid />
         <Controls />
       </div>

@@ -50,7 +50,7 @@ const MyMenubar: React.FC = () => {
     />
   );
 
-  return <Menubar model={menuItems} start={startItem} end={endItem} />;
+  return <Menubar model={menuItems} start={startItem} end={endItem} className={styles.header}/>;
 };
 
 export default MyMenubar;
