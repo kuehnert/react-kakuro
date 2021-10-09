@@ -160,7 +160,7 @@ export const gameSlice = createSlice({
       state.game = newGame;
       state.missingCells = newMissingCells;
       state.hints = getHints(newGame, state.selectedIndex!);
-      localStorage.setItem('gameState', JSON.stringify(state))
+      localStorage.setItem('gameState', JSON.stringify(state));
     },
     togglePencilMark(state, action: PayloadAction<IGuess>) {
       const { index, guess } = action.payload;
@@ -170,18 +170,23 @@ export const gameSlice = createSlice({
       if (currentCell.type === CellType.NumberCell) {
         const index = currentCell.pencilMarks.indexOf(guess);
 
-        if (index < 0) {
+        if (guess === 0) {
+          currentCell.pencilMarks = []
+        } else if (index < 0) {
+          // add new pencil mark
           currentCell.pencilMarks.push(guess);
           currentCell.pencilMarks.sort();
         } else {
+          // remove existing pencil mark
           currentCell.pencilMarks.splice(index, 1);
         }
         state.game = newGame;
+        localStorage.setItem('gameState', JSON.stringify(state));
       }
     },
     toggleMarkWrong(state) {
       state.markWrong = !state.markWrong;
-      localStorage.setItem('gameState', JSON.stringify(state))
+      localStorage.setItem('gameState', JSON.stringify(state));
     },
     autoPencil(state) {
       // set guesses where there is only one pencil mark option

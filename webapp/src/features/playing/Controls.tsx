@@ -8,6 +8,7 @@ import {
   increaseZoom,
   setGuess,
   toggleMarkWrong,
+  togglePencilMark,
 } from '../../store/gameSlice';
 import { RootState } from '../../store/store';
 import styles from './Controls.module.scss';
@@ -25,9 +26,15 @@ const Controls: React.FC = () => {
 
   const handleZoom = (delta: number) => dispatch(increaseZoom(delta));
 
-  const handleDeleteClick = (event: React.MouseEvent) => {
+  const handleDelete = (event: React.MouseEvent) => {
     if (selectedIndex) {
       dispatch(setGuess({ index: selectedIndex, guess: 0 }));
+    }
+  };
+
+  const handleDeletePencilMarks = (event: React.MouseEvent) => {
+    if (selectedIndex) {
+      dispatch(togglePencilMark({ index: selectedIndex, guess: 0 }));
     }
   };
 
@@ -73,19 +80,33 @@ const Controls: React.FC = () => {
             'is-large',
             styles.button
           )}
-          onClick={handleDeleteClick}>
-          Delete
-        </Button>
+          icon='mdi mdi-pencil-off'
+          label='Delete'
+          onClick={handleDeletePencilMarks}
+        />
 
         <Button
           className={classnames('button is-large', styles.button)}
-          onClick={handleAutoPencil}>
-          Auto Pencil
-        </Button>
+          onClick={handleAutoPencil}
+          label='Auto Pencil'
+          icon="mdi mdi-pencil"
+        />
 
         <div className={styles.columns}>
           {digits.map(d => renderButton(d, false))}
         </div>
+
+        <Button
+          className={classnames(
+            'button',
+            'is-warning',
+            'is-large',
+            styles.button
+          )}
+          icon='mdi mdi-delete'
+          label='Delete'
+          onClick={handleDelete}
+        />
       </div>
 
       <div className=''>
@@ -93,6 +114,8 @@ const Controls: React.FC = () => {
           checked={markWrong}
           onLabel='Show mistakes'
           offLabel='Hide mistakes'
+          onIcon="mdi mdi-eye"
+          offIcon="mdi mdi-eye-off"
           onChange={() => dispatch(toggleMarkWrong())}
         />
       </div>
