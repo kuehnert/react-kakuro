@@ -128,11 +128,17 @@ export const gameSlice = createSlice({
       state.selectedIndex = newIndex;
       state.hints = getHints(state.game!, newIndex);
     },
-    increaseZoom(state) {
-      state.zoomLevel += 1;
-    },
-    decreaseZoom(state) {
-      state.zoomLevel -= 1;
+    increaseZoom(state, action: PayloadAction<number>) {
+      const delta = action.payload;
+
+      if (delta === 0) {
+        state.zoomLevel = initialState.zoomLevel;
+      } else {
+        const newValue = state.zoomLevel + delta;
+        if (newValue > 0 && newValue <= 10) {
+          state.zoomLevel = newValue;
+        }
+      }
     },
     setGuess(state, action: PayloadAction<IGuess>) {
       const { index, guess } = action.payload;
@@ -164,7 +170,7 @@ export const gameSlice = createSlice({
         state.game = newGame;
       }
     },
-    autoPencil(state, action: PayloadAction) {
+    autoPencil(state) {
       // set guesses where there is only one pencil mark option
       singlePencilmarksToGuess(state.game!);
 
@@ -177,7 +183,6 @@ export const gameSlice = createSlice({
 export const {
   fetchGameSuccess,
   increaseZoom,
-  decreaseZoom,
   setSelectedIndex,
   setCurrentGameSuccess,
   setGuess,

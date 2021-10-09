@@ -32,16 +32,16 @@ export function guessNumber(game: IGameData, index: number, guess: number) {
 //   );
 // }
 
-function logSolution(game: IGameData) {
-  console.log(
-    'Solution',
-    JSON.stringify(
-      game.cells
-        .filter(c => c.type === CellType.NumberCell)
-        .map(c => (c as INumberCell).solution)
-    )
-  );
-}
+// function logSolution(game: IGameData) {
+//   console.log(
+//     'Solution',
+//     JSON.stringify(
+//       game.cells
+//         .filter(c => c.type === CellType.NumberCell)
+//         .map(c => (c as INumberCell).solution)
+//     )
+//   );
+// }
 
 function _solvePuzzle(game: IGameData, index: number) {
   if (index >= game.cells.length) {
@@ -135,7 +135,7 @@ function solvePuzzle(original: IGameData): ISolvePuzzleResult {
       error: `Puzzle invalid; more than one solution (${solutions.length}).`,
     };
   } else {
-    logSolution(solutions[0]);
+    // logSolution(solutions[0]);
     return { solution: solutions[0] };
   }
 }

@@ -11,7 +11,8 @@ import {
   CellType,
   IBaseGame,
   IGameData,
-  INumberCell, PuzzleStates
+  INumberCell,
+  PuzzleStates,
 } from './gameSlice';
 import { AppThunk } from './store';
 
@@ -111,6 +112,9 @@ export const designSlice = createSlice({
       state.puzzle.state = PuzzleStates.Solved;
     },
     solveGameFailed: state => {
+      state.puzzle.cells
+        .filter(c => c.type === CellType.NumberCell)
+        .forEach(c => ((c as INumberCell).solution = 0));
       state.puzzle.state = PuzzleStates.Raw;
       state.activeStep = DesignStepsEnum.InsertHints;
     },

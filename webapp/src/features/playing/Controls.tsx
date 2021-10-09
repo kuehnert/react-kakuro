@@ -1,22 +1,23 @@
-import React from 'react';
-import styles from './Controls.module.scss';
 import classnames from 'classnames';
-import GuessButton from './GuessButton';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
-import { autoPencil, decreaseZoom, increaseZoom, setGuess } from '../../store/gameSlice';
 import { Button } from 'primereact/button';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { autoPencil, increaseZoom, setGuess } from '../../store/gameSlice';
+import { RootState } from '../../store/store';
+import styles from './Controls.module.scss';
+import GuessButton from './GuessButton';
 
 /*
  * Here be number buttons for guesses and pencil marks
  */
 const Controls: React.FC = () => {
-  const { selectedIndex } = useSelector((state: RootState) => state.game);
+  const { selectedIndex, zoomLevel } = useSelector(
+    (state: RootState) => state.game
+  );
   const dispatch = useDispatch();
   const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-  const handleZoomIn = () => dispatch(increaseZoom());
-  const handleZoomOut = () => dispatch(decreaseZoom());
+  const handleZoom = (delta: number) => dispatch(increaseZoom(delta));
 
   const handleDeleteClick = (event: React.MouseEvent) => {
     if (selectedIndex) {
@@ -35,8 +36,23 @@ const Controls: React.FC = () => {
   return (
     <aside className={classnames('controls', styles.controls)}>
       <div className={styles.zoomButtons}>
-        <Button icon='mdi mdi-magnify-minus' onClick={handleZoomOut} />
-        <Button icon='mdi mdi-magnify-plus'  onClick={handleZoomIn} />
+        <Button
+          className={'p-button-lg'}
+          icon='mdi mdi-magnify-minus'
+          onClick={() => handleZoom(-1)}
+          disabled={zoomLevel < 1}
+        />
+        <Button
+          className={'p-button-lg'}
+          label='100 %'
+          onClick={() => handleZoom(0)}
+        />
+        <Button
+          className={'p-button-lg'}
+          icon='mdi mdi-magnify-plus'
+          onClick={() => handleZoom(1)}
+          disabled={zoomLevel > 10}
+        />
       </div>
 
       <div className={styles.guessButtons}>
