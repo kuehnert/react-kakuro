@@ -93,7 +93,7 @@ function _solvePuzzle(game: IGameData, index: number) {
         }
 
         nCell.guess = p;
-        // console.log(`Cell no. ${index}: Guessing ${p}...`);
+        console.log(`Cell no. ${index}: Guessing ${p}...`);
 
         const tempGame: IGameData = JSON.parse(JSON.stringify(game));
         makePencilmarks(tempGame);

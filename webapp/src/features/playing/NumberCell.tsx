@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import classnames from 'classnames';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { calcGuessFontSize, calcPencilMarkFontSize } from 'utils/calcCellSize';
 import { INumberCell, setSelectedIndex } from '../../store/gameSlice';
-import styles from './NumberCell.module.scss';
 import { RootState } from '../../store/store';
-import { useSelector } from 'react-redux';
-import { calcGuessFontSize } from 'utils/calcCellSize';
+import styles from './NumberCell.module.scss';
 
 export interface Props {
   cell: INumberCell;
@@ -19,9 +18,18 @@ const NumberCell: React.FC<Props> = ({ cell, index }) => {
   );
   const dispatch = useDispatch();
   const guessFontSize = calcGuessFontSize(zoomLevel);
+  const pencilMarkFontSize = calcPencilMarkFontSize(zoomLevel);
 
   const handleClick = (event: React.MouseEvent) => {
     dispatch(setSelectedIndex(index));
+  };
+
+  const renderPencilMarks = (pencilMarks: number[]) => {
+    return pencilMarks.map(pm => (
+      <div key={pm} className={styles[`digit${pm}`]} style={pencilMarkFontSize}>
+        {pm}
+      </div>
+    ));
   };
 
   const wrongGuess =
@@ -41,8 +49,8 @@ const NumberCell: React.FC<Props> = ({ cell, index }) => {
         </div>
       )}
       {!cell.guess && cell.pencilMarks?.length > 0 && (
-        <div className={classnames(styles.pencilMarks)}>
-          {cell.pencilMarks.join('')}
+        <div className={classnames(styles.pencilMarks)} style={{}}>
+          {renderPencilMarks(cell.pencilMarks)}
         </div>
       )}
     </div>

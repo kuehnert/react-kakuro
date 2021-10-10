@@ -9,3 +9,7 @@ export function calcGuessFontSize(zoomLevel: number) {
 export function calcHintFontSize(zoomLevel: number) {
   return { fontSize: `${zoomLevel / 2.4 }rem` };
 }
+
+export function calcPencilMarkFontSize(zoomLevel: number) {
+  return { fontSize: `${zoomLevel / 4.0}rem`, lineHeight: `${zoomLevel / 4.0}rem` };
+}
