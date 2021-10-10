@@ -42,6 +42,7 @@ const userSchema = mongoose.Schema({
       },
     },
   ],
+  solved: [String],
 });
 
 userSchema.methods.generateAuthToken = async function () {

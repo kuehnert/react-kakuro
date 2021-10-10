@@ -5,14 +5,17 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store/store';
 import { difficultyLevels } from 'types/puzzle';
-import { fetchList, IListGame, setChoiceID } from './listSlice';
+import { fetchList, fetchSolved, IListGame, setChoiceID } from './listSlice';
 
 const PuzzleList: React.FC = () => {
-  const { list, choice } = useSelector((state: RootState) => state.list);
+  const { list, choice, solved } = useSelector(
+    (state: RootState) => state.list
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchList());
+    dispatch(fetchSolved());
   }, [dispatch]);
 
   const formatDate = (date: Date) => format(date, 'dd-MM-yyyy');
@@ -22,6 +25,14 @@ const PuzzleList: React.FC = () => {
 
   const dateTemplate = (puzzle: IListGame) =>
     formatDate(new Date(puzzle.createdAt));
+
+  const solvedTemplate = (puzzle: IListGame) => {
+    if (!puzzle._id) {
+      return "Unknown";
+    }
+
+    return solved.includes(puzzle._id) ? <i className="mdi mdi-check"></i> : '';
+  }
 
   return (
     // <Panel header='List of Puzzles'>
@@ -49,6 +60,11 @@ const PuzzleList: React.FC = () => {
       <Column field='rowCount' header='Rows' sortable />
       <Column field='creatorName' header='Creator' filter sortable />
       <Column field='createdAt' header='Date' body={dateTemplate} sortable />
+      <Column
+        field='solved'
+        header='Solved'
+        body={solvedTemplate}
+      />
     </DataTable>
     // </Panel>
   );

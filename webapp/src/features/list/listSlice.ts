@@ -2,21 +2,23 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import kakuroApi from 'api/kakuroApi';
 import { setErrorAlert } from 'features/alerts/alertSlice';
 import { AppThunk } from 'store/store';
+import authHeader from 'utils/authHeader';
 import { IBaseGame } from '../../store/gameSlice';
 
 export interface IListGame extends IBaseGame {
   cellString: string;
   createdAt: Date;
-  _id: string;
 }
 
 type ListSliceState = {
   list: IListGame[];
   choice?: IListGame;
+  solved: string[];
 };
 
 const initialState: ListSliceState = {
   list: [],
+  solved: [],
 };
 
 export const listSlice = createSlice({
@@ -26,9 +28,11 @@ export const listSlice = createSlice({
     fetchListSuccess: (state, action: PayloadAction<IListGame[]>) => {
       state.list = action.payload;
     },
+    fetchSolvedSuccess: (state, action: PayloadAction<string[]>) => {
+      state.solved = action.payload;
+    },
     addPuzzleToList: (state, action: PayloadAction<IListGame>) => {
       state.list.push(action.payload);
-      console.log('Me here');
     },
     setChoiceID: (state, action: PayloadAction<IListGame>) => {
       state.choice = action.payload;
@@ -36,7 +40,7 @@ export const listSlice = createSlice({
   },
 });
 
-export const { addPuzzleToList, fetchListSuccess, setChoiceID } =
+export const { addPuzzleToList, fetchListSuccess, fetchSolvedSuccess, setChoiceID } =
   listSlice.actions;
 
 export default listSlice.reducer;
@@ -52,6 +56,19 @@ export const fetchList = (): AppThunk => async (dispatch: any) => {
     dispatch(setErrorAlert('Puzzles konnten nicht geladen werden.'));
   }
 
-  // dispatch(setSuccessAlert('Puzzles wurden geladen.'));
   dispatch(fetchListSuccess(list));
+};
+
+export const fetchSolved = (): AppThunk => async (dispatch: any) => {
+  let solved;
+
+  try {
+    const response = await kakuroApi.get('/users/solved', { headers: authHeader() });
+    solved = response.data;
+  } catch (error) {
+    console.error('error:', error);
+    dispatch(setErrorAlert('Liste gelöster Puzzles konnten nicht geladen werden.'));
+  }
+
+  dispatch(fetchSolvedSuccess(solved));
 };

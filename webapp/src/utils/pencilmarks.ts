@@ -111,12 +111,6 @@ export function makePencilmarksForCell(
       const neighbour = game.cells[index + 1] as INumberCell;
 
       newPM = newPM.filter(p => {
-        if (index === 114) {
-          console.log('p:', p);
-          console.log('needed:', hints[0].sum - p);
-          console.log('includes?', neighbour.pencilMarks.includes(hints[0].sum - p));
-        }
-
         return neighbour.pencilMarks.includes(hints[0].sum - p);
       });
     }

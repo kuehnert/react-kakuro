@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import kakuroApi from 'api/kakuroApi';
 import { setSuccessAlert, setWarningAlert } from 'features/alerts/alertSlice';
+import authHeader from 'utils/authHeader';
 import { checkGuessesCorrect } from 'utils/checkPuzzle';
 import { clearGuesses, doClearPencilMarks } from 'utils/clearGuesses';
 import doCountMissingCells from 'utils/doCountMissingCells';
@@ -51,6 +53,7 @@ export interface INumberCell extends ICell {
 }
 
 export type IBaseGame = {
+  _id?: string;
   name: string;
   columnCount: number;
   rowCount: number;
@@ -187,6 +190,7 @@ export const gameSlice = createSlice({
     },
     resetGame(state) {
       state.game = clearGuesses(state.game);
+      state.missingCells = doCountMissingCells(state.game);
     },
     toggleMarkWrong(state) {
       state.markWrong = !state.markWrong;
@@ -201,6 +205,8 @@ export const gameSlice = createSlice({
 
       // calculate pencil marks
       makePencilmarks(state.game!);
+
+      state.missingCells = doCountMissingCells(state.game);
     },
   },
 });
@@ -259,13 +265,23 @@ export const setGuess =
       }
 
       currentCell.guess = guess;
-      // if (guess === 0) {
-      //   makePencilmarksForCell(currentCell, index, newGame);
-      // }
-      // state.game = newGame;
 
       if (newMissingCells === 0) {
         if (checkGuessesCorrect(newGame)) {
+          if (game._id) {
+            try {
+              await kakuroApi.post(
+                '/users/solved',
+                { id: game._id },
+                {
+                  headers: authHeader(),
+                }
+              );
+            } catch (error) {
+              console.error(error);
+            }
+          }
+
           dispatch(setSuccessAlert('Puzzle solved. Congratulations!'));
         } else {
           dispatch(setWarningAlert('There are still mistakes in the puzzle'));

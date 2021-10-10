@@ -31,6 +31,33 @@ router.post('/users', async (req, res) => {
   }
 });
 
+// Get solved puzzle ids
+router.get('/users/solved', auth, async (req, res) => {
+  try {
+    const user = req.user;
+    res.status(201).send(user.solved);
+  } catch (error) {
+    res.status(500).send({ error: 'Unable to update user' });
+  }
+});
+
+// Add Solved puzzle id
+router.post('/users/solved', auth, async (req, res) => {
+  try {
+    const { id } = req.body;
+    const user = req.user;
+
+    if (!user.solved.includes(id)) {
+      user.solved.push(id);
+      await user.save();
+    }
+
+    res.sendStatus(201);
+  } catch (error) {
+    res.status(500).send({ error: 'Unable to update user' });
+  }
+});
+
 // FETCH ALL
 // router.get('/users', auth, async (_, res) => {
 //   try {
