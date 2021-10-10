@@ -87,8 +87,8 @@ const HintDialog: React.FC<Props> = ({
 
   return (
     <Dialog
+      className={styles.dialog}
       header='Set number(s) for hint cell'
-      style={{ width: '30vw' }}
       visible={visible}
       modal={true}
       onHide={onHide}>
