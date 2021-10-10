@@ -82,19 +82,61 @@ export function makePencilmarksForCell(
   }
 
   // Filter out impossible combinations
+  let newPM = nCell.pencilMarks || [];
   const hints = getHints(game, index);
   const hComb = getCombinations(hints[0]);
   const vComb = getCombinations(hints[1]);
-  // Get possible digits
-  const hDigits = Array.from(new Set(hComb.flat()));
-  const vDigits = Array.from(new Set(vComb.flat()));
-
   const used = [...hints[0].used, ...hints[1].used];
-  const poss = hDigits
-    .filter(e => vDigits.includes(e) && !used.includes(e))
-    .sort();
 
-  nCell.pencilMarks = poss;
+  // if no current pencil marks, find possible ones
+  if (newPM.length === 0) {
+    // Get possible digits
+    const hDigits = Array.from(new Set(hComb.flat()));
+    const vDigits = Array.from(new Set(vComb.flat()));
+    newPM = hDigits
+      .filter(e => vDigits.includes(e) && !used.includes(e))
+      .sort();
+  } else {
+    // only possible if pencil marks have been set once already
+    // i.e. if neighbours have correct marks
+
+    // if cell part of a twin across or down
+    // check which marks are possible
+    if (
+      hints[0].count === 2 &&
+      index + 1 < game.cells.length &&
+      game.cells[index + 1].type === CellType.NumberCell &&
+      (game.cells[index + 1] as INumberCell).guess === 0
+    ) {
+      const neighbour = game.cells[index + 1] as INumberCell;
+
+      newPM = newPM.filter(p => {
+        if (index === 114) {
+          console.log('p:', p);
+          console.log('needed:', hints[0].sum - p);
+          console.log('includes?', neighbour.pencilMarks.includes(hints[0].sum - p));
+        }
+
+        return neighbour.pencilMarks.includes(hints[0].sum - p);
+      });
+    }
+
+    // check for twin down
+    if (
+      hints[1].count === 2 &&
+      index + game.columnCount < game.cells.length &&
+      game.cells[index + game.columnCount].type === CellType.NumberCell &&
+      (game.cells[index + game.columnCount] as INumberCell).guess === 0
+    ) {
+      const neighbour = game.cells[index + game.columnCount] as INumberCell;
+
+      newPM = newPM.filter(p => {
+        return neighbour.pencilMarks.includes(hints[1].sum - p);
+      });
+    }
+  }
+
+  nCell.pencilMarks = newPM;
 }
 
 export function makePencilmarks(game: IGameData) {

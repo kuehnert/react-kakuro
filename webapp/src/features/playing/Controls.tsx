@@ -153,6 +153,7 @@ const Controls: React.FC = () => {
 
       <div className='debug'>
         <div>Missing: {missingCells}</div>
+        <div>Selected: {selectedIndex}</div>
       </div>
     </aside>
   );
