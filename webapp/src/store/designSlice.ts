@@ -3,10 +3,11 @@ import kakuroApi from 'api/kakuroApi';
 import { setErrorAlert, setSuccessAlert } from 'features/alerts/alertSlice';
 import { addPuzzleToList, IListGame } from 'features/list/listSlice';
 import authHeader from 'utils/authHeader';
-import checkPuzzle from 'utils/checkPuzzle';
+import { checkPuzzle } from 'utils/checkPuzzle';
 import { doCountMissingHints, doMakeHintCells } from 'utils/hintCells';
 import preparePuzzle from 'utils/preparePuzzle';
 import solvePuzzle from 'utils/solvePuzzle';
+import validatePuzzle from 'utils/validateGrid';
 import {
   CellType,
   IBaseGame,
@@ -88,7 +89,20 @@ export const designSlice = createSlice({
       return initialState;
     },
     setPuzzleState: (state, action: PayloadAction<DesignSliceState>) => {
-      return action.payload;
+      const newState = action.payload;
+      newState.activeStep = DesignStepsEnum.DrawGrid;
+      const newPuzzle = newState.puzzle;
+      const res = validatePuzzle(newPuzzle);
+      if (res.valid) {
+        newState.activeStep = DesignStepsEnum.InsertHints;
+
+        const res = checkPuzzle(newPuzzle);
+        if (res.valid) {
+          newState.activeStep = DesignStepsEnum.CheckPuzzle;
+        }
+      }
+
+      return newState;
     },
     updateCell: (state, action) => {
       const newCell = action.payload;

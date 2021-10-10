@@ -57,8 +57,12 @@ export function singlePencilmarksToGuess(game: IGameData): boolean {
   game!.cells.forEach(c => {
     if (c.type === CellType.NumberCell) {
       const cell = c as INumberCell;
-      if (cell.guess == null && cell.pencilMarks?.length === 1) {
-        // cell.guess = cell.pencilMarks[0];
+      if (cell.guess === 0 && cell.pencilMarks?.length === 1) {
+        if (cell.solution > 0) {
+          cell.guess = cell.pencilMarks[0];
+        } else {
+          cell.solution = cell.pencilMarks[0];
+        }
         guessNumber(game, cell.index, cell.pencilMarks[0]);
         setGuess = true;
       }

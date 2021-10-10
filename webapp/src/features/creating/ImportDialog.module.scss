@@ -1,0 +1,17 @@
+.dialog {
+  min-width: 400px;
+  width: 40vw;
+
+  .dragging {
+    background-color: #ccc;
+  }
+}
+
+.button {
+  margin: 8px;
+}
+
+.textarea {
+  width: 100%;
+  height: 70vh;
+}

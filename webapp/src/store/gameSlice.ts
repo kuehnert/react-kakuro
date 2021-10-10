@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { setSuccessAlert, setWarningAlert } from 'features/alerts/alertSlice';
-import checkCorrect from 'utils/checkSolution';
+import { checkGuessesCorrect } from 'utils/checkPuzzle';
 import doCountMissingCells from 'utils/doCountMissingCells';
 import getHints from 'utils/getHints';
 import { makePencilmarks, singlePencilmarksToGuess } from 'utils/pencilmarks';
@@ -171,7 +171,7 @@ export const gameSlice = createSlice({
         const index = currentCell.pencilMarks.indexOf(guess);
 
         if (guess === 0) {
-          currentCell.pencilMarks = []
+          currentCell.pencilMarks = [];
         } else if (index < 0) {
           // add new pencil mark
           currentCell.pencilMarks.push(guess);
@@ -257,7 +257,7 @@ export const setGuess =
       // state.game = newGame;
 
       if (newMissingCells === 0) {
-        if (checkCorrect(newGame)) {
+        if (checkGuessesCorrect(newGame)) {
           dispatch(setSuccessAlert('Puzzle solved. Congratulations!'));
         } else {
           dispatch(setWarningAlert('There are still mistakes in the puzzle'));

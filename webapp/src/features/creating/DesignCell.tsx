@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CellType } from 'store/gameSlice';
+import { CellType, INumberCell } from 'store/gameSlice';
 import {
   DesignStepsEnum,
   IDesignCell,
@@ -54,6 +54,8 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
     }
   };
 
+  const pm = (cell.type === CellType.NumberCell) ? (cell as INumberCell).pencilMarks?.join('') : null;
+
   return (
     <>
       <div
@@ -62,7 +64,8 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
         {/* <div className={styles.index}>{cell.index}</div> */}
         <div className='horizontalHint'>{renderHint(cell.hintHorizontal)}</div>
         <div className='verticalHint'>{renderHint(cell.hintVertical)}</div>
-        <div className={styles.solution}>{renderHint(cell.solution)}</div>
+        <div className={styles.solution}>{cell.solution}</div>
+        {pm && <div className={styles.pencilmarks}>{pm}</div>}
       </div>
 
       {activeStep === DesignStepsEnum.InsertHints && (

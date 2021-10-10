@@ -1,6 +1,6 @@
-import { CellType, IGameData, IHintCell } from 'store/gameSlice';
+import { CellType, IGameData, IHintCell, INumberCell } from 'store/gameSlice';
 
-function checkPuzzle(puzzle: IGameData) {
+export function checkPuzzle(puzzle: IGameData) {
   const { cells } = puzzle;
   // TODO: Which clever checks should we implement?
   // * are the sums possible?
@@ -43,4 +43,14 @@ function checkPuzzle(puzzle: IGameData) {
   return { valid: true };
 }
 
-export default checkPuzzle;
+export function checkGuessesCorrect({ cells }: IGameData): boolean {
+  return cells
+    .filter(c => c.type === CellType.NumberCell)
+    .every(c => (c as INumberCell).guess === (c as INumberCell).solution);
+}
+
+export function checkAllSolved({ cells }: IGameData): boolean {
+  return cells
+    .filter(c => c.type === CellType.NumberCell)
+    .every(c => (c as INumberCell).solution > 0);
+}

@@ -1,15 +1,18 @@
 import classNames from 'classnames';
 import myHistory from 'myHistory';
 import { Button } from 'primereact/button';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   clearDesignGame,
   createGame,
   setActiveStep,
-  solveGame
+  setPuzzleState,
+  solveGame,
 } from 'store/designSlice';
-import { PuzzleStates, setCurrentGame } from 'store/gameSlice';
+import { IGameData, PuzzleStates, setCurrentGame } from 'store/gameSlice';
+import { checkAllSolved } from 'utils/checkPuzzle';
+import { makePencilmarks, singlePencilmarksToGuess } from 'utils/pencilmarks';
 import { RootState } from '../../store/store';
 import DesignPanel from './DesignPanel';
 import DrawGrid from './DrawGrid';
@@ -34,6 +37,32 @@ const SaveGame: React.FC = () => {
     dispatch(solveGame());
   };
 
+  const handleSolveStep = () => {
+    const newPuzzle: IGameData = JSON.parse(JSON.stringify(puzzle));
+    makePencilmarks(newPuzzle);
+    singlePencilmarksToGuess(newPuzzle);
+
+    if (checkAllSolved(newPuzzle)) {
+      newPuzzle.state = PuzzleStates.Solved;
+    }
+
+    dispatch(setPuzzleState({ puzzle: newPuzzle, activeStep }));
+  };
+
+  const handleSolveMultiple = () => {
+    const newPuzzle: IGameData = JSON.parse(JSON.stringify(puzzle));
+    makePencilmarks(newPuzzle);
+    while (singlePencilmarksToGuess(newPuzzle)) {
+      makePencilmarks(newPuzzle);
+    }
+
+    if (checkAllSolved(newPuzzle)) {
+      newPuzzle.state = PuzzleStates.Solved;
+    }
+
+    dispatch(setPuzzleState({ puzzle: newPuzzle, activeStep }));
+  };
+
   const handleSend = () => {
     dispatch(createGame(puzzle));
   };
@@ -42,11 +71,30 @@ const SaveGame: React.FC = () => {
     dispatch(clearDesignGame());
   };
 
+  useEffect(() => {
+    // handleSolveStep();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <DesignPanel handleBack={handleBack}>
       <>
         <Button
-          label='Solve'
+          label='Solve Step'
+          icon='mdi mdi-brain'
+          onClick={handleSolveStep}
+          className={styles.button}
+        />
+
+        <Button
+          label='Solve Multiple'
+          icon='mdi mdi-brain'
+          onClick={handleSolveMultiple}
+          className={styles.button}
+        />
+
+        <Button
+          label='Solve Puzzle'
           icon='mdi mdi-brain'
           onClick={handleSolve}
           className={styles.button}

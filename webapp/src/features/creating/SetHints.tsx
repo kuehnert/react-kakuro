@@ -2,7 +2,7 @@ import { setErrorAlert } from 'features/alerts/alertSlice';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeHintCells, setActiveStep } from 'store/designSlice';
-import checkPuzzle from 'utils/checkPuzzle';
+import { checkPuzzle } from 'utils/checkPuzzle';
 import { RootState } from '../../store/store';
 import DesignPanel from './DesignPanel';
 import DrawGrid from './DrawGrid';
@@ -27,7 +27,7 @@ const SetHints: React.FC = () => {
     if (res.valid) {
       dispatch(setActiveStep(activeStep + 1));
     } else {
-      dispatch(setErrorAlert(res.error || "Error in puzzle"));
+      dispatch(setErrorAlert(res.error || 'Error in puzzle'));
     }
   };
 

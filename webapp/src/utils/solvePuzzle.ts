@@ -97,7 +97,10 @@ function _solvePuzzle(game: IGameData, index: number) {
 
         const tempGame: IGameData = JSON.parse(JSON.stringify(game));
         makePencilmarks(tempGame);
-        singlePencilmarksToGuess(tempGame);
+        while (singlePencilmarksToGuess(tempGame)) {
+          makePencilmarks(tempGame);
+        }
+
         _solvePuzzle(tempGame, index + 1);
         nCell.guess = 0;
       });
@@ -122,7 +125,9 @@ function solvePuzzle(original: IGameData): ISolvePuzzleResult {
   // create initial pencil marks
   // logBoard(game);
   makePencilmarks(game);
-  while (singlePencilmarksToGuess(game)) {}
+  while (singlePencilmarksToGuess(game)) {
+    makePencilmarks(game);
+  }
 
   solutions = new Array<IGameData>();
   _solvePuzzle(game, 0);
