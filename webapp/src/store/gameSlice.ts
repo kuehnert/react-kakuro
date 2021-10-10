@@ -268,7 +268,7 @@ export const setGuess =
 
       if (newMissingCells === 0) {
         if (checkGuessesCorrect(newGame)) {
-          if (game._id) {
+          if (game._id && getState().users.user) {
             try {
               await kakuroApi.post(
                 '/users/solved',

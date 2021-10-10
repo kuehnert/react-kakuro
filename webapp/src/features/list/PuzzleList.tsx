@@ -8,6 +8,7 @@ import { difficultyLevels } from 'types/puzzle';
 import { fetchList, fetchSolved, IListGame, setChoiceID } from './listSlice';
 
 const PuzzleList: React.FC = () => {
+  const { user } = useSelector((state: RootState) => state.users);
   const { list, choice, solved } = useSelector(
     (state: RootState) => state.list
   );
@@ -15,8 +16,10 @@ const PuzzleList: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchList());
-    dispatch(fetchSolved());
-  }, [dispatch]);
+    if (user) {
+      dispatch(fetchSolved());
+    }
+  }, [dispatch, user]);
 
   const formatDate = (date: Date) => format(date, 'dd-MM-yyyy');
 
@@ -28,11 +31,11 @@ const PuzzleList: React.FC = () => {
 
   const solvedTemplate = (puzzle: IListGame) => {
     if (!puzzle._id) {
-      return "Unknown";
+      return 'Unknown';
     }
 
-    return solved.includes(puzzle._id) ? <i className="mdi mdi-check"></i> : '';
-  }
+    return solved.includes(puzzle._id) ? <i className='mdi mdi-check'></i> : '';
+  };
 
   return (
     // <Panel header='List of Puzzles'>
@@ -60,11 +63,7 @@ const PuzzleList: React.FC = () => {
       <Column field='rowCount' header='Rows' sortable />
       <Column field='creatorName' header='Creator' filter sortable />
       <Column field='createdAt' header='Date' body={dateTemplate} sortable />
-      <Column
-        field='solved'
-        header='Solved'
-        body={solvedTemplate}
-      />
+      {user && solved && <Column field='solved' header='Solved' body={solvedTemplate} />}
     </DataTable>
     // </Panel>
   );
