@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { setSuccessAlert, setWarningAlert } from 'features/alerts/alertSlice';
 import { checkGuessesCorrect } from 'utils/checkPuzzle';
+import { clearGuesses, doClearPencilMarks } from 'utils/clearGuesses';
 import doCountMissingCells from 'utils/doCountMissingCells';
 import getHints from 'utils/getHints';
 import { makePencilmarks, singlePencilmarksToGuess } from 'utils/pencilmarks';
@@ -184,9 +185,15 @@ export const gameSlice = createSlice({
         localStorage.setItem('gameState', JSON.stringify(state));
       }
     },
+    resetGame(state) {
+      state.game = clearGuesses(state.game);
+    },
     toggleMarkWrong(state) {
       state.markWrong = !state.markWrong;
       localStorage.setItem('gameState', JSON.stringify(state));
+    },
+    clearPencilMarks(state) {
+      state.game = doClearPencilMarks(state.game);
     },
     autoPencil(state) {
       // set guesses where there is only one pencil mark option
@@ -199,13 +206,14 @@ export const gameSlice = createSlice({
 });
 
 export const {
-  // fetchGameSuccess,
+  clearPencilMarks,
   increaseZoom,
   setGameState,
   setSelectedIndex,
   setCurrentGameSuccess,
   setGuessSuccess,
   autoPencil,
+  resetGame,
   togglePencilMark,
   toggleMarkWrong,
 } = gameSlice.actions;

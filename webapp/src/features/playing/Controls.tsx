@@ -5,7 +5,10 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   autoPencil,
+  clearPencilMarks,
   increaseZoom,
+  PuzzleStates,
+  resetGame,
   setGuess,
   toggleMarkWrong,
   togglePencilMark,
@@ -18,9 +21,8 @@ import GuessButton from './GuessButton';
  * Here be number buttons for guesses and pencil marks
  */
 const Controls: React.FC = () => {
-  const { selectedIndex, zoomLevel, markWrong, missingCells } = useSelector(
-    (state: RootState) => state.game
-  );
+  const { selectedIndex, zoomLevel, markWrong, missingCells, game } =
+    useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
   const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -30,6 +32,14 @@ const Controls: React.FC = () => {
     if (selectedIndex) {
       dispatch(setGuess({ index: selectedIndex, guess: 0 }));
     }
+  };
+
+  const handleRestart = (event: React.MouseEvent) => {
+    dispatch(resetGame());
+  };
+
+  const handleClearPencilMarks = (event: React.MouseEvent) => {
+    dispatch(clearPencilMarks());
   };
 
   const handleDeletePencilMarks = (event: React.MouseEvent) => {
@@ -89,7 +99,14 @@ const Controls: React.FC = () => {
           className={classnames('button is-large', styles.button)}
           onClick={handleAutoPencil}
           label='Auto Pencil'
-          icon="mdi mdi-pencil"
+          icon='mdi mdi-pencil'
+        />
+
+        <Button
+          className={classnames('button is-large', styles.button)}
+          onClick={handleClearPencilMarks}
+          label='Clear Pencil Marks'
+          icon='mdi mdi-pencil-off'
         />
 
         <div className={styles.columns}>
@@ -107,17 +124,31 @@ const Controls: React.FC = () => {
           label='Delete'
           onClick={handleDelete}
         />
+
+        <Button
+          className={classnames(
+            'button',
+            'p-warning-button',
+            'is-large',
+            styles.button
+          )}
+          icon='mdi mdi-restart'
+          label='Start Over'
+          onClick={handleRestart}
+        />
       </div>
 
       <div className=''>
-        <ToggleButton
-          checked={markWrong}
-          onLabel='Show mistakes'
-          offLabel='Hide mistakes'
-          onIcon="mdi mdi-eye"
-          offIcon="mdi mdi-eye-off"
-          onChange={() => dispatch(toggleMarkWrong())}
-        />
+        {game.state === PuzzleStates.Solved && (
+          <ToggleButton
+            checked={markWrong}
+            onLabel='Show mistakes'
+            offLabel='Hide mistakes'
+            onIcon='mdi mdi-eye'
+            offIcon='mdi mdi-eye-off'
+            onChange={() => dispatch(toggleMarkWrong())}
+          />
+        )}
       </div>
 
       <div className='debug'>
