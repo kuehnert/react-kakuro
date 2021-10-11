@@ -50,7 +50,9 @@ const PuzzleList: React.FC = () => {
       selection={choice}
       onSelectionChange={e => dispatch(setChoiceID(e.value))}
       dataKey='_id'
-      style={{ width: '80vw' }}>
+      style={{ width: '80vw' }}
+      stateStorage='local'
+      stateKey='kakuro-puzzle-list'>
       <Column field='name' header='Puzzle name' sortable />
       <Column
         field='level'
@@ -63,7 +65,9 @@ const PuzzleList: React.FC = () => {
       <Column field='rowCount' header='Rows' sortable />
       <Column field='creatorName' header='Creator' filter sortable />
       <Column field='createdAt' header='Date' body={dateTemplate} sortable />
-      {user && solved && <Column field='solved' header='Solved' body={solvedTemplate} />}
+      {user && solved && (
+        <Column field='solved' header='Solved' body={solvedTemplate} />
+      )}
     </DataTable>
     // </Panel>
   );
