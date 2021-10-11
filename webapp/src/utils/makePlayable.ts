@@ -1,5 +1,6 @@
 import { IListGame } from 'features/list/listSlice';
 import { CellType, IGameData, PuzzleStates } from 'store/gameSlice';
+import doCountMissingCells from './doCountMissingCells';
 import { doMakeHintCells, doFillHintsFromSolution } from './hintCells';
 
 function makePlayable(input: IListGame): IGameData {
@@ -24,6 +25,7 @@ function makePlayable(input: IListGame): IGameData {
     cells,
     state: PuzzleStates.Solved,
     hintCount: -1,
+    missingCells: doCountMissingCells(cells),
   };
 
   doMakeHintCells(newPuzzle);

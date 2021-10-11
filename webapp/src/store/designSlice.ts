@@ -66,6 +66,7 @@ const initialState: DesignSliceState = {
     cells: createGrid(10, 10),
     state: PuzzleStates.Raw,
     hintCount: -1,
+    missingCells: -1,
   },
 };
 

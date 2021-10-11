@@ -7,12 +7,19 @@
 @import './layout/variables';
 
 html,
-body, #root {
+body,
+#root {
+  margin: 0;
   height: 100%;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
-  font-size: 1rem;
   font-weight: bold;
   text-align: center;
   touch-action: none;
@@ -28,15 +35,13 @@ body, #root {
 .content {
   width: auto;
   background-color: $color4;
-  // flex-grow: 1;
-  // display: flex;
   justify-content: center;
   overflow: auto;
 }
 
 .p-panel {
   margin-bottom: 8px;
-  margin-top:    8px;
-  margin-left:   8px;
-  margin-right:  8px;
+  margin-top: 8px;
+  margin-left: 8px;
+  margin-right: 8px;
 }

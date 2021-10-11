@@ -69,6 +69,7 @@ export interface IGameData extends IBaseGame {
   state: PuzzleStates;
   cells: ICell[];
   hintCount: number;
+  missingCells: number;
 }
 
 export interface IGuess {
@@ -90,7 +91,8 @@ export type GameSliceState = {
   selectedIndex?: number;
   hints: IHintValues[];
   markWrong: boolean;
-  missingCells: number;
+  undoStack: string[];
+  redoStack: string[];
 };
 
 const initialState: GameSliceState = {
@@ -103,42 +105,33 @@ const initialState: GameSliceState = {
     name: 'Dummy',
     level: -1,
     hintCount: -1,
+    missingCells: -1,
   },
   hints: [
     { index: -1, sum: -1, count: -1, used: new Array<number>() },
     { index: -1, sum: -1, count: -1, used: new Array<number>() },
   ],
   markWrong: false,
-  missingCells: -1,
+  undoStack: [],
+  redoStack: [],
 };
 
 export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    setGameState(state, action: PayloadAction<GameSliceState>) {
-      return action.payload;
+    setGameState(state, action: PayloadAction<IGameData>) {
+      state.game = action.payload;
+      state.undoStack = [];
+      state.redoStack = [];
     },
     setCurrentGameSuccess(state, action: PayloadAction<IGameData>) {
+      state.undoStack = [];
+      state.redoStack = [];
       state.game = action.payload;
-      state.missingCells = doCountMissingCells(state.game);
-      localStorage.setItem('gameState', JSON.stringify(state));
+      state.game.missingCells = doCountMissingCells(state.game.cells);
+      localStorage.setItem('currentGame', JSON.stringify(state.game));
     },
-    // fetchGameSuccess(state, action: PayloadAction<IGameData>) {
-    //   state.game = { ...action.payload };
-    //   // create pencilmarks for all number cells
-    //   state.game.cells
-    //     .filter(c => c.type === CellType.NumberCell)
-    //     .forEach(cell => {
-    //       const nCell = cell as INumberCell;
-    //       if (!nCell.guess) {
-    //         nCell.guess = 0;
-    //       }
-    //       if (!nCell.pencilMarks) {
-    //         nCell.pencilMarks = [];
-    //       }
-    //     });
-    // },
     setSelectedIndex(state, action: PayloadAction<number>) {
       let newIndex = action.payload;
       state.selectedIndex = newIndex;
@@ -160,13 +153,15 @@ export const gameSlice = createSlice({
       state,
       action: PayloadAction<{ newGame: IGameData; newMissingCells: number }>
     ) {
+      state.undoStack.push(JSON.stringify(state.game));
       const { newGame, newMissingCells } = action.payload;
       state.game = newGame;
-      state.missingCells = newMissingCells;
+      state.game.missingCells = newMissingCells;
       state.hints = getHints(newGame, state.selectedIndex!);
       localStorage.setItem('gameState', JSON.stringify(state));
     },
     togglePencilMark(state, action: PayloadAction<IGuess>) {
+      state.undoStack.push(JSON.stringify(state.game));
       const { index, guess } = action.payload;
       const newGame: IGameData = JSON.parse(JSON.stringify(state.game));
       const currentCell: INumberCell = newGame.cells[index] as INumberCell;
@@ -189,24 +184,39 @@ export const gameSlice = createSlice({
       }
     },
     resetGame(state) {
+      state.undoStack.push(JSON.stringify(state.game));
       state.game = clearGuesses(state.game);
-      state.missingCells = doCountMissingCells(state.game);
+      state.game.missingCells = doCountMissingCells(state.game.cells);
     },
     toggleMarkWrong(state) {
       state.markWrong = !state.markWrong;
       localStorage.setItem('gameState', JSON.stringify(state));
     },
     clearPencilMarks(state) {
+      state.undoStack.push(JSON.stringify(state.game));
       state.game = doClearPencilMarks(state.game);
     },
     autoPencil(state) {
+      state.undoStack.push(JSON.stringify(state.game));
       // set guesses where there is only one pencil mark option
       singlePencilmarksToGuess(state.game!);
 
       // calculate pencil marks
       makePencilmarks(state.game!);
 
-      state.missingCells = doCountMissingCells(state.game);
+      state.game.missingCells = doCountMissingCells(state.game.cells);
+    },
+    undo(state) {
+      const oldGameString = state.undoStack.pop();
+      const game = JSON.parse(oldGameString!);
+      state.redoStack.push(JSON.stringify(state.game));
+      state.game = game;
+    },
+    redo(state) {
+      const oldGameString = state.redoStack.pop();
+      const game = JSON.parse(oldGameString!);
+      state.undoStack.push(JSON.stringify(state.game));
+      state.game = game;
     },
   },
 });
@@ -222,6 +232,8 @@ export const {
   resetGame,
   togglePencilMark,
   toggleMarkWrong,
+  redo,
+  undo,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;
@@ -250,18 +262,18 @@ export const setCurrentGame =
 export const setGuess =
   ({ index, guess }: IGuess): AppThunk =>
   async (dispatch, getState) => {
-    const { game, missingCells } = getState().game;
+    const { game } = getState().game;
     const newGame: IGameData = JSON.parse(JSON.stringify(game));
     const currentCell = newGame.cells[index] as INumberCell;
     let newMissingCells;
 
     if (currentCell.type === CellType.NumberCell) {
       if (currentCell.guess === 0 && guess !== 0) {
-        newMissingCells = missingCells - 1;
+        newMissingCells = game.missingCells - 1;
       } else if (currentCell.guess > 0 && guess === 0) {
-        newMissingCells = missingCells + 1;
+        newMissingCells = game.missingCells + 1;
       } else {
-        newMissingCells = missingCells;
+        newMissingCells = game.missingCells;
       }
 
       currentCell.guess = guess;

@@ -3,7 +3,7 @@ import KeyboardListener from 'components/KeyboardListener';
 import myHistory from 'myHistory';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { GameSliceState, setGameState } from 'store/gameSlice';
+import { IGameData, setGameState } from 'store/gameSlice';
 import { RootState } from '../../store/store';
 import './Cell.scss';
 import CombinationLine from './CombinationLine';
@@ -21,11 +21,10 @@ const PlayGame: React.FC = () => {
     }
 
     console.log('Loading game state...');
-    const res = localStorage.getItem('gameState');
-
+    const res = localStorage.getItem('currentGame');
     if (res) {
-      const newState: GameSliceState = JSON.parse(res);
-      dispatch(setGameState(newState));
+      const newGame: IGameData = JSON.parse(res);
+      dispatch(setGameState(newGame));
     } else {
       myHistory.push('/');
     }

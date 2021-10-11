@@ -8,10 +8,12 @@ import {
   clearPencilMarks,
   increaseZoom,
   PuzzleStates,
+  redo,
   resetGame,
   setGuess,
   toggleMarkWrong,
   togglePencilMark,
+  undo,
 } from '../../store/gameSlice';
 import { RootState } from '../../store/store';
 import styles from './Controls.module.scss';
@@ -21,7 +23,7 @@ import GuessButton from './GuessButton';
  * Here be number buttons for guesses and pencil marks
  */
 const Controls: React.FC = () => {
-  const { selectedIndex, zoomLevel, markWrong, missingCells, game } =
+  const { selectedIndex, zoomLevel, markWrong, game, undoStack, redoStack } =
     useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
   const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -150,9 +152,26 @@ const Controls: React.FC = () => {
           />
         )}
       </div>
+      <div className='undoredo'>
+        <Button
+          className={classnames('button', 'p-button-large', styles.button)}
+          icon='mdi mdi-undo'
+          label='Undo'
+          onClick={() => dispatch(undo())}
+          disabled={undoStack.length === 0}
+        />
+
+        <Button
+          className={classnames('button', 'p-warning-button', styles.button)}
+          icon='mdi mdi-redo'
+          label='Redo'
+          onClick={() => dispatch(redo())}
+          disabled={redoStack.length === 0}
+        />
+      </div>
 
       <div className='debug'>
-        <div>Missing: {missingCells}</div>
+        <div>Missing: {game.missingCells}</div>
         <div>Selected: {selectedIndex}</div>
       </div>
     </aside>
