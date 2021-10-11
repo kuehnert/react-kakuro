@@ -154,6 +154,7 @@ export const gameSlice = createSlice({
       action: PayloadAction<{ newGame: IGameData; newMissingCells: number }>
     ) {
       state.undoStack.push(JSON.stringify(state.game));
+      state.redoStack = [];
       const { newGame, newMissingCells } = action.payload;
       state.game = newGame;
       state.game.missingCells = newMissingCells;
@@ -162,6 +163,7 @@ export const gameSlice = createSlice({
     },
     togglePencilMark(state, action: PayloadAction<IGuess>) {
       state.undoStack.push(JSON.stringify(state.game));
+      state.redoStack = [];
       const { index, guess } = action.payload;
       const newGame: IGameData = JSON.parse(JSON.stringify(state.game));
       const currentCell: INumberCell = newGame.cells[index] as INumberCell;
@@ -185,6 +187,7 @@ export const gameSlice = createSlice({
     },
     resetGame(state) {
       state.undoStack.push(JSON.stringify(state.game));
+      state.redoStack = [];
       state.game = clearGuesses(state.game);
       state.game.missingCells = doCountMissingCells(state.game.cells);
     },
@@ -194,6 +197,7 @@ export const gameSlice = createSlice({
     },
     clearPencilMarks(state) {
       state.undoStack.push(JSON.stringify(state.game));
+      state.redoStack = [];
       state.game = doClearPencilMarks(state.game);
     },
     autoPencil(state) {

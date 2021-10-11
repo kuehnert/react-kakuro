@@ -1,3 +1,4 @@
+import { confirmDialog } from 'primereact/confirmdialog'; // To use <ConfirmDialog> tag
 import { ToggleButton } from 'primereact/togglebutton';
 import classnames from 'classnames';
 import { Button } from 'primereact/button';
@@ -37,7 +38,15 @@ const Controls: React.FC = () => {
   };
 
   const handleRestart = (event: React.MouseEvent) => {
-    dispatch(resetGame());
+    confirmDialog({
+      message: 'Are you sure you want to start over?',
+      header: 'Warning',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => dispatch(resetGame()),
+      // reject: () => rejectFunc()
+  });
+
+
   };
 
   const handleClearPencilMarks = (event: React.MouseEvent) => {
