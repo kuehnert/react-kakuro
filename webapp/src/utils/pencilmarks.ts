@@ -89,14 +89,17 @@ export function makePencilmarksForCell(
   const used = [...hints[0].used, ...hints[1].used];
 
   // if no current pencil marks, find possible ones
-  if (newPM.length === 0) {
-    // Get possible digits
-    const hDigits = Array.from(new Set(hComb.flat()));
-    const vDigits = Array.from(new Set(vComb.flat()));
-    newPM = hDigits
-      .filter(e => vDigits.includes(e) && !used.includes(e))
-      .sort();
-  } else {
+  // Get possible digits
+  const hDigits = Array.from(new Set(hComb.flat()));
+  const vDigits = Array.from(new Set(vComb.flat()));
+  newPM = hDigits.filter(e => vDigits.includes(e) && !used.includes(e)).sort();
+  console.log('0 newPM:', newPM);
+
+
+  if ((nCell.pencilMarks || []).length > 0) {
+    newPM = newPM.filter(e => nCell.pencilMarks.includes(e));
+    console.log('1 newPM:', newPM);
+
     // only possible if pencil marks have been set once already
     // i.e. if neighbours have correct marks
 

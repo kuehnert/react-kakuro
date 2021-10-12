@@ -5,6 +5,11 @@ export default function getHints(game: IGameData, index: number) {
     { index: -1, sum: -1, count: -1, used: new Array<number>() },
     { index: -1, sum: -1, count: -1, used: new Array<number>() },
   ];
+
+  if (!index) {
+    return hints;
+  }
+
   let hIndex = index;
 
   // Find corresponding hint cell horizontally

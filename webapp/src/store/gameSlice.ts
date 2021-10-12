@@ -111,7 +111,7 @@ const initialState: GameSliceState = {
     { index: -1, sum: -1, count: -1, used: new Array<number>() },
     { index: -1, sum: -1, count: -1, used: new Array<number>() },
   ],
-  markWrong: false,
+  markWrong: JSON.parse(localStorage.getItem('kakuro-markWrong') || 'false'),
   undoStack: [],
   redoStack: [],
 };
@@ -122,6 +122,7 @@ export const gameSlice = createSlice({
   reducers: {
     setGameState(state, action: PayloadAction<IGameData>) {
       state.game = action.payload;
+      state.hints = getHints(state.game, state.selectedIndex!);
       state.undoStack = [];
       state.redoStack = [];
     },
@@ -130,6 +131,7 @@ export const gameSlice = createSlice({
       state.redoStack = [];
       state.game = action.payload;
       state.game.missingCells = doCountMissingCells(state.game.cells);
+      state.hints = getHints(state.game, state.selectedIndex!);
       localStorage.setItem('currentGame', JSON.stringify(state.game));
     },
     setSelectedIndex(state, action: PayloadAction<number>) {
@@ -190,10 +192,11 @@ export const gameSlice = createSlice({
       state.redoStack = [];
       state.game = clearGuesses(state.game);
       state.game.missingCells = doCountMissingCells(state.game.cells);
+      state.hints = getHints(state.game, state.selectedIndex!);
     },
     toggleMarkWrong(state) {
       state.markWrong = !state.markWrong;
-      localStorage.setItem('gameState', JSON.stringify(state));
+      localStorage.setItem('kakuro-markWrong', JSON.stringify(state.markWrong));
     },
     clearPencilMarks(state) {
       state.undoStack.push(JSON.stringify(state.game));
@@ -281,6 +284,8 @@ export const setGuess =
       }
 
       currentCell.guess = guess;
+      // remove guess from pencil marks
+      makePencilmarks(newGame);
 
       if (newMissingCells === 0) {
         if (checkGuessesCorrect(newGame)) {
