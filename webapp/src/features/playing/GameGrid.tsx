@@ -1,6 +1,7 @@
 import classnames from 'classnames';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { calcBoardSize } from 'utils/calcCellSize';
 import {
   CellType,
   IBlankCell,
@@ -16,7 +17,8 @@ import HintCell from './HintCell';
 import NumberCell from './NumberCell';
 
 const GameGrid: React.FC = () => {
-  const { game } = useSelector((state: RootState) => state.game);
+  const { game, zoomLevel } = useSelector((state: RootState) => state.game);
+  const { columnCount, rowCount } = game;
 
   const renderCell = (cell: ICell, index: number) => {
     if (cell.type === CellType.BlankCell) {
@@ -34,7 +36,7 @@ const GameGrid: React.FC = () => {
   const renderGrid = () => {
     return (
       <div
-        className={styles.grid}
+        className={classnames(styles.grid)}
         style={{
           gridTemplateColumns: `repeat(${game!.columnCount}, 1fr)`,
           gridTemplateRows: `repeat(${game!.rowCount}, 1fr)`,
@@ -45,7 +47,13 @@ const GameGrid: React.FC = () => {
   };
 
   return (
-    <div className={classnames(styles.gameBackground)}>{renderGrid()}</div>
+    <div className={classnames(styles.gameBackground)}>
+      <div
+        className={classnames(styles.gridContainer)}
+        style={calcBoardSize(columnCount, rowCount, zoomLevel)}>
+        {renderGrid()}
+      </div>
+    </div>
   );
 };
 

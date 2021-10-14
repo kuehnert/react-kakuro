@@ -9,9 +9,9 @@
 html,
 body,
 #root {
-  margin: 0;
   height: 100%;
   margin: 0;
+  font-size: 12px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -29,7 +29,7 @@ body,
 }
 
 .header {
-  padding: 10px;
+  padding: 0px;
 }
 
 .content {
@@ -40,8 +40,8 @@ body,
 }
 
 .p-panel {
-  margin-bottom: 8px;
-  margin-top: 8px;
-  margin-left: 8px;
-  margin-right: 8px;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }

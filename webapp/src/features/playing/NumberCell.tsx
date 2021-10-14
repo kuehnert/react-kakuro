@@ -2,7 +2,7 @@
 import classnames from 'classnames';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { calcGuessFontSize, calcPencilMarkFontSize } from 'utils/calcCellSize';
+import { calcCellSize, calcGuessFontSize, calcPencilMarkFontSize } from 'utils/calcCellSize';
 import { INumberCell, setSelectedIndex } from '../../store/gameSlice';
 import { RootState } from '../../store/store';
 import styles from './NumberCell.module.scss';
@@ -32,6 +32,8 @@ const NumberCell: React.FC<Props> = ({ cell, index }) => {
     ));
   };
 
+  const cellStyle = calcCellSize(zoomLevel);
+
   const wrongGuess =
     markWrong && cell.solution > 0 && cell.guess !== cell.solution;
 
@@ -40,6 +42,7 @@ const NumberCell: React.FC<Props> = ({ cell, index }) => {
       className={classnames('gamecell', styles.number, {
         selected: index === selectedIndex,
       })}
+      style={cellStyle}
       onClick={handleClick}>
       {cell.guess > 0 && (
         <div

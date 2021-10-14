@@ -3,19 +3,19 @@
 }
 
 .columns {
-  padding: 20px;
+  padding: 0.5rem;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px;
+  gap: 0.5rem;
 }
 
 .button {
-  margin-left: 6px !important;
-  margin-right: 6px !important;
-  margin-top: 6px !important;
-  margin-bottom: 6px !important;
+  margin-left: 0.5rem !important;
+  margin-right: 0.5rem !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
 }
 
 .zoomButtons {
-  margin: 12px;
+  margin: 0.5rem;
 }
