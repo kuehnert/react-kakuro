@@ -11,8 +11,8 @@ const difficulties = {
 };
 
 async function import_menneske() {
-  const number = Math.floor(Math.random() * 8000);
-  const url = `https://menneske.no/kakuro/10x10/eng/solution.html?number=${number}`;
+  const number = Math.floor(Math.random() * 2704);
+  const url = `https://menneske.no/kakuro/20x20/eng/solution.html?number=${number}`;
 
   try {
     console.log(`Getting url ${url}...`);
@@ -24,8 +24,12 @@ async function import_menneske() {
     // const html = fs.readFileSync('./menneske-sample.html').toLocaleString();
 
     const dom = cheerio.load(html);
-    const cells = dom('table.kakurotable > tbody > tr > td');
     const columnCount = dom('table.kakurotable > tbody > tr').length;
+    if (columnCount === 0) {
+      return { error: 'Error downloading puzzle' };
+    }
+
+    const cells = dom('table.kakurotable > tbody > tr > td');
     const rowCount = cells.length / columnCount;
     let cellString = '';
 
@@ -41,7 +45,7 @@ async function import_menneske() {
     console.log(cellString);
     // #bodycol > div > table.kakurotable > tbody > tr:nth-child(1) > td:nth-child(1)
     const puzzle = {
-      name: `Number ${number}`,
+      name: `${columnCount}x${rowCount} Number ${number}`,
       level: 0,
       cellString,
       columnCount,

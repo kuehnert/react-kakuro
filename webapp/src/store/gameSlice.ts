@@ -285,7 +285,8 @@ export const setGuess =
 
       currentCell.guess = guess;
       // remove guess from pencil marks
-      makePencilmarks(newGame);
+      // too much help
+      // makePencilmarks(newGame);
 
       if (newMissingCells === 0) {
         if (checkGuessesCorrect(newGame)) {

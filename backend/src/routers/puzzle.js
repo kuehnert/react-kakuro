@@ -63,7 +63,7 @@ router.post('/puzzles/steal', async (req, res) => {
     console.log('values', values);
     if (values.error) {
       console.error(values.error);
-      return res.status(500).send({ error });
+      return res.status(500).send(error);
     }
 
     const puzzle = new Puzzle({
