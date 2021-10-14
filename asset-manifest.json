@@ -1,26 +1,26 @@
 {
   "files": {
     "main.css": "/react-kakuro/static/css/main.ecc9cb50.chunk.css",
-    "main.js": "/react-kakuro/static/js/main.7086bf7d.chunk.js",
-    "main.js.map": "/react-kakuro/static/js/main.7086bf7d.chunk.js.map",
+    "main.js": "/react-kakuro/static/js/main.96a15cba.chunk.js",
+    "main.js.map": "/react-kakuro/static/js/main.96a15cba.chunk.js.map",
     "runtime-main.js": "/react-kakuro/static/js/runtime-main.3fbbed69.js",
     "runtime-main.js.map": "/react-kakuro/static/js/runtime-main.3fbbed69.js.map",
     "static/css/2.017ecfc4.chunk.css": "/react-kakuro/static/css/2.017ecfc4.chunk.css",
-    "static/js/2.42dc03bb.chunk.js": "/react-kakuro/static/js/2.42dc03bb.chunk.js",
-    "static/js/2.42dc03bb.chunk.js.map": "/react-kakuro/static/js/2.42dc03bb.chunk.js.map",
+    "static/js/2.ee4f6bb5.chunk.js": "/react-kakuro/static/js/2.ee4f6bb5.chunk.js",
+    "static/js/2.ee4f6bb5.chunk.js.map": "/react-kakuro/static/js/2.ee4f6bb5.chunk.js.map",
     "static/js/3.ea4ce4fd.chunk.js": "/react-kakuro/static/js/3.ea4ce4fd.chunk.js",
     "static/js/3.ea4ce4fd.chunk.js.map": "/react-kakuro/static/js/3.ea4ce4fd.chunk.js.map",
     "index.html": "/react-kakuro/index.html",
     "static/css/2.017ecfc4.chunk.css.map": "/react-kakuro/static/css/2.017ecfc4.chunk.css.map",
     "static/css/main.ecc9cb50.chunk.css.map": "/react-kakuro/static/css/main.ecc9cb50.chunk.css.map",
-    "static/js/2.42dc03bb.chunk.js.LICENSE.txt": "/react-kakuro/static/js/2.42dc03bb.chunk.js.LICENSE.txt",
+    "static/js/2.ee4f6bb5.chunk.js.LICENSE.txt": "/react-kakuro/static/js/2.ee4f6bb5.chunk.js.LICENSE.txt",
     "static/media/App.scss": "/react-kakuro/static/media/primeicons.e61f3495.woff"
   },
   "entrypoints": [
     "static/js/runtime-main.3fbbed69.js",
     "static/css/2.017ecfc4.chunk.css",
-    "static/js/2.42dc03bb.chunk.js",
+    "static/js/2.ee4f6bb5.chunk.js",
     "static/css/main.ecc9cb50.chunk.css",
-    "static/js/main.7086bf7d.chunk.js"
+    "static/js/main.96a15cba.chunk.js"
   ]
 }
