@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import classNames from 'classnames';
+import { importPuzzle } from 'features/list/listSlice';
 import PuzzleList from 'features/list/PuzzleList';
 import myHistory from 'myHistory';
 import { Button } from 'primereact/button';
@@ -13,6 +14,10 @@ import styles from './MainMenu.module.scss';
 const MainMenu: React.FC = () => {
   const { choice } = useSelector((state: RootState) => state.list);
   const dispatch = useDispatch();
+
+  const handleFetch = () => {
+    dispatch(importPuzzle());
+  };
 
   const handlePlay = () => {
     const newPuzzle = makePlayable(choice!);
@@ -33,6 +38,15 @@ const MainMenu: React.FC = () => {
         </div>
 
         <div className='flex flex-row justify-content-center'>
+          <div className='w-15rem h-4rem'>
+            <Button
+              label='Fetch game'
+              icon='mdi mdi-download-network'
+              className='p-button-lg'
+              onClick={handleFetch}
+            />
+          </div>
+
           <div className='w-15rem h-4rem'>
             <Button
               label='Create game'

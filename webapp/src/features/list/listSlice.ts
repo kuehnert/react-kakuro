@@ -72,3 +72,17 @@ export const fetchSolved = (): AppThunk => async (dispatch: any) => {
 
   dispatch(fetchSolvedSuccess(solved));
 };
+
+export const importPuzzle = (): AppThunk => async (dispatch: any) => {
+  let puzzle;
+
+  try {
+    const response = await kakuroApi.post('/puzzles/steal', { headers: authHeader() });
+    puzzle = response.data;
+  } catch (error) {
+    console.error('error:', error);
+    dispatch(setErrorAlert('Fehler beim Importieren eines Puzzles.'));
+  }
+
+  dispatch(addPuzzleToList(puzzle));
+};
