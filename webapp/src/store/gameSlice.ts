@@ -95,8 +95,11 @@ export type GameSliceState = {
   redoStack: string[];
 };
 
+const ZOOM_MIN = 3;
+const ZOOM_MAX = 10;
+
 const initialState: GameSliceState = {
-  zoomLevel: 3,
+  zoomLevel: 6,
   game: {
     state: -1,
     cells: [],
@@ -146,7 +149,7 @@ export const gameSlice = createSlice({
         state.zoomLevel = initialState.zoomLevel;
       } else {
         const newValue = state.zoomLevel + delta;
-        if (newValue > 0 && newValue <= 10) {
+        if (newValue >= ZOOM_MIN && newValue <= ZOOM_MAX) {
           state.zoomLevel = newValue;
         }
       }

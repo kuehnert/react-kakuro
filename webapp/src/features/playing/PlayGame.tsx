@@ -35,11 +35,10 @@ const PlayGame: React.FC = () => {
       <KeyboardListener />
 
       <div className={styles.content}>
+        <CombinationLine />
         <GameGrid />
         <Controls />
       </div>
-
-      <CombinationLine />
     </>
   );
 };

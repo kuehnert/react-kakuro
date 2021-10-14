@@ -27,9 +27,9 @@ const CombinationLine: React.FC = () => {
     const key = 'p' + a[0] + '' + index + '' + direction;
 
     return (
-      <span className={styles.possibility} key={key}>
+      <div className={styles.possibility} key={key}>
         {a.map(d => renderDigit(d, direction))}
-      </span>
+      </div>
     );
   };
 
@@ -37,9 +37,9 @@ const CombinationLine: React.FC = () => {
     const key = 'ps' + a[0] + '' + direction;
 
     return (
-      <span key={key}>
+      <div key={key}>
         {a.map((b, i) => renderPossibility(b, i, direction))}
-      </span>
+      </div>
     );
   };
 
@@ -49,7 +49,10 @@ const CombinationLine: React.FC = () => {
     } else {
       return (
         <>
-          <span className={styles.sum}>{hints[direction].sum}:</span>
+          <div className={styles.sum}>
+            {hints[direction].sum}
+            {direction === 0 ? 'a' : 'd'}
+          </div>
           {renderPossibilities(possibilities[direction], direction)}
         </>
       );
@@ -65,9 +68,11 @@ const CombinationLine: React.FC = () => {
 
   return (
     <div className={styles.combinations}>
-      <div className={styles.text}>
-        <div>{renderLine(0)}</div>
-        <div>{renderLine(1)}</div>
+      <div className={styles.column}>
+        <div className={styles.text}>{renderLine(0)}</div>
+      </div>
+      <div className={styles.column}>
+        <div className={styles.text}>{renderLine(1)}</div>
       </div>
     </div>
   );
