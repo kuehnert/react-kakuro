@@ -164,7 +164,7 @@ export const gameSlice = createSlice({
       state.game = newGame;
       state.game.missingCells = newMissingCells;
       state.hints = getHints(newGame, state.selectedIndex!);
-      localStorage.setItem('gameState', JSON.stringify(state));
+      localStorage.setItem('currentGame', JSON.stringify(state.game));
     },
     togglePencilMark(state, action: PayloadAction<IGuess>) {
       state.undoStack.push(JSON.stringify(state.game));
@@ -187,7 +187,7 @@ export const gameSlice = createSlice({
           currentCell.pencilMarks.splice(index, 1);
         }
         state.game = newGame;
-        localStorage.setItem('gameState', JSON.stringify(state));
+        localStorage.setItem('currentGame', JSON.stringify(state.game));
       }
     },
     resetGame(state) {
