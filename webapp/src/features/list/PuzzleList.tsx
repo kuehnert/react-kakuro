@@ -13,6 +13,7 @@ const PuzzleList: React.FC = () => {
     (state: RootState) => state.list
   );
   const dispatch = useDispatch();
+  const filtered = user ? list.filter(p => !solved.includes(p._id!)) : list;
 
   useEffect(() => {
     dispatch(fetchList());
@@ -40,7 +41,7 @@ const PuzzleList: React.FC = () => {
   return (
     // <Panel header='List of Puzzles'>
     <DataTable
-      value={list}
+      value={filtered}
       autoLayout
       stripedRows
       className='p-datatable-sm'
