@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/react-kakuro/static/css/main.a81893db.chunk.css",
-    "main.js": "/react-kakuro/static/js/main.f6a8fdde.chunk.js",
-    "main.js.map": "/react-kakuro/static/js/main.f6a8fdde.chunk.js.map",
+    "main.js": "/react-kakuro/static/js/main.3abe48e0.chunk.js",
+    "main.js.map": "/react-kakuro/static/js/main.3abe48e0.chunk.js.map",
     "runtime-main.js": "/react-kakuro/static/js/runtime-main.3fbbed69.js",
     "runtime-main.js.map": "/react-kakuro/static/js/runtime-main.3fbbed69.js.map",
     "static/css/2.017ecfc4.chunk.css": "/react-kakuro/static/css/2.017ecfc4.chunk.css",
@@ -21,6 +21,6 @@
     "static/css/2.017ecfc4.chunk.css",
     "static/js/2.00a17681.chunk.js",
     "static/css/main.a81893db.chunk.css",
-    "static/js/main.f6a8fdde.chunk.js"
+    "static/js/main.3abe48e0.chunk.js"
   ]
 }
