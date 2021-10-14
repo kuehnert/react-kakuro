@@ -5,6 +5,7 @@ const _ = require('lodash');
 const Puzzle = require('../models/puzzle');
 const debug = require('../utils/debug');
 const auth = require('../middleware/auth');
+const import_menneske = require('../utils/import_menneske');
 
 // FETCH ALL
 router.get('/puzzles', async (req, res) => {
@@ -47,10 +48,35 @@ router.post('/puzzles', auth, async (req, res) => {
     console.log('error', error);
 
     if (error.code === 11000) {
-      res.status(500).send({ code: 11000, message: 'Puzzle already in database' });
+      res
+        .status(500)
+        .send({ code: 11000, message: 'Puzzle already in database' });
     } else {
       res.status(500).send({ error });
     }
+  }
+});
+
+router.post('/puzzles/steal', async (req, res) => {
+  try {
+    const values = await import_menneske();
+    console.log('values', values);
+    if (values.error) {
+      console.error(values.error);
+      return res.status(500).send({ error });
+    }
+
+    const puzzle = new Puzzle({
+      ...values,
+      creatorID: 'mrrobot',
+      creatorName: 'Menneske',
+      createdAt: new Date(),
+    });
+    await puzzle.save();
+    res.status(202).send(puzzle);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error });
   }
 });
 
