@@ -137,7 +137,10 @@ export const gameSlice = createSlice({
       state.game.missingCells = doCountMissingCells(state.game.cells);
       delete state.selectedIndex;
       state.hints = DEFAULT_HINTS;
-      localStorage.setItem('currentGame', JSON.stringify(state.game));
+      const currentGame = JSON.stringify(state.game);
+      console.log('currentGame:', currentGame);
+
+      localStorage.setItem('currentGame', currentGame);
     },
     setSelectedIndex(state, action: PayloadAction<number>) {
       let newIndex = action.payload;

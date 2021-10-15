@@ -93,12 +93,12 @@ export function makePencilmarksForCell(
   const hDigits = Array.from(new Set(hComb.flat()));
   const vDigits = Array.from(new Set(vComb.flat()));
   newPM = hDigits.filter(e => vDigits.includes(e) && !used.includes(e)).sort();
-  console.log('0 newPM:', newPM);
+  // console.log('0 newPM:', newPM);
 
 
   if ((nCell.pencilMarks || []).length > 0) {
     newPM = newPM.filter(e => nCell.pencilMarks.includes(e));
-    console.log('1 newPM:', newPM);
+    // console.log('1 newPM:', newPM);
 
     // only possible if pencil marks have been set once already
     // i.e. if neighbours have correct marks
