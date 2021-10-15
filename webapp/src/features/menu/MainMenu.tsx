@@ -42,7 +42,7 @@ const MainMenu: React.FC = () => {
 
   return (
     <div className={styles.content}>
-      <div className={classNames('text-center')}>
+      <div className='text-center'>
         <div className='mb-3 font-bold text-2xl'>
           <span className='text-900'>The best </span>
           <span className='text-blue-600'>Kakuro Game </span>
@@ -52,7 +52,7 @@ const MainMenu: React.FC = () => {
           All of this is work in progress, so be patient and stay tuned.
         </div>
 
-        <div className='flex flex-row justify-content-center'>
+        <div className={classNames('flex flex-row justify-content-center p-3', styles.bar)}>
           <Dropdown
             value={puzzleSize}
             options={puzzleSizes}
@@ -73,7 +73,7 @@ const MainMenu: React.FC = () => {
             onClick={e => myHistory.push('/create')}
           />
           <Button
-            label='Play Game!'
+            label='Start New Game!'
             icon='mdi mdi-controller-classic'
             className='p-button-lg'
             onClick={handlePlay}

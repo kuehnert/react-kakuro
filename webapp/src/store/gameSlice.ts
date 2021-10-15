@@ -97,6 +97,10 @@ export type GameSliceState = {
 
 const ZOOM_MIN = 3;
 const ZOOM_MAX = 10;
+const DEFAULT_HINTS = [
+  { index: -1, sum: -1, count: -1, used: new Array<number>() },
+  { index: -1, sum: -1, count: -1, used: new Array<number>() },
+];
 
 const initialState: GameSliceState = {
   zoomLevel: 6,
@@ -110,10 +114,7 @@ const initialState: GameSliceState = {
     hintCount: -1,
     missingCells: -1,
   },
-  hints: [
-    { index: -1, sum: -1, count: -1, used: new Array<number>() },
-    { index: -1, sum: -1, count: -1, used: new Array<number>() },
-  ],
+  hints: DEFAULT_HINTS,
   markWrong: JSON.parse(localStorage.getItem('kakuro-markWrong') || 'false'),
   undoStack: [],
   redoStack: [],
@@ -134,7 +135,8 @@ export const gameSlice = createSlice({
       state.redoStack = [];
       state.game = action.payload;
       state.game.missingCells = doCountMissingCells(state.game.cells);
-      state.hints = getHints(state.game, state.selectedIndex!);
+      delete state.selectedIndex;
+      state.hints = DEFAULT_HINTS;
       localStorage.setItem('currentGame', JSON.stringify(state.game));
     },
     setSelectedIndex(state, action: PayloadAction<number>) {
@@ -253,6 +255,8 @@ export default gameSlice.reducer;
 export const setCurrentGame =
   (game: IGameData): AppThunk =>
     async (dispatch: any) => {
+      localStorage.removeItem('currentGame');
+
       const newGame: IGameData = JSON.parse(JSON.stringify(game));
 
       // create pencilmarks for all number cells
