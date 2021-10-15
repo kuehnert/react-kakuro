@@ -59,11 +59,13 @@ router.post('/puzzles', auth, async (req, res) => {
 
 router.post('/puzzles/steal', async (req, res) => {
   try {
-    const values = await import_menneske();
+    const size = req.body.size;
+    console.log('size', size);
+    const values = await import_menneske(size);
     console.log('values', values);
     if (values.error) {
       console.error(values.error);
-      return res.status(500).send(error);
+      return res.status(500).send(values);
     }
 
     const puzzle = new Puzzle({

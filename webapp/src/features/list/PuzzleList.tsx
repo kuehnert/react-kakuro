@@ -13,7 +13,7 @@ const PuzzleList: React.FC = () => {
     (state: RootState) => state.list
   );
   const dispatch = useDispatch();
-  const filtered = user ? list.filter(p => !solved.includes(p._id!)) : list;
+  const filtered = (list && user) ? list.filter(p => !solved.includes(p._id!)) : list;
 
   useEffect(() => {
     dispatch(fetchList());

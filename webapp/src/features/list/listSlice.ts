@@ -73,11 +73,11 @@ export const fetchSolved = (): AppThunk => async (dispatch: any) => {
   dispatch(fetchSolvedSuccess(solved));
 };
 
-export const importPuzzle = (): AppThunk => async (dispatch: any) => {
+export const importPuzzle = (size: string): AppThunk => async (dispatch: any) => {
   let puzzle;
 
   try {
-    const response = await kakuroApi.post('/puzzles/steal', { headers: authHeader() });
+    const response = await kakuroApi.post('/puzzles/steal', { size }, { headers: authHeader() });
     puzzle = response.data;
   } catch (error) {
     console.error('error:', error);

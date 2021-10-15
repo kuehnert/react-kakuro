@@ -156,7 +156,7 @@ export const gameSlice = createSlice({
     },
     setGuessSuccess(
       state,
-      action: PayloadAction<{ newGame: IGameData; newMissingCells: number }>
+      action: PayloadAction<{ newGame: IGameData; newMissingCells: number; }>
     ) {
       state.undoStack.push(JSON.stringify(state.game));
       state.redoStack = [];
@@ -221,12 +221,14 @@ export const gameSlice = createSlice({
       const game = JSON.parse(oldGameString!);
       state.redoStack.push(JSON.stringify(state.game));
       state.game = game;
+      state.hints = getHints(state.game, state.selectedIndex!);
     },
     redo(state) {
       const oldGameString = state.redoStack.pop();
       const game = JSON.parse(oldGameString!);
       state.undoStack.push(JSON.stringify(state.game));
       state.game = game;
+      state.hints = getHints(state.game, state.selectedIndex!);
     },
   },
 });
@@ -250,69 +252,69 @@ export default gameSlice.reducer;
 
 export const setCurrentGame =
   (game: IGameData): AppThunk =>
-  async (dispatch: any) => {
-    const newGame: IGameData = JSON.parse(JSON.stringify(game));
+    async (dispatch: any) => {
+      const newGame: IGameData = JSON.parse(JSON.stringify(game));
 
-    // create pencilmarks for all number cells
-    newGame.cells
-      .filter(c => c.type === CellType.NumberCell)
-      .forEach(cell => {
-        const nCell = cell as INumberCell;
-        if (!nCell.guess) {
-          nCell.guess = 0;
-        }
-        if (!nCell.pencilMarks) {
-          nCell.pencilMarks = [];
-        }
-      });
+      // create pencilmarks for all number cells
+      newGame.cells
+        .filter(c => c.type === CellType.NumberCell)
+        .forEach(cell => {
+          const nCell = cell as INumberCell;
+          if (!nCell.guess) {
+            nCell.guess = 0;
+          }
+          if (!nCell.pencilMarks) {
+            nCell.pencilMarks = [];
+          }
+        });
 
-    dispatch(setCurrentGameSuccess(newGame));
-  };
+      dispatch(setCurrentGameSuccess(newGame));
+    };
 
 export const setGuess =
   ({ index, guess }: IGuess): AppThunk =>
-  async (dispatch, getState) => {
-    const { game } = getState().game;
-    const newGame: IGameData = JSON.parse(JSON.stringify(game));
-    const currentCell = newGame.cells[index] as INumberCell;
-    let newMissingCells;
+    async (dispatch, getState) => {
+      const { game } = getState().game;
+      const newGame: IGameData = JSON.parse(JSON.stringify(game));
+      const currentCell = newGame.cells[index] as INumberCell;
+      let newMissingCells;
 
-    if (currentCell.type === CellType.NumberCell) {
-      if (currentCell.guess === 0 && guess !== 0) {
-        newMissingCells = game.missingCells - 1;
-      } else if (currentCell.guess > 0 && guess === 0) {
-        newMissingCells = game.missingCells + 1;
-      } else {
-        newMissingCells = game.missingCells;
-      }
-
-      currentCell.guess = guess;
-      // remove guess from pencil marks
-      // too much help
-      // makePencilmarks(newGame);
-
-      if (newMissingCells === 0) {
-        if (checkGuessesCorrect(newGame)) {
-          if (game._id && getState().users.user) {
-            try {
-              await kakuroApi.post(
-                '/users/solved',
-                { id: game._id },
-                {
-                  headers: authHeader(),
-                }
-              );
-            } catch (error) {
-              console.error(error);
-            }
-          }
-
-          dispatch(setSuccessAlert('Puzzle solved. Congratulations!'));
+      if (currentCell.type === CellType.NumberCell) {
+        if (currentCell.guess === 0 && guess !== 0) {
+          newMissingCells = game.missingCells - 1;
+        } else if (currentCell.guess > 0 && guess === 0) {
+          newMissingCells = game.missingCells + 1;
         } else {
-          dispatch(setWarningAlert('There are still mistakes in the puzzle'));
+          newMissingCells = game.missingCells;
         }
-      }
 
-      dispatch(setGuessSuccess({ newGame, newMissingCells }));
-    }
-  };
+        currentCell.guess = guess;
+        // remove guess from pencil marks
+        // too much help
+        // makePencilmarks(newGame);
+
+        if (newMissingCells === 0) {
+          if (checkGuessesCorrect(newGame)) {
+            if (game._id && getState().users.user) {
+              try {
+                await kakuroApi.post(
+                  '/users/solved',
+                  { id: game._id },
+                  {
+                    headers: authHeader(),
+                  }
+                );
+              } catch (error) {
+                console.error(error);
+              }
+            }
+
+            dispatch(setSuccessAlert('Puzzle solved. Congratulations!'));
+          } else {
+            dispatch(setWarningAlert('There are still mistakes in the puzzle'));
+          }
+        }
+
+        dispatch(setGuessSuccess({ newGame, newMissingCells }));
+      }
+    };
