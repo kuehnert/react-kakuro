@@ -1,13 +1,13 @@
-import { CellType, IGameData, IHintCell, INumberCell } from 'store/gameSlice';
+import { CellType, IGameData, IHint, IHintCell, INumberCell } from 'store/gameSlice';
 import getCombinations from './getCombinations';
 import getHints from './getHints';
 import { guessNumber } from './solvePuzzle';
 
-export function getRowForCell(
+export function getGroupForCell(
   { cells, columnCount }: IGameData,
   index: number,
   across = true
-) {
+): IHint {
   const delta = across ? 1 : columnCount;
   let x = index - delta;
   let cellIndexes = [];
@@ -43,10 +43,6 @@ export function getRowForCell(
   const count = (y - x) / delta;
 
   return { index, hint, count, sum, sumSolved, cellIndexes, usedDigits };
-}
-
-export function getColumnForCell(game: IGameData, index: number) {
-  return getRowForCell(game, index, false);
 }
 
 export function guessRemovesPencilmarks(game: IGameData, index: number) {}

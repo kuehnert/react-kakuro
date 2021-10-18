@@ -1,21 +1,19 @@
 import { CellType, IGameData, INumberCell } from 'store/gameSlice';
 import {
-  makePencilmarks,
-  getRowForCell,
-  singlePencilmarksToGuess,
-  getColumnForCell,
+  getGroupForCell, makePencilmarks,
+  singlePencilmarksToGuess
 } from './pencilmarks';
 
 let solutions: IGameData[];
 
 export function guessNumber(game: IGameData, index: number, guess: number) {
   (game.cells[index] as INumberCell).guess = guess;
-  getRowForCell(game, index).cellIndexes.forEach(i => {
+  getGroupForCell(game, index).cellIndexes.forEach(i => {
     const nCell = game.cells[i] as INumberCell;
     nCell.pencilMarks = nCell.pencilMarks.filter(pm => pm !== guess);
   });
 
-  getColumnForCell(game, index).cellIndexes.forEach(i => {
+  getGroupForCell(game, index, false).cellIndexes.forEach(i => {
     const nCell = game.cells[i] as INumberCell;
     nCell.pencilMarks = nCell.pencilMarks.filter(pm => pm !== guess);
   });

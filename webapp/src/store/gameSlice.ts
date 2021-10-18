@@ -5,7 +5,7 @@ import authHeader from 'utils/authHeader';
 import { checkGuessesCorrect } from 'utils/checkPuzzle';
 import { clearGuesses, doClearPencilMarks } from 'utils/clearGuesses';
 import doCountMissingCells from 'utils/doCountMissingCells';
-import getHints from 'utils/getHints';
+// import getHints from 'utils/getHints';
 import { makePencilmarks, singlePencilmarksToGuess } from 'utils/pencilmarks';
 import { AppThunk } from './store';
 
@@ -39,10 +39,16 @@ export interface IBlankCell extends ICell {
   type: CellType.BlankCell;
 }
 
+export interface IHint {
+  sum: number;
+  count: number;
+  cellIds: number[];
+  usedDigits: number[];
+}
+
 export interface IHintCell extends ICell {
   type: CellType.HintCell;
-  hintHorizontal?: number;
-  hintVertical?: number;
+  hints: (IHint | null)[];
 }
 
 export interface INumberCell extends ICell {
@@ -77,19 +83,11 @@ export interface IGuess {
   guess: number;
 }
 
-export interface IHintValues {
-  index: number;
-  sum: number;
-  count: number;
-  used: number[];
-}
-
 /* State */
 export type GameSliceState = {
   zoomLevel: number;
   game: IGameData;
   selectedIndex?: number;
-  hints: IHintValues[];
   markWrong: boolean;
   undoStack: string[];
   redoStack: string[];
@@ -97,10 +95,6 @@ export type GameSliceState = {
 
 const ZOOM_MIN = 3;
 const ZOOM_MAX = 10;
-const DEFAULT_HINTS = [
-  { index: -1, sum: -1, count: -1, used: new Array<number>() },
-  { index: -1, sum: -1, count: -1, used: new Array<number>() },
-];
 
 const initialState: GameSliceState = {
   zoomLevel: 6,
@@ -114,7 +108,6 @@ const initialState: GameSliceState = {
     hintCount: -1,
     missingCells: -1,
   },
-  hints: DEFAULT_HINTS,
   markWrong: JSON.parse(localStorage.getItem('kakuro-markWrong') || 'false'),
   undoStack: [],
   redoStack: [],
@@ -126,7 +119,7 @@ export const gameSlice = createSlice({
   reducers: {
     setGameState(state, action: PayloadAction<IGameData>) {
       state.game = action.payload;
-      state.hints = getHints(state.game, state.selectedIndex!);
+      // state.hints = getHints(state.game, state.selectedIndex!);
       state.undoStack = [];
       state.redoStack = [];
     },
@@ -136,7 +129,7 @@ export const gameSlice = createSlice({
       state.game = action.payload;
       state.game.missingCells = doCountMissingCells(state.game.cells);
       delete state.selectedIndex;
-      state.hints = DEFAULT_HINTS;
+      // state.hints = DEFAULT_HINTS;
       const currentGame = JSON.stringify(state.game);
       console.log('currentGame:', currentGame);
 
@@ -145,7 +138,7 @@ export const gameSlice = createSlice({
     setSelectedIndex(state, action: PayloadAction<number>) {
       let newIndex = action.payload;
       state.selectedIndex = newIndex;
-      state.hints = getHints(state.game!, newIndex);
+      // state.hints = getHints(state.game!, newIndex);
     },
     increaseZoom(state, action: PayloadAction<number>) {
       const delta = action.payload;
@@ -168,7 +161,7 @@ export const gameSlice = createSlice({
       const { newGame, newMissingCells } = action.payload;
       state.game = newGame;
       state.game.missingCells = newMissingCells;
-      state.hints = getHints(newGame, state.selectedIndex!);
+      // state.hints = getHints(newGame, state.selectedIndex!);
       localStorage.setItem('currentGame', JSON.stringify(state.game));
     },
     togglePencilMark(state, action: PayloadAction<IGuess>) {
@@ -200,7 +193,7 @@ export const gameSlice = createSlice({
       state.redoStack = [];
       state.game = clearGuesses(state.game);
       state.game.missingCells = doCountMissingCells(state.game.cells);
-      state.hints = getHints(state.game, state.selectedIndex!);
+      // state.hints = getHints(state.game, state.selectedIndex!);
     },
     toggleMarkWrong(state) {
       state.markWrong = !state.markWrong;
@@ -226,14 +219,14 @@ export const gameSlice = createSlice({
       const game = JSON.parse(oldGameString!);
       state.redoStack.push(JSON.stringify(state.game));
       state.game = game;
-      state.hints = getHints(state.game, state.selectedIndex!);
+      // state.hints = getHints(state.game, state.selectedIndex!);
     },
     redo(state) {
       const oldGameString = state.redoStack.pop();
       const game = JSON.parse(oldGameString!);
       state.undoStack.push(JSON.stringify(state.game));
       state.game = game;
-      state.hints = getHints(state.game, state.selectedIndex!);
+      // state.hints = getHints(state.game, state.selectedIndex!);
     },
   },
 });

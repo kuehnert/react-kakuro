@@ -1,4 +1,4 @@
-import { CellType, ICell, IGameData, IHintCell } from 'store/gameSlice';
+import { CellType, ICell, IGameData, IHint, IHintCell } from 'store/gameSlice';
 import { getColumnForCell, getRowForCell } from './pencilmarks';
 
 export function doCountMissingHints(puzzle: IGameData) {
@@ -18,6 +18,29 @@ export function doCountMissingHints(puzzle: IGameData) {
   return puzzle.cells.reduce(reducer, 0);
 }
 
+const makeHints: IHint[] = (across: boolean, down: bolean) => {
+  const hints = [null, null];
+  if (across) {
+    hints[0] = {
+      sum: -1,
+      count: -1,
+      cellIds: [],
+      usedDigits: [],
+    };
+  }
+
+  if (down) {
+    hints[1] = {
+      sum: -1,
+      count: -1,
+      cellIds: [],
+      usedDigits: [],
+    };
+  };
+
+  return hints;
+};
+
 export function doMakeHintCells(puzzle: IGameData) {
   const { cells } = puzzle;
   let hintCount = 0;
@@ -27,28 +50,34 @@ export function doMakeHintCells(puzzle: IGameData) {
     const cell: ICell = cells[index];
     const nextColumn = index + 1;
     const nextRow = index + puzzle.columnCount;
+    let across = false;
+    let down = false;
 
     if (cell.type === CellType.BlankCell) {
+      // cell must be a hint cell if there is a number to its right
       if (cells[nextColumn].type === CellType.NumberCell) {
         cell.type = CellType.HintCell;
-        (cell as IHintCell).hintHorizontal = -1;
+        across = true;
         hintCount += 1;
       }
 
+      // cell must be a hint cell if there is a number below
       if (
         nextRow < cells.length &&
         cells[nextRow].type === CellType.NumberCell
       ) {
         cell.type = CellType.HintCell;
-        (cell as IHintCell).hintVertical = -1;
+        down = true;
         hintCount += 1;
       }
+
+      (cell as IHintCell).hints = makeHints(across, down);
     } else if (cell.type === CellType.HintCell) {
       const hCell = cell as IHintCell;
       let isHint = false;
 
       if (cells[nextColumn].type === CellType.NumberCell) {
-        if (hCell.hintHorizontal === -1) {
+        if (hCell.hints[0]) {
           hintCount += 1;
         }
 
@@ -59,7 +88,7 @@ export function doMakeHintCells(puzzle: IGameData) {
         nextRow < cells.length &&
         cells[nextRow].type === CellType.NumberCell
       ) {
-        if (hCell.hintVertical === -1) {
+        if (hCell.hints[1]) {
           hintCount += 1;
         }
 
@@ -69,6 +98,7 @@ export function doMakeHintCells(puzzle: IGameData) {
       // check if hint cell is no longer a hint cell
       if (!isHint) {
         cell.type = CellType.BlankCell;
+        cell.hints = null;
       }
     }
   }
@@ -85,17 +115,17 @@ export function doFillHintsFromSolution(puzzle: IGameData) {
     .forEach(c => {
       const hintCell = c as IHintCell;
 
-      if (hintCell.hintHorizontal === -1) {
-        const rowGroup = getRowForCell(puzzle, hintCell.index + 1);
-        hintCell.hintHorizontal = rowGroup.sumSolved;
+      if (hintCell.hints[0]) {
+        const rowGroup = getGroupForCell(puzzle, hintCell.index + 1);
+        hintCell.hints[0].sum = rowGroup.sumSolved;
       }
 
-      if (hintCell.hintVertical === -1) {
-        const columnGroup = getColumnForCell(
+      if (hintCell.hints[1]) {
+        const columnGroup = getGroupForCell(
           puzzle,
-          hintCell.index + puzzle.columnCount
+          hintCell.index + puzzle.columnCount, false
         );
-        hintCell.hintVertical = columnGroup.sumSolved;
+        hintCell.hints[1].sum = columnGroup.sumSolved;
       }
     });
 }

@@ -6,7 +6,7 @@ import { RootState } from '../../store/store';
 import styles from './CombinationLine.module.scss';
 
 const CombinationLine: React.FC = () => {
-  const { hints } = useSelector((state: RootState) => state.game);
+  const { selectedIndex } = useSelector((state: RootState) => state.game);
   const [possibilities, setPossibilities] = useState<number[][][]>([[], []]);
 
   const renderDigit = (d: number, direction: number) => {

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CellType } from 'store/gameSlice';
 import { RootState } from 'store/store';
 import combinations from 'utils/combinations';
-import { getRowForCell } from 'utils/pencilmarks';
+import { getGroupForCell } from 'utils/pencilmarks';
 import { IDesignCell, updateCell } from '../../store/designSlice';
 import styles from './HintDialog.module.scss';
 
@@ -44,7 +44,7 @@ const HintDialog: React.FC<Props> = ({
   };
 
   const renderButtons = (across: boolean) => {
-    const groupData = getRowForCell(
+    const groupData = getGroupForCell(
       puzzle,
       cell.index + (across ? 1 : puzzle.columnCount),
       across
