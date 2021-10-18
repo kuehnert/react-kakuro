@@ -71,18 +71,18 @@ const Controls: React.FC = () => {
     <aside className={classnames('controls', styles.controls)}>
       <div className={styles.zoomButtons}>
         <Button
-          className={'p-button-lg'}
+          className={''}
           icon='mdi mdi-magnify-minus'
           onClick={() => handleZoom(-1)}
           disabled={zoomLevel < 1}
         />
         <Button
-          className={'p-button-lg'}
+          className={''}
           label='100 %'
           onClick={() => handleZoom(0)}
         />
         <Button
-          className={'p-button-lg'}
+          className={''}
           icon='mdi mdi-magnify-plus'
           onClick={() => handleZoom(1)}
           disabled={zoomLevel > 10}
@@ -98,7 +98,6 @@ const Controls: React.FC = () => {
           className={classnames(
             'button',
             'is-warning',
-            'is-large',
             styles.button
           )}
           icon='mdi mdi-pencil-off'
@@ -109,14 +108,14 @@ const Controls: React.FC = () => {
         <Button
           className={classnames('button is-large', styles.button)}
           onClick={handleAutoPencil}
-          label='Auto Pencil'
+          label='Auto'
           icon='mdi mdi-pencil'
         />
 
         <Button
           className={classnames('button is-large', styles.button)}
           onClick={handleClearPencilMarks}
-          label='Clear Pencil Marks'
+          label='Clear'
           icon='mdi mdi-pencil-off'
         />
 

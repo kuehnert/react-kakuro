@@ -1,23 +1,28 @@
 @import '../../layout/variables';
 
 .guessButton {
+  // width: 4vw;
+  // height: 4vw;
   background: $color2;
-  aspect-ratio: 1;
-  font-size: 3rem;
+  // aspect-ratio: 1;
+  font-size: 3vh;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .pencilMark {
   background: $color1;
-  font-size: 1.3rem;
-  padding: 4px;
+  font-size: 1.5vh;
+  font-weight: normal;
+  padding: 2px;
   display: grid;
   grid-template-rows: repeat(3, 1fr);
   grid-template-columns: repeat(3, 1fr);
 }
 
 .digit {
-  margin: 4px;
 }
 
 .digit1 {
