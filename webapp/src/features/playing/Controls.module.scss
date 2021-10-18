@@ -1,12 +1,15 @@
 .controls {
   background-color: #c6b0a1;
+
 }
 
 .columns {
-  padding: 0.5rem;
+  padding: 1vw;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 0.5rem;
+  grid-template-columns: repeat(3, 4vw);
+  grid-template-rows: repeat(3, 4vw);
+  gap: 0.5vw;
+  justify-content: center;
 }
 
 .button {
