@@ -7,6 +7,7 @@ import { CellType } from 'store/gameSlice';
 import { RootState } from 'store/store';
 import combinations from 'utils/combinations';
 import { getGroupForCell } from 'utils/pencilmarks';
+// import { getGroupForCell } from 'utils/pencilmarks';
 import { IDesignCell, updateCell } from '../../store/designSlice';
 import styles from './HintDialog.module.scss';
 

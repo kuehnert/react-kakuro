@@ -1,4 +1,4 @@
-import { IHint } from 'store/gameSlice';
+import { ICombination, IHint } from 'store/gameSlice';
 import combinations from './combinations';
 
 interface IGetCombinationsParams {
@@ -12,12 +12,17 @@ interface IGetCombinationsParams {
  */
 export default function getCombinations(
   { sumSolved, count }: IGetCombinationsParams,
-) {
+): ICombination[] {
   let combs = combinations[count][sumSolved];
+
+  console.log('count:', count);
+  console.log('sumSolved:', sumSolved);
+  console.log('combs:', combs);
+
 
   // only select those combinations which contain every used digit
   // TODO do this when new number guessed
   // combs = combs.filter(c => hints.usedDigits.every(h => c.includes(h)));
 
-  return combs;
+  return combs.map(c => ({ digits: c, excluded: false }));
 }

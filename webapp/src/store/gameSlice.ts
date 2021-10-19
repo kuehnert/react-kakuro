@@ -39,13 +39,18 @@ export interface IBlankCell extends ICell {
   type: CellType.BlankCell;
 }
 
+export interface ICombination {
+  digits: number[];
+  excluded: boolean;
+};
+
 export interface IHint {
   sumSolved: number;              // hint for this cell
   sumGuessed: number;        // sumSolved of guessed cells
   count: number;
   cellIndexes: number[];
   usedDigits: number[];
-  combinations: number[][]; // [combination][digit]
+  combinations: ICombination[]; // [combination][digit]
 }
 
 export interface IHintCell extends ICell {

@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import getCombinations from 'utils/getCombinations';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
@@ -25,7 +24,7 @@ const CombinationLine: React.FC = () => {
   const renderCombination = (hint: IHint, index: number) => {
     return (
       <div className={styles.possibility} key={index}>
-        {hint.combinations[index].map(d => renderDigit(hint, d))}
+        {hint.combinations[index].digits?.map(d => renderDigit(hint, d))}
       </div>
     );
   };
@@ -42,7 +41,7 @@ const CombinationLine: React.FC = () => {
         <>
           <div className={styles.sumSolved}>
             {hints[direction]?.sumSolved}
-            {direction === 0 ? 'a' : 'd'}
+            {direction === 0 ? <i className="mdi mdi-arrow-right" />: <i className="mdi mdi-arrow-down" />}
           </div>
           <div>{renderCombinations(hints[direction]!)}</div>
         </>
@@ -51,8 +50,13 @@ const CombinationLine: React.FC = () => {
   };
 
   useEffect(() => {
-    if (selectedIndex && game.cells[selectedIndex].type === CellType.HintCell) {
-      setHints((game.cells[selectedIndex] as IHintCell).hints);
+    if (selectedIndex && game.cells[selectedIndex].type === CellType.NumberCell) {
+      const hintCell0 = game.hintMaps[0][selectedIndex];
+      const hint0 = (game.cells[hintCell0] as IHintCell).hints[0];
+
+      const hintCell1 = game.hintMaps[1][selectedIndex];
+      const hint1 = (game.cells[hintCell1] as IHintCell).hints[1];
+      setHints([hint0, hint1]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedIndex]);

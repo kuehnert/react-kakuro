@@ -1,4 +1,4 @@
-import { CellType, IGameData, IHint, IHintCell, INumberCell } from 'store/gameSlice';
+import { CellType, ICombination, IGameData, IHint, IHintCell, INumberCell } from 'store/gameSlice';
 import getCombinations from './getCombinations';
 import getHints from './getHints';
 import { guessNumber } from './solvePuzzle';
@@ -42,8 +42,8 @@ export function getGroupForCell(
     ? (cells[x] as IHintCell).hints[0]
     : (cells[x] as IHintCell).hints[1];
   const count = (y - x) / delta;
-  const combinations = getCombinations({ sumSolved, count });
-
+  const combinations = getCombinations({ sumSolved: sumGuessed, count });
+  // const combinations = new Array<ICombination>();
   return { count, sumSolved, sumGuessed, cellIndexes, usedDigits, combinations };
 }
 
@@ -81,10 +81,13 @@ export function makePencilmarksForCell(
 
   // Filter out impossible combinations
   let newPM = nCell.pencilMarks || [];
-  const hints = getHints(game, index);
-  const hComb = getCombinations(hints[0]);
-  const vComb = getCombinations(hints[1]);
-  const used = [...hints[0].used, ...hints[1].used];
+  const hHint = (game.cells[game.hintMaps[0][index]] as IHintCell).hints[0];
+  const vHint = (game.cells[game.hintMaps[1][index]] as IHintCell).hints[1];
+
+  const used = [...hHint!.usedDigits, ...vHint!.usedDigits];
+
+  const hComb = hHint!.combinations.map(c => c.digits);
+  const vComb = vHint!.combinations.map(c => c.digits);
 
   // if no current pencil marks, find possible ones
   // Get possible digits
@@ -104,7 +107,7 @@ export function makePencilmarksForCell(
     // if cell part of a twin across or down
     // check which marks are possible
     if (
-      hints[0].count === 2 &&
+      hHint!.count === 2 &&
       index + 1 < game.cells.length &&
       game.cells[index + 1].type === CellType.NumberCell &&
       (game.cells[index + 1] as INumberCell).guess === 0
@@ -112,13 +115,13 @@ export function makePencilmarksForCell(
       const neighbour = game.cells[index + 1] as INumberCell;
 
       newPM = newPM.filter(p => {
-        return neighbour.pencilMarks.includes(hints[0].sumSolved - p);
+        return neighbour.pencilMarks.includes(hHint!.sumSolved - p);
       });
     }
 
     // check for twin down
     if (
-      hints[1].count === 2 &&
+      vHint!.count === 2 &&
       index + game.columnCount < game.cells.length &&
       game.cells[index + game.columnCount].type === CellType.NumberCell &&
       (game.cells[index + game.columnCount] as INumberCell).guess === 0
@@ -126,7 +129,7 @@ export function makePencilmarksForCell(
       const neighbour = game.cells[index + game.columnCount] as INumberCell;
 
       newPM = newPM.filter(p => {
-        return neighbour.pencilMarks.includes(hints[1].sumSolved - p);
+        return neighbour.pencilMarks.includes(vHint!.sumSolved - p);
       });
     }
   }
