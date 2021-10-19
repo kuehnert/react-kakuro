@@ -20,10 +20,10 @@ const HintCell: React.FC<Props> = ({ cell, index }) => {
   return (
     <div className={classnames('gamecell', 'hintCell')} style={style}>
       <div className='horizontalHint' style={fontSize}>
-        {cell.hintHorizontal}
+        {cell.hints[0]?.sumSolved}
       </div>
       <div className='verticalHint' style={fontSize}>
-        {cell.hintVertical}
+        {cell.hints[1]?.sumSolved}
       </div>
     </div>
   );

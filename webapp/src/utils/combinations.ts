@@ -1,5 +1,5 @@
 export interface ICombinationsForCount {
-  [sum: string]: number[][];
+  [sumSolved: string]: number[][];
 }
 
 export interface ICombinations {
@@ -13,13 +13,13 @@ const makeCombinations = () => {
   const digitsToCombination = () => {
     const set = new Array<number>();
     let count = 0;
-    let sum = 0;
+    let sumSolved = 0;
 
     for (let index = 1; index < digits.length; index++) {
       if (digits[index]) {
         set.push(index);
         count += 1;
-        sum += index;
+        sumSolved += index;
       }
     }
 
@@ -27,11 +27,11 @@ const makeCombinations = () => {
       combinations[count] = {};
     }
 
-    if (!combinations[count][sum]) {
-      combinations[count][sum] = new Array<number[]>();
+    if (!combinations[count][sumSolved]) {
+      combinations[count][sumSolved] = new Array<number[]>();
     }
 
-    combinations[count][sum].push(set);
+    combinations[count][sumSolved].push(set);
   };
 
   const _makeCombinations = (min: number, current: number) => {

@@ -1,5 +1,9 @@
 import { CellType, ICell, IGameData, IHint, IHintCell } from 'store/gameSlice';
-import { getColumnForCell, getRowForCell } from './pencilmarks';
+import { getGroupForCell } from './pencilmarks';
+
+export function delta(puzzle: IGameData, direction: number): number {
+  return direction === 0 ? 1 : puzzle.columnCount;
+}
 
 export function doCountMissingHints(puzzle: IGameData) {
   const reducer = (prev: number, curr: ICell) => {
@@ -9,8 +13,8 @@ export function doCountMissingHints(puzzle: IGameData) {
       const hCell = curr as IHintCell;
       return (
         prev +
-        (hCell.hintHorizontal === -1 ? 1 : 0) +
-        (hCell.hintVertical === -1 ? 1 : 0)
+        (hCell.hints[0]?.sumSolved === -1 ? 1 : 0) +
+        (hCell.hints[1]?.sumSolved === -1 ? 1 : 0)
       );
     }
   };
@@ -18,25 +22,29 @@ export function doCountMissingHints(puzzle: IGameData) {
   return puzzle.cells.reduce(reducer, 0);
 }
 
-const makeHints: IHint[] = (across: boolean, down: bolean) => {
-  const hints = [null, null];
+const makeHints = (across: boolean, down: boolean): Array<IHint | null> => {
+  const hints = new Array<IHint | null>(2);
   if (across) {
     hints[0] = {
-      sum: -1,
+      sumSolved: -1,
+      sumGuessed: -1,
       count: -1,
-      cellIds: [],
+      cellIndexes: [],
       usedDigits: [],
+      combinations: [],
     };
   }
 
   if (down) {
     hints[1] = {
-      sum: -1,
+      sumSolved: -1,
+      sumGuessed: -1,
       count: -1,
-      cellIds: [],
+      cellIndexes: [],
       usedDigits: [],
+      combinations: [],
     };
-  };
+  }
 
   return hints;
 };
@@ -98,7 +106,7 @@ export function doMakeHintCells(puzzle: IGameData) {
       // check if hint cell is no longer a hint cell
       if (!isHint) {
         cell.type = CellType.BlankCell;
-        cell.hints = null;
+        // (cell as IHintCell).hints = null;
       }
     }
   }
@@ -115,17 +123,15 @@ export function doFillHintsFromSolution(puzzle: IGameData) {
     .forEach(c => {
       const hintCell = c as IHintCell;
 
-      if (hintCell.hints[0]) {
-        const rowGroup = getGroupForCell(puzzle, hintCell.index + 1);
-        hintCell.hints[0].sum = rowGroup.sumSolved;
-      }
-
-      if (hintCell.hints[1]) {
-        const columnGroup = getGroupForCell(
-          puzzle,
-          hintCell.index + puzzle.columnCount, false
-        );
-        hintCell.hints[1].sum = columnGroup.sumSolved;
-      }
+      [0, 1].forEach(dir => {
+        if (hintCell.hints[dir]) {
+          const group = getGroupForCell(puzzle, hintCell.index + delta(puzzle, dir), dir);
+          hintCell.hints[dir] = {
+            ...group,
+            sumGuessed: 0,
+            sumSolved: group.sumGuessed,
+          };
+        }
+      });
     });
 }

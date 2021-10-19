@@ -26,12 +26,15 @@ function makePlayable(input: IListGame): IGameData {
     state: PuzzleStates.Solved,
     hintCount: -1,
     missingCells: doCountMissingCells(cells),
+    hintMaps: [{}, {}],
   };
 
   doMakeHintCells(newPuzzle);
   doFillHintsFromSolution(newPuzzle);
 
-  // JSON.stringify(newPuzzle, null, 4);
+  const debug = JSON.stringify(newPuzzle, null, 4);
+  console.log('debug:', debug);
+
   return newPuzzle;
 }
 

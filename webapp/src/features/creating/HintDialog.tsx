@@ -47,7 +47,7 @@ const HintDialog: React.FC<Props> = ({
     const groupData = getGroupForCell(
       puzzle,
       cell.index + (across ? 1 : puzzle.columnCount),
-      across
+      across ? 0 : 1
     );
 
     // console.log('groupData.index', groupData.index, 'groupData.count', groupData.count);

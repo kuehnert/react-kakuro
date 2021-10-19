@@ -40,10 +40,12 @@ export interface IBlankCell extends ICell {
 }
 
 export interface IHint {
-  sum: number;
+  sumSolved: number;              // hint for this cell
+  sumGuessed: number;        // sumSolved of guessed cells
   count: number;
-  cellIds: number[];
+  cellIndexes: number[];
   usedDigits: number[];
+  combinations: number[][]; // [combination][digit]
 }
 
 export interface IHintCell extends ICell {
@@ -71,11 +73,16 @@ export interface IServerGameData extends IBaseGame {
   cellString: string;
 }
 
+export interface IHintMap {
+  [index: number]: number;
+};
+
 export interface IGameData extends IBaseGame {
   state: PuzzleStates;
   cells: ICell[];
   hintCount: number;
   missingCells: number;
+  hintMaps: IHintMap[];
 }
 
 export interface IGuess {
@@ -107,6 +114,7 @@ const initialState: GameSliceState = {
     level: -1,
     hintCount: -1,
     missingCells: -1,
+    hintMaps: [{}, {}],
   },
   markWrong: JSON.parse(localStorage.getItem('kakuro-markWrong') || 'false'),
   undoStack: [],

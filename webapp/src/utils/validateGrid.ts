@@ -1,5 +1,5 @@
 import { CellType, IGameData } from 'store/gameSlice';
-import { getGroupForCell, getRowForCell } from './pencilmarks';
+import { getGroupForCell } from './pencilmarks';
 
 export interface IValidatePuzzleResult {
   valid: boolean;
@@ -18,7 +18,7 @@ function validatePuzzle(puzzle: IGameData): IValidatePuzzleResult {
     if (cell.type === CellType.NumberCell) {
       numberCount += 1;
 
-      const row = getGroupForCell(puzzle, cell.index);
+      const row = getGroupForCell(puzzle, cell.index, 0);
       if (row.count === 1) {
         return {
           valid: false,
@@ -26,7 +26,7 @@ function validatePuzzle(puzzle: IGameData): IValidatePuzzleResult {
         };
       }
 
-      const column = getGroupForCell(puzzle, cell.index, false);
+      const column = getGroupForCell(puzzle, cell.index, 1);
       if (column.count === 1) {
         return {
           valid: false,

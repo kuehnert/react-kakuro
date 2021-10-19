@@ -2,8 +2,8 @@ import { CellType, IGameData, IHintCell, INumberCell } from 'store/gameSlice';
 
 export default function getHints(game: IGameData, index: number) {
   const hints = [
-    { index: -1, sum: -1, count: -1, used: new Array<number>() },
-    { index: -1, sum: -1, count: -1, used: new Array<number>() },
+    { index: -1, sumSolved: -1, count: -1, used: new Array<number>() },
+    { index: -1, sumSolved: -1, count: -1, used: new Array<number>() },
   ];
 
   if (!index) {
@@ -22,7 +22,7 @@ export default function getHints(game: IGameData, index: number) {
   }
 
   hints[0].index = hIndex;
-  hints[0].sum = (game.cells[hIndex] as IHintCell).hintHorizontal! || -1;
+  hints[0].sumSolved = (game.cells[hIndex] as IHintCell).hints[0]?.sumSolved! || -1;
 
   // Find count of cells for this hint
   hIndex = index;
@@ -50,7 +50,7 @@ export default function getHints(game: IGameData, index: number) {
   }
 
   hints[1].index = vIndex;
-  hints[1].sum = (game.cells[vIndex] as IHintCell).hintVertical! || -1;
+  hints[1].sumSolved = (game.cells[vIndex] as IHintCell).hints[1]?.sumSolved || -1;
 
   // Find count of cells for this hint
   vIndex = index;

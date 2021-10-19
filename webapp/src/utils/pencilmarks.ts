@@ -6,14 +6,15 @@ import { guessNumber } from './solvePuzzle';
 export function getGroupForCell(
   { cells, columnCount }: IGameData,
   index: number,
-  across = true
+  direction: number
 ): IHint {
+  const across = direction === 0;
   const delta = across ? 1 : columnCount;
   let x = index - delta;
   let cellIndexes = [];
   let usedDigits = [];
-  let sum = 0;
   let sumSolved = 0;
+  let sumGuessed = 0;
 
   while (cells[x].type === CellType.NumberCell) {
     x -= delta;
@@ -29,23 +30,24 @@ export function getGroupForCell(
     const nCell = cells[y] as INumberCell;
     if (nCell.guess) {
       usedDigits.push(nCell.guess);
-      sum += nCell.guess;
+      sumSolved += nCell.guess;
     }
 
     if (nCell.solution) {
-      sumSolved += nCell.solution;
+      sumGuessed += nCell.solution;
     }
   }
 
   const hint = across
-    ? (cells[x] as IHintCell).hintHorizontal
-    : (cells[x] as IHintCell).hintVertical;
+    ? (cells[x] as IHintCell).hints[0]
+    : (cells[x] as IHintCell).hints[1];
   const count = (y - x) / delta;
+  const combinations = getCombinations({ sumSolved, count });
 
-  return { index, hint, count, sum, sumSolved, cellIndexes, usedDigits };
+  return { count, sumSolved, sumGuessed, cellIndexes, usedDigits, combinations };
 }
 
-export function guessRemovesPencilmarks(game: IGameData, index: number) {}
+export function guessRemovesPencilmarks(game: IGameData, index: number) { }
 
 export function singlePencilmarksToGuess(game: IGameData): boolean {
   let setGuess = false;
@@ -110,7 +112,7 @@ export function makePencilmarksForCell(
       const neighbour = game.cells[index + 1] as INumberCell;
 
       newPM = newPM.filter(p => {
-        return neighbour.pencilMarks.includes(hints[0].sum - p);
+        return neighbour.pencilMarks.includes(hints[0].sumSolved - p);
       });
     }
 
@@ -124,7 +126,7 @@ export function makePencilmarksForCell(
       const neighbour = game.cells[index + game.columnCount] as INumberCell;
 
       newPM = newPM.filter(p => {
-        return neighbour.pencilMarks.includes(hints[1].sum - p);
+        return neighbour.pencilMarks.includes(hints[1].sumSolved - p);
       });
     }
   }

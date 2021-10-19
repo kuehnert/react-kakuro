@@ -4,67 +4,58 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import styles from './CombinationLine.module.scss';
+import { CellType, IHint, IHintCell } from 'store/gameSlice';
 
 const CombinationLine: React.FC = () => {
-  const { selectedIndex } = useSelector((state: RootState) => state.game);
-  const [possibilities, setPossibilities] = useState<number[][][]>([[], []]);
+  const { selectedIndex, game } = useSelector((state: RootState) => state.game);
+  const [hints, setHints] = useState<(IHint | null)[]>([null, null]);
 
-  const renderDigit = (d: number, direction: number) => {
-    const key = 'd' + d + '' + direction;
-
-    if (hints[direction].used.includes(d)) {
+  const renderDigit = (hint: IHint, d: number) => {
+    if (hint.usedDigits.includes(d)) {
       return (
-        <span className={styles.highlight} key={key}>
+        <span className={styles.highlight} key={d}>
           {d}
         </span>
       );
     } else {
-      return <span key={key}>{d}</span>;
+      return <span key={d}>{d}</span>;
     }
   };
 
-  const renderPossibility = (a: number[], index: number, direction: number) => {
-    const key = 'p' + a[0] + '' + index + '' + direction;
-
+  const renderCombination = (hint: IHint, index: number) => {
     return (
-      <div className={styles.possibility} key={key}>
-        {a.map(d => renderDigit(d, direction))}
+      <div className={styles.possibility} key={index}>
+        {hint.combinations[index].map(d => renderDigit(hint, d))}
       </div>
     );
   };
 
-  const renderPossibilities = (a: number[][], direction: number) => {
-    const key = 'ps' + a[0] + '' + direction;
-
-    return (
-      <div key={key}>
-        {a.map((b, i) => renderPossibility(b, i, direction))}
-      </div>
-    );
+  const renderCombinations = (hint: IHint) => {
+    return hint.combinations.map((_, i) => renderCombination(hint, i));
   };
 
   const renderLine = (direction: number) => {
-    if (hints[direction].sum < 0) {
+    if (!hints[direction] || hints[direction]!.sumSolved <= 0) {
       return '\u00a0';
     } else {
       return (
         <>
-          <div className={styles.sum}>
-            {hints[direction].sum}
+          <div className={styles.sumSolved}>
+            {hints[direction]?.sumSolved}
             {direction === 0 ? 'a' : 'd'}
           </div>
-          {renderPossibilities(possibilities[direction], direction)}
+          <div>{renderCombinations(hints[direction]!)}</div>
         </>
       );
     }
   };
 
   useEffect(() => {
-    if (hints[0].index > -1) {
-      setPossibilities([getCombinations(hints[0]), getCombinations(hints[1])]);
+    if (selectedIndex && game.cells[selectedIndex].type === CellType.HintCell) {
+      setHints((game.cells[selectedIndex] as IHintCell).hints);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hints]);
+  }, [selectedIndex]);
 
   return (
     <div className={styles.combinations}>

@@ -67,6 +67,7 @@ const initialState: DesignSliceState = {
     state: PuzzleStates.Raw,
     hintCount: -1,
     missingCells: -1,
+    hintMaps: [{}, {}],
   },
 };
 
@@ -191,28 +192,28 @@ export interface IApiError {
 
 export const createGame =
   (values: IGameData): AppThunk =>
-  async (dispatch: any) => {
-    // dispatch(submitting());
-    let puzzle = preparePuzzle(values);
-    let newPuzzle: IListGame;
+    async (dispatch: any) => {
+      // dispatch(submitting());
+      let puzzle = preparePuzzle(values);
+      let newPuzzle: IListGame;
 
-    try {
-      const response = await kakuroApi.post('/puzzles', puzzle, {
-        headers: authHeader(),
-      });
-      newPuzzle = response.data;
-    } catch (error) {
-      console.log('error:', JSON.stringify(error, null, 4));
-      dispatch(
-        setErrorAlert(
-          // `Error trying to save puzzle: ${(error as IApiError).message}`
-          `Error: Puzzle is already in database`
-        )
-      );
-      return;
-    }
+      try {
+        const response = await kakuroApi.post('/puzzles', puzzle, {
+          headers: authHeader(),
+        });
+        newPuzzle = response.data;
+      } catch (error) {
+        console.log('error:', JSON.stringify(error, null, 4));
+        dispatch(
+          setErrorAlert(
+            // `Error trying to save puzzle: ${(error as IApiError).message}`
+            `Error: Puzzle is already in database`
+          )
+        );
+        return;
+      }
 
-    dispatch(addPuzzleToList(newPuzzle));
-    dispatch(createGameSuccess());
-    dispatch(setSuccessAlert('Puzzle erzeugt.'));
-  };
+      dispatch(addPuzzleToList(newPuzzle));
+      dispatch(createGameSuccess());
+      dispatch(setSuccessAlert('Puzzle erzeugt.'));
+    };

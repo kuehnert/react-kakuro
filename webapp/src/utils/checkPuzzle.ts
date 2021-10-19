@@ -15,17 +15,17 @@ export function checkPuzzle(puzzle: IGameData) {
     .every(c => {
       const hc = c as IHintCell;
 
-      if (hc.hintHorizontal) {
-        sumHorizontal += hc.hintHorizontal;
+      if (hc.hints[0]?.sumSolved) {
+        sumHorizontal += hc.hints[0]?.sumSolved;
       }
 
-      if (hc.hintVertical) {
-        sumVertical += hc.hintVertical;
+      if (hc.hints[1]?.sumSolved) {
+        sumVertical += hc.hints[1]?.sumSolved;
       }
 
       return (
-        (!hc.hintHorizontal || hc.hintHorizontal > -1) &&
-        (!hc.hintVertical || hc.hintVertical > -1)
+        (!hc.hints[0]?.sumSolved || hc.hints[0]?.sumSolved > -1) &&
+        (!hc.hints[1]?.sumSolved || hc.hints[1]?.sumSolved > -1)
       );
     });
 
