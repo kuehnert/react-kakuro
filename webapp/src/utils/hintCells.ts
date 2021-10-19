@@ -116,7 +116,7 @@ export function doMakeHintCells(puzzle: IGameData) {
 }
 
 export function doFillHintsFromSolution(puzzle: IGameData) {
-  const { cells } = puzzle;
+  const { cells, hintMaps } = puzzle;
 
   cells
     .filter(c => c.type === CellType.HintCell)
@@ -131,6 +131,9 @@ export function doFillHintsFromSolution(puzzle: IGameData) {
             sumGuessed: 0,
             sumSolved: group.sumGuessed,
           };
+          group.cellIndexes.forEach(i => {
+            hintMaps[dir][i] = c.index;
+          });
         }
       });
     });
