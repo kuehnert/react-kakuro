@@ -1,7 +1,7 @@
 import { CellType, IGameData, IHintCell, INumberCell } from 'store/gameSlice';
 
 /** obsolete? */
-export default function getHints(game: IGameData, index: number) {
+export default function generateHints(game: IGameData, index: number) {
   const hints = [
     { index: -1, sumSolved: -1, count: -1, used: new Array<number>() },
     { index: -1, sumSolved: -1, count: -1, used: new Array<number>() },

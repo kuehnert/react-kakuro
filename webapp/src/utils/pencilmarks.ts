@@ -1,6 +1,5 @@
-import { CellType, ICombination, IGameData, IHint, IHintCell, INumberCell } from 'store/gameSlice';
+import { CellType, IGameData, IHint, IHintCell, INumberCell } from 'store/gameSlice';
 import getCombinations from './getCombinations';
-import getHints from './getHints';
 import { guessNumber } from './solvePuzzle';
 
 export function getGroupForCell(

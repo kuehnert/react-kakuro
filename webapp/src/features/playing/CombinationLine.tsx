@@ -4,15 +4,27 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import styles from './CombinationLine.module.scss';
 import { CellType, IHint, IHintCell } from 'store/gameSlice';
+import _ from 'lodash';
+import getHintsForCell, { ICellHInts } from 'utils/getHintsForCell';
 
 const CombinationLine: React.FC = () => {
   const { selectedIndex, game } = useSelector((state: RootState) => state.game);
-  const [hints, setHints] = useState<(IHint | null)[]>([null, null]);
+  const [cellHints, setCellHints] = useState<ICellHInts>();
+  const icons = [
+    <i className='mdi mdi-arrow-right' />,
+    <i className='mdi mdi-arrow-down' />,
+  ];
 
   const renderDigit = (hint: IHint, d: number) => {
     if (hint.usedDigits.includes(d)) {
       return (
-        <span className={styles.highlight} key={d}>
+        <span className={styles.usedDigit} key={d}>
+          {d}
+        </span>
+      );
+    } else if (!cellHints!.candidates.includes(d)) {
+      return (
+        <span className={styles.impossibleDigit} key={d}>
           {d}
         </span>
       );
@@ -34,41 +46,40 @@ const CombinationLine: React.FC = () => {
   };
 
   const renderLine = (direction: number) => {
-    if (!hints[direction] || hints[direction]!.sumSolved <= 0) {
+    const dirHints = cellHints!.hints[direction];
+
+    if (dirHints.sumSolved <= 0) {
       return '\u00a0';
     } else {
       return (
         <>
           <div className={styles.sumSolved}>
-            {hints[direction]?.sumSolved}
-            {direction === 0 ? <i className="mdi mdi-arrow-right" />: <i className="mdi mdi-arrow-down" />}
+            {dirHints.sumSolved}
+            {icons[direction]}
           </div>
-          <div>{renderCombinations(hints[direction]!)}</div>
+          <div>{renderCombinations(dirHints)}</div>
         </>
       );
     }
   };
 
   useEffect(() => {
-    if (selectedIndex && game.cells[selectedIndex].type === CellType.NumberCell) {
-      const hintCell0 = game.hintMaps[0][selectedIndex];
-      const hint0 = (game.cells[hintCell0] as IHintCell).hints[0];
-
-      const hintCell1 = game.hintMaps[1][selectedIndex];
-      const hint1 = (game.cells[hintCell1] as IHintCell).hints[1];
-      setHints([hint0, hint1]);
+    if (
+      selectedIndex &&
+      game.cells[selectedIndex].type === CellType.NumberCell
+    ) {
+      setCellHints(getHintsForCell(game, selectedIndex));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedIndex]);
 
   return (
     <div className={styles.combinations}>
-      <div className={styles.column}>
-        <div className={styles.text}>{renderLine(0)}</div>
-      </div>
-      <div className={styles.column}>
-        <div className={styles.text}>{renderLine(1)}</div>
-      </div>
+      {cellHints && [0, 1].map(dir => (
+        <div className={styles.column} key={dir}>
+          <div className={styles.text}>{renderLine(dir)}</div>
+        </div>
+      ))}
     </div>
   );
 };
