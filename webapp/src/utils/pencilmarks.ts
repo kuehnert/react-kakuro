@@ -37,13 +37,10 @@ export function getGroupForCell(
     }
   }
 
-  const hint = across
-    ? (cells[x] as IHintCell).hints[0]
-    : (cells[x] as IHintCell).hints[1];
   const count = (y - x) / delta;
   const combinations = getCombinations({ sumSolved: sumGuessed, count });
-  // const combinations = new Array<ICombination>();
-  return { count, sumSolved, sumGuessed, cellIndexes, usedDigits, combinations };
+
+  return { index: x, count, sumSolved, sumGuessed, cellIndexes, usedDigits, combinations };
 }
 
 export function guessRemovesPencilmarks(game: IGameData, index: number) { }

@@ -1,5 +1,5 @@
-import { CellType, IGameData, IHint, IHintCell, INumberCell } from 'store/gameSlice';
 import _ from 'lodash';
+import { IGameData, IHint, IHintCell } from 'store/gameSlice';
 
 export interface ICellHInts {
   hints: IHint[];
@@ -29,7 +29,7 @@ export default function getHintsForCell({ cells, hintMaps }: IGameData, index: n
 
   // find possible digits: those that are present
   // both across and down
-  const candidates = tempCandidates[0].filter(d => tempCandidates[1].includes(d));
+  const candidates = _.intersection(tempCandidates[0], tempCandidates[1]);
 
   return { hints, candidates };
 }

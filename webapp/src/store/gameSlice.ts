@@ -5,6 +5,7 @@ import authHeader from 'utils/authHeader';
 import { checkGuessesCorrect } from 'utils/checkPuzzle';
 import { clearGuesses, doClearPencilMarks } from 'utils/clearGuesses';
 import doCountMissingCells from 'utils/doCountMissingCells';
+import doSetGuess from 'utils/doSetGuess';
 // import getHints from 'utils/getHints';
 import { makePencilmarks, singlePencilmarksToGuess } from 'utils/pencilmarks';
 import { AppThunk } from './store';
@@ -42,11 +43,12 @@ export interface IBlankCell extends ICell {
 export interface ICombination {
   digits: number[];
   excluded: boolean;
-};
+}
 
 export interface IHint {
-  sumSolved: number;              // hint for this cell
-  sumGuessed: number;        // sumSolved of guessed cells
+  index: number; // index of this cell
+  sumSolved: number; // hint for this cell
+  sumGuessed: number; // sumSolved of guessed cells
   count: number;
   cellIndexes: number[];
   usedDigits: number[];
@@ -80,7 +82,7 @@ export interface IServerGameData extends IBaseGame {
 
 export interface IHintMap {
   [index: number]: number;
-};
+}
 
 export interface IGameData extends IBaseGame {
   state: PuzzleStates;
@@ -93,6 +95,12 @@ export interface IGameData extends IBaseGame {
 export interface IGuess {
   index: number;
   guess: number;
+}
+
+export interface IToggleCombinationParams {
+  hintIndex: number;
+  direction: number;
+  combinationIndex: number;
 }
 
 /* State */
@@ -167,14 +175,17 @@ export const gameSlice = createSlice({
     },
     setGuessSuccess(
       state,
-      action: PayloadAction<{ newGame: IGameData; newMissingCells: number; }>
+      action: PayloadAction<{ newGame: IGameData; newMissingCells: number }>
     ) {
+      console.log('huh?');
+
       state.undoStack.push(JSON.stringify(state.game));
       state.redoStack = [];
       const { newGame, newMissingCells } = action.payload;
       state.game = newGame;
+      console.log('newGame:', newGame);
+
       state.game.missingCells = newMissingCells;
-      // state.hints = getHints(newGame, state.selectedIndex!);
       localStorage.setItem('currentGame', JSON.stringify(state.game));
     },
     togglePencilMark(state, action: PayloadAction<IGuess>) {
@@ -227,6 +238,20 @@ export const gameSlice = createSlice({
 
       state.game.missingCells = doCountMissingCells(state.game.cells);
     },
+    toggleCombination(state, action: PayloadAction<IToggleCombinationParams>) {
+      const { hintIndex, direction, combinationIndex } = action.payload;
+      console.log('hintIndex:', hintIndex);
+      console.log('direction:', direction);
+      console.log('combinationIndex:', combinationIndex);
+
+
+
+      const hCell = state.game.cells[hintIndex] as IHintCell;
+      const comb = hCell.hints[direction]?.combinations[combinationIndex];
+      if (comb) {
+        comb.excluded = !comb?.excluded;
+      }
+    },
     undo(state) {
       const oldGameString = state.undoStack.pop();
       const game = JSON.parse(oldGameString!);
@@ -253,6 +278,7 @@ export const {
   setGuessSuccess,
   autoPencil,
   resetGame,
+  toggleCombination,
   togglePencilMark,
   toggleMarkWrong,
   redo,
@@ -263,71 +289,66 @@ export default gameSlice.reducer;
 
 export const setCurrentGame =
   (game: IGameData): AppThunk =>
-    async (dispatch: any) => {
-      localStorage.removeItem('currentGame');
+  async (dispatch: any) => {
+    localStorage.removeItem('currentGame');
 
-      const newGame: IGameData = JSON.parse(JSON.stringify(game));
+    const newGame: IGameData = JSON.parse(JSON.stringify(game));
 
-      // create pencilmarks for all number cells
-      newGame.cells
-        .filter(c => c.type === CellType.NumberCell)
-        .forEach(cell => {
-          const nCell = cell as INumberCell;
-          if (!nCell.guess) {
-            nCell.guess = 0;
-          }
-          if (!nCell.pencilMarks) {
-            nCell.pencilMarks = [];
-          }
-        });
+    // create pencilmarks for all number cells
+    newGame.cells
+      .filter(c => c.type === CellType.NumberCell)
+      .forEach(cell => {
+        const nCell = cell as INumberCell;
+        if (!nCell.guess) {
+          nCell.guess = 0;
+        }
+        if (!nCell.pencilMarks) {
+          nCell.pencilMarks = [];
+        }
+      });
 
-      dispatch(setCurrentGameSuccess(newGame));
-    };
+    dispatch(setCurrentGameSuccess(newGame));
+  };
 
 export const setGuess =
   ({ index, guess }: IGuess): AppThunk =>
-    async (dispatch, getState) => {
-      const { game } = getState().game;
-      const newGame: IGameData = JSON.parse(JSON.stringify(game));
-      const currentCell = newGame.cells[index] as INumberCell;
-      let newMissingCells;
+  async (dispatch, getState) => {
+    const { game } = getState().game;
+    const newGame: IGameData = JSON.parse(JSON.stringify(game));
+    const currentCell = newGame.cells[index] as INumberCell;
+    let newMissingCells;
 
-      if (currentCell.type === CellType.NumberCell) {
-        if (currentCell.guess === 0 && guess !== 0) {
-          newMissingCells = game.missingCells - 1;
-        } else if (currentCell.guess > 0 && guess === 0) {
-          newMissingCells = game.missingCells + 1;
-        } else {
-          newMissingCells = game.missingCells;
-        }
+    if (currentCell.guess === 0 && guess !== 0) {
+      newMissingCells = game.missingCells - 1;
+    } else if (currentCell.guess > 0 && guess === 0) {
+      newMissingCells = game.missingCells + 1;
+    } else {
+      newMissingCells = game.missingCells;
+    }
 
-        currentCell.guess = guess;
-        // remove guess from pencil marks
-        // too much help
-        // makePencilmarks(newGame);
+    doSetGuess(newGame, index, guess);
 
-        if (newMissingCells === 0) {
-          if (checkGuessesCorrect(newGame)) {
-            if (game._id && getState().users.user) {
-              try {
-                await kakuroApi.post(
-                  '/users/solved',
-                  { id: game._id },
-                  {
-                    headers: authHeader(),
-                  }
-                );
-              } catch (error) {
-                console.error(error);
+    if (newMissingCells === 0) {
+      if (checkGuessesCorrect(newGame)) {
+        dispatch(setSuccessAlert('Puzzle solved. Congratulations!'));
+
+        if (game._id && getState().users.user) {
+          try {
+            await kakuroApi.post(
+              '/users/solved',
+              { id: game._id },
+              {
+                headers: authHeader(),
               }
-            }
-
-            dispatch(setSuccessAlert('Puzzle solved. Congratulations!'));
-          } else {
-            dispatch(setWarningAlert('There are still mistakes in the puzzle'));
+            );
+          } catch (error) {
+            console.error(error);
           }
         }
-
-        dispatch(setGuessSuccess({ newGame, newMissingCells }));
+      } else {
+        dispatch(setWarningAlert('There are still mistakes in the puzzle'));
       }
-    };
+    }
+
+    dispatch(setGuessSuccess({ newGame, newMissingCells }));
+  };

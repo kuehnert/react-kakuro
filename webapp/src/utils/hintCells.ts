@@ -1,5 +1,4 @@
 import { CellType, ICell, IGameData, IHint, IHintCell } from 'store/gameSlice';
-import getCombinations from './getCombinations';
 import { getGroupForCell } from './pencilmarks';
 
 export function delta(puzzle: IGameData, direction: number): number {
@@ -27,6 +26,7 @@ const makeHints = (across: boolean, down: boolean): Array<IHint | null> => {
   const hints = new Array<IHint | null>(2);
   if (across) {
     hints[0] = {
+      index: -1,
       sumSolved: -1,
       sumGuessed: -1,
       count: -1,
@@ -38,6 +38,7 @@ const makeHints = (across: boolean, down: boolean): Array<IHint | null> => {
 
   if (down) {
     hints[1] = {
+      index: -1,
       sumSolved: -1,
       sumGuessed: -1,
       count: -1,
@@ -126,9 +127,14 @@ export function doFillHintsFromSolution(puzzle: IGameData) {
 
       [0, 1].forEach(dir => {
         if (hintCell.hints[dir]) {
-          const group = getGroupForCell(puzzle, hintCell.index + delta(puzzle, dir), dir);
+          const group = getGroupForCell(
+            puzzle,
+            hintCell.index + delta(puzzle, dir),
+            dir
+          );
           const hint = {
             ...group,
+            // index: hintCell.index,
             sumGuessed: 0,
             sumSolved: group.sumGuessed,
           };

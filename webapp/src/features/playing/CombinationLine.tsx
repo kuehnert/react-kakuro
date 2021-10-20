@@ -1,19 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { CellType, IHint, toggleCombination } from 'store/gameSlice';
+import getHintsForCell, { ICellHInts } from 'utils/getHintsForCell';
 import { RootState } from '../../store/store';
 import styles from './CombinationLine.module.scss';
-import { CellType, IHint, IHintCell } from 'store/gameSlice';
-import _ from 'lodash';
-import getHintsForCell, { ICellHInts } from 'utils/getHintsForCell';
 
 const CombinationLine: React.FC = () => {
+  const dispatch = useDispatch();
   const { selectedIndex, game } = useSelector((state: RootState) => state.game);
   const [cellHints, setCellHints] = useState<ICellHInts>();
   const icons = [
     <i className='mdi mdi-arrow-right' />,
     <i className='mdi mdi-arrow-down' />,
   ];
+
+  const handleToggleCombination = (
+    hintIndex: number,
+    direction: number,
+    combinationIndex: number
+  ) => {
+    dispatch(toggleCombination({ hintIndex, direction, combinationIndex }));
+  };
 
   const renderDigit = (hint: IHint, d: number) => {
     if (hint.usedDigits.includes(d)) {
@@ -33,16 +42,24 @@ const CombinationLine: React.FC = () => {
     }
   };
 
-  const renderCombination = (hint: IHint, index: number) => {
+  const renderCombination = (hint: IHint, index: number, direction: number) => {
+    const combination = hint.combinations[index];
+    const excluded = combination.excluded;
+
     return (
-      <div className={styles.possibility} key={index}>
-        {hint.combinations[index].digits?.map(d => renderDigit(hint, d))}
+      <div
+        className={classNames(styles.possibility, excluded && styles.excluded)}
+        key={index}
+        onClick={() => handleToggleCombination(hint.index, direction, index)}>
+        {combination.digits?.map(d => renderDigit(hint, d))}
       </div>
     );
   };
 
-  const renderCombinations = (hint: IHint) => {
-    return hint.combinations.map((_, i) => renderCombination(hint, i));
+  const renderCombinations = (hint: IHint, direction: number) => {
+    return hint.combinations.map((_, i) =>
+      renderCombination(hint, i, direction)
+    );
   };
 
   const renderLine = (direction: number) => {
@@ -57,7 +74,7 @@ const CombinationLine: React.FC = () => {
             {dirHints.sumSolved}
             {icons[direction]}
           </div>
-          <div>{renderCombinations(dirHints)}</div>
+          <div>{renderCombinations(dirHints, direction)}</div>
         </>
       );
     }
@@ -68,18 +85,22 @@ const CombinationLine: React.FC = () => {
       selectedIndex &&
       game.cells[selectedIndex].type === CellType.NumberCell
     ) {
-      setCellHints(getHintsForCell(game, selectedIndex));
+      const ch = getHintsForCell(game, selectedIndex);
+      console.log('ch', ch);
+
+      setCellHints(ch);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedIndex]);
+  }, [game, selectedIndex]);
 
   return (
     <div className={styles.combinations}>
-      {cellHints && [0, 1].map(dir => (
-        <div className={styles.column} key={dir}>
-          <div className={styles.text}>{renderLine(dir)}</div>
-        </div>
-      ))}
+      {cellHints &&
+        [0, 1].map(dir => (
+          <div className={styles.column} key={dir}>
+            <div className={styles.text}>{renderLine(dir)}</div>
+          </div>
+        ))}
     </div>
   );
 };

@@ -28,10 +28,16 @@
 
 .possibility {
   padding: 2px 0;
+  cursor: pointer;
+}
+
+.excluded {
+  text-decoration: line-through;
+  color: #777;
 }
 
 .usedDigit {
-  color: #444;
+  color: #ffa;
 }
 
 .possibleDigit {
@@ -39,5 +45,5 @@
 }
 
 .impossibleDigit {
-  color: #888;
+  color: 888;
 }
