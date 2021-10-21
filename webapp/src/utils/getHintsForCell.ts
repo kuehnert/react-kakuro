@@ -4,6 +4,7 @@ import { IGameData, IHint, IHintCell } from 'store/gameSlice';
 export interface ICellHInts {
   hints: IHint[];
   candidates: number[];
+  allUsed: number[];
 }
 
 /**
@@ -36,12 +37,11 @@ export default function getHintsForCell(
 
   // find possible digits: those that are present
   // both across and down
-  const candidates = _.intersection(tempCandidates[0], tempCandidates[1]);
+  let candidates = _.intersection(tempCandidates[0], tempCandidates[1]);
 
   // remove used digits
   const allUsed = _.union(hints[0].usedDigits, hints[1].usedDigits);
-  tempCandidates[0] = _.difference(allUsed, tempCandidates[0]);
-  tempCandidates[1] = _.difference(allUsed, tempCandidates[1]);
+  candidates = _.difference(candidates, allUsed);
 
-  return { hints, candidates };
+  return { hints, candidates, allUsed };
 }

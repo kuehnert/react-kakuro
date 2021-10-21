@@ -58,8 +58,10 @@
   background: #fff;
   width: 40vw;
   height: 50vh;
+  max-height: 400px;
   overflow: auto;
   text-align: left;
   z-index: 100;
   border: 1px solid black;
+  box-shadow: 8px -8px 20px -5px rgba(0,0,0,0.67);
 }

@@ -15,6 +15,7 @@ const CombinationLine: React.FC = () => {
     <i className='mdi mdi-arrow-right' />,
     <i className='mdi mdi-arrow-down' />,
   ];
+  const debugMode = false;
 
   const handleToggleCombination = (
     hintIndex: number,
@@ -28,7 +29,7 @@ const CombinationLine: React.FC = () => {
     if (combination.excluded || combination.impossible) {
       return <span>{d}</span>
      } else
-    if (hint.usedDigits.includes(d)) {
+    if (cellHints?.allUsed.includes(d)) {
       return (
         <span className={styles.usedDigit} key={d}>
           {d}
@@ -108,9 +109,9 @@ const CombinationLine: React.FC = () => {
             </div>
           ))}
       </div>
-      <div className={styles.debug}>
+      {debugMode && (<div className={styles.debug}>
         <pre>{JSON.stringify(cellHints, null, 4)}</pre>
-      </div>
+      </div>)}
     </>
   );
 };
