@@ -19,5 +19,5 @@ export default function getCombinations(
   // TODO do this when new number guessed
   // combs = combs.filter(c => hints.usedDigits.every(h => c.includes(h)));
 
-  return combs.map(c => ({ digits: c, excluded: false }));
+  return combs.map(c => ({ digits: c, excluded: false, impossible: false }));
 }

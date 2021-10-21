@@ -2,7 +2,7 @@
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CellType, IHint, toggleCombination } from 'store/gameSlice';
+import { CellType, ICombination, IHint, toggleCombination } from 'store/gameSlice';
 import getHintsForCell, { ICellHInts } from 'utils/getHintsForCell';
 import { RootState } from '../../store/store';
 import styles from './CombinationLine.module.scss';
@@ -24,16 +24,20 @@ const CombinationLine: React.FC = () => {
     dispatch(toggleCombination({ hintIndex, direction, combinationIndex }));
   };
 
-  const renderDigit = (hint: IHint, d: number) => {
+  const renderDigit = (hint: IHint, combination: ICombination, d: number) => {
+    if (combination.excluded || combination.impossible) {
+      return <span>{d}</span>
+     } else
     if (hint.usedDigits.includes(d)) {
       return (
         <span className={styles.usedDigit} key={d}>
           {d}
         </span>
       );
-    } else if (!cellHints!.candidates.includes(d)) {
+    // } else if (cellHints!.candidates.length < 5 && cellHints!.candidates.includes(d)) {
+    } else if (cellHints!.candidates.includes(d)) {
       return (
-        <span className={styles.impossibleDigit} key={d}>
+        <span className={styles.candidateDigit} key={d}>
           {d}
         </span>
       );
@@ -44,14 +48,15 @@ const CombinationLine: React.FC = () => {
 
   const renderCombination = (hint: IHint, index: number, direction: number) => {
     const combination = hint.combinations[index];
-    const excluded = combination.excluded;
+    const excluded = combination.excluded && styles.excluded;
+    const impossible = combination.impossible && styles.impossible;
 
     return (
       <div
-        className={classNames(styles.possibility, excluded && styles.excluded)}
+        className={classNames(styles.possibility, excluded, impossible)}
         key={index}
         onClick={() => handleToggleCombination(hint.index, direction, index)}>
-        {combination.digits?.map(d => renderDigit(hint, d))}
+        {combination.digits?.map(d => renderDigit(hint, combination, d))}
       </div>
     );
   };
@@ -86,7 +91,7 @@ const CombinationLine: React.FC = () => {
       game.cells[selectedIndex].type === CellType.NumberCell
     ) {
       const ch = getHintsForCell(game, selectedIndex);
-      console.log('ch', ch);
+      // console.log('ch', ch);
 
       setCellHints(ch);
     }
@@ -94,14 +99,19 @@ const CombinationLine: React.FC = () => {
   }, [game, selectedIndex]);
 
   return (
-    <div className={styles.combinations}>
-      {cellHints &&
-        [0, 1].map(dir => (
-          <div className={styles.column} key={dir}>
-            <div className={styles.text}>{renderLine(dir)}</div>
-          </div>
-        ))}
-    </div>
+    <>
+      <div className={styles.combinations}>
+        {cellHints &&
+          [0, 1].map(dir => (
+            <div className={styles.column} key={dir}>
+              <div className={styles.text}>{renderLine(dir)}</div>
+            </div>
+          ))}
+      </div>
+      <div className={styles.debug}>
+        <pre>{JSON.stringify(cellHints, null, 4)}</pre>
+      </div>
+    </>
   );
 };
 

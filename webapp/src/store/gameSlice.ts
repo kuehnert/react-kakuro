@@ -43,6 +43,7 @@ export interface IBlankCell extends ICell {
 export interface ICombination {
   digits: number[];
   excluded: boolean;
+  impossible: boolean;
 }
 
 export interface IHint {
@@ -177,13 +178,10 @@ export const gameSlice = createSlice({
       state,
       action: PayloadAction<{ newGame: IGameData; newMissingCells: number }>
     ) {
-      console.log('huh?');
-
       state.undoStack.push(JSON.stringify(state.game));
       state.redoStack = [];
       const { newGame, newMissingCells } = action.payload;
       state.game = newGame;
-      console.log('newGame:', newGame);
 
       state.game.missingCells = newMissingCells;
       localStorage.setItem('currentGame', JSON.stringify(state.game));

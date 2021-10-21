@@ -1,4 +1,5 @@
 import { CellType, IGameData, IHint, IHintCell, INumberCell } from 'store/gameSlice';
+import doSetGuess from './doSetGuess';
 import getCombinations from './getCombinations';
 import { guessNumber } from './solvePuzzle';
 
@@ -57,7 +58,8 @@ export function singlePencilmarksToGuess(game: IGameData): boolean {
         } else {
           cell.solution = cell.pencilMarks[0];
         }
-        guessNumber(game, cell.index, cell.pencilMarks[0]);
+        // guessNumber(game, cell.index, cell.pencilMarks[0]);
+        doSetGuess(game, cell.index, cell.pencilMarks[0])
         setGuess = true;
       }
     }

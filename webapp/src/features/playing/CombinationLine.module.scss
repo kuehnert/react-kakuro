@@ -33,17 +33,33 @@
 
 .excluded {
   text-decoration: line-through;
-  color: #777;
+  color: #888;
+}
+
+.impossible {
+  color: #666;
 }
 
 .usedDigit {
+  color: #aaf;
+}
+
+.candidateDigit {
   color: #ffa;
 }
 
-.possibleDigit {
-  color: yellow;
+.impossibleDigit {
+  color: #eee;
 }
 
-.impossibleDigit {
-  color: 888;
+.debug {
+  position: absolute;
+  bottom: 0;
+  background: #fff;
+  width: 40vw;
+  height: 50vh;
+  overflow: auto;
+  text-align: left;
+  z-index: 100;
+  border: 1px solid black;
 }

@@ -46,7 +46,7 @@ const KeyboardListener: React.FC = () => {
       } else if (key === 'Delete') {
         dispatch(setGuess({ index: selectedIndex, guess: 0 }));
       } else {
-        console.log('Key pressed:', key);
+        // console.log('Key pressed:', key);
       }
     },
     [selectedIndex]
