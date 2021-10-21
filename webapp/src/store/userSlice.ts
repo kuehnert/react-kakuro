@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { setErrorAlert, setSuccessAlert } from 'features/alerts/alertSlice';
 import { decode } from 'jsonwebtoken';
 import kakuroApi from '../api/kakuroApi';
 import authHeader from '../utils/authHeader';
@@ -147,26 +148,22 @@ export const login =
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('token', token);
     } catch ({ response }) {
+      dispatch(setSuccessAlert('There was an error signing you in. Please check email and password.'));
       dispatch(
         requestFailed({ resourceType: 'users', resources: [], response })
       );
-      // dispatch(
-      //   setAlert({
-      //     type: 'error',
-      //     message: 'Beim Anmelden gab es einen Fehler. Bitte probieren Sie es später noch einmal.',
-      //   }),
-      // );
       return;
     }
 
+    dispatch(setSuccessAlert('Successfully signed in.'));
     dispatch(loginSuccess(user));
-    // dispatch(setAlert({ type: 'success', message: 'Sie haben sich erfolgreich angemeldet.' }));
   };
 
 export const logout = (): AppThunk => async dispatch => {
   try {
     await kakuroApi.post('/users/logout', null, { headers: authHeader() });
   } catch ({ response }) {
+    dispatch(setErrorAlert('There was a problem signing you out.'));
     dispatch(logoutFailed(JSON.stringify(response)));
     return;
   } finally {
@@ -174,8 +171,8 @@ export const logout = (): AppThunk => async dispatch => {
     localStorage.removeItem('token');
   }
 
+  dispatch(setSuccessAlert('You have successfully signed out.'));
   dispatch(logoutSuccess());
-  // dispatch(setAlert({ type: 'success', message: 'Sie haben sich erfolgreich abgemeldet.' }));
 };
 
 export const signUp =
@@ -191,17 +188,11 @@ export const signUp =
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('token', token);
     } catch ({ response }: any) {
-      console.log('response:', response);
-      dispatch(signUpFailed("Unable to sign up"));
-      // dispatch(
-      //   setAlert({
-      //     type: 'error',
-      //     message: 'Beim Anmelden gab es einen Fehler. Bitte probieren Sie es später noch einmal.',
-      //   }),
-      // );
+      dispatch(setErrorAlert('Unable to sign you up.'))
+      dispatch(signUpFailed('Unable to sign up'));
       return;
     }
 
+    dispatch(setSuccessAlert('Successfully signed up.'));
     dispatch(loginSuccess(user));
-    // dispatch(setAlert({ type: 'success', message: 'Sie haben sich erfolgreich angemeldet.' }));
   };
