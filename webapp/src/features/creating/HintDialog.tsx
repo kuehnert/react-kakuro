@@ -30,7 +30,9 @@ const HintDialog: React.FC<Props> = ({
   const dispatch = useDispatch();
 
   const handleClick = (n: number, acrossHint: boolean) => {
-    const newCell: IHintCell = { ...cell, type: CellType.HintCell };
+    // const newCell: IHintCell = { ...cell, type: CellType.HintCell };
+    const newCell: IHintCell = JSON.parse(JSON.stringify(cell));
+
     if (acrossHint) {
       newCell.hints[0]!.sumSolved = n;
     } else {
@@ -49,8 +51,6 @@ const HintDialog: React.FC<Props> = ({
       cell.index + (across ? 1 : puzzle.columnCount),
       across ? 0 : 1
     );
-    console.log('groupData', groupData);
-
 
     const combs = Object.keys(combinations[groupData.count]).map(e => +e);
     const minSum = Math.min(...combs);
