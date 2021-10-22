@@ -6,7 +6,7 @@ import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useDispatch } from 'react-redux';
 import { setPuzzleState } from 'store/designSlice';
-import { IGameData } from 'store/gameSlice';
+import { IGameData } from 'models/cellModels';
 import styles from './ImportDialog.module.scss';
 
 const SetSize: React.FC = () => {

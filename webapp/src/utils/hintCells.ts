@@ -1,4 +1,4 @@
-import { CellType, ICell, IGameData, IHint, IHintCell } from 'store/gameSlice';
+import { CellType, ICell, IGameData, IHint, IHintCell } from 'models/cellModels';
 import { getGroupForCell } from './pencilmarks';
 
 export function delta(puzzle: IGameData, direction: number): number {
@@ -22,26 +22,28 @@ export function doCountMissingHints(puzzle: IGameData) {
   return puzzle.cells.reduce(reducer, 0);
 }
 
-const makeHints = (across: boolean, down: boolean): Array<IHint | null> => {
+const makeHints = (counts: number[]): Array<IHint | null> => {
+  const [across, down] = counts;
   const hints = new Array<IHint | null>(2);
-  if (across) {
+
+  if (across > 0) {
     hints[0] = {
       index: -1,
       sumSolved: -1,
       sumGuessed: -1,
-      count: -1,
+      count: across,
       cellIndexes: [],
       usedDigits: [],
       combinations: [],
     };
   }
 
-  if (down) {
+  if (down > 0) {
     hints[1] = {
       index: -1,
       sumSolved: -1,
       sumGuessed: -1,
-      count: -1,
+      count: down,
       cellIndexes: [],
       usedDigits: [],
       combinations: [],
@@ -58,63 +60,34 @@ export function doMakeHintCells(puzzle: IGameData) {
   // no hint cells in last cell
   for (let index = 0; index < cells.length - 1; index++) {
     const cell: ICell = cells[index];
-    const nextColumn = index + 1;
-    const nextRow = index + puzzle.columnCount;
-    let across = false;
-    let down = false;
+    let counts = [0, 0];
 
-    if (cell.type === CellType.BlankCell) {
-      // cell must be a hint cell if there is a number to its right
-      if (cells[nextColumn].type === CellType.NumberCell) {
-        cell.type = CellType.HintCell;
-        across = true;
-        hintCount += 1;
-      }
-
-      // cell must be a hint cell if there is a number below
-      if (
-        nextRow < cells.length &&
-        cells[nextRow].type === CellType.NumberCell
-      ) {
-        cell.type = CellType.HintCell;
-        down = true;
-        hintCount += 1;
-      }
-
-      (cell as IHintCell).hints = makeHints(across, down);
-    } else if (cell.type === CellType.HintCell) {
-      const hCell = cell as IHintCell;
-      let isHint = false;
-
-      if (cells[nextColumn].type === CellType.NumberCell) {
-        if (hCell.hints[0]) {
-          hintCount += 1;
+    if (cell.type !== CellType.NumberCell) {
+      // cell must be a hint cell if there is a number to its right or down
+      [0, 1].forEach(direction => {
+        let next = index + delta(puzzle, direction);
+        while (
+          next < cells.length &&
+          cells[next].type === CellType.NumberCell
+        ) {
+          cell.type = CellType.HintCell;
+          counts[direction]++;
+          next += delta(puzzle, direction);
         }
+      });
 
-        isHint = true;
-      }
-
-      if (
-        nextRow < cells.length &&
-        cells[nextRow].type === CellType.NumberCell
-      ) {
-        if (hCell.hints[1]) {
-          hintCount += 1;
-        }
-
-        isHint = true;
-      }
-
-      // check if hint cell is no longer a hint cell
-      if (!isHint) {
+      const isHint = counts.join('') !== '00';
+      if (isHint) {
+        (cell as IHintCell).hints = makeHints(counts);
+        hintCount += (counts[0] > 0 ? 1 : 0) + (counts[1] > 0 ? 1 : 0);
+      } else {
         cell.type = CellType.BlankCell;
-        // (cell as IHintCell).hints = null;
+        delete (cell as any).hints // = null;
       }
     }
   }
 
   puzzle.hintCount = hintCount;
-  // console.log('puzzle:', JSON.stringify(puzzle));
 }
 
 export function doFillHintsFromSolution(puzzle: IGameData) {

@@ -2,7 +2,8 @@
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CellType, ICombination, IHint, toggleCombination } from 'store/gameSlice';
+import { CellType, ICombination, IHint } from 'models/cellModels';
+import { toggleCombination } from 'store/gameSlice';
 import getHintsForCell, { ICellHInts } from 'utils/getHintsForCell';
 import { RootState } from '../../store/store';
 import styles from './CombinationLine.module.scss';

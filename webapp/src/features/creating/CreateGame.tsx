@@ -1,8 +1,9 @@
+import { designSteps } from 'models/designModels';
 import { Panel } from 'primereact/panel';
 import { Steps } from 'primereact/steps';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { designSteps, setPuzzleState } from 'store/designSlice';
+import { setPuzzleState } from 'store/designSlice';
 import { RootState } from '../../store/store';
 import styles from './CreateGame.module.scss';
 import SaveGame from './SaveGame';

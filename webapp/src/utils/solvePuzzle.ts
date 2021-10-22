@@ -1,4 +1,4 @@
-import { CellType, IGameData, INumberCell } from 'store/gameSlice';
+import { CellType, IGameData, INumberCell } from 'models/cellModels';
 import {
   getGroupForCell, makePencilmarks,
   singlePencilmarksToGuess

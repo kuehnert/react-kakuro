@@ -4,7 +4,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/store';
 import { calcCellSize, calcHintFontSize } from 'utils/calcCellSize';
-import { IHintCell } from '../../store/gameSlice';
+import { IHintCell } from 'models/cellModels';
 import './HintCell.scss';
 
 export interface Props {

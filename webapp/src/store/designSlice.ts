@@ -14,36 +14,9 @@ import {
   IGameData,
   INumberCell,
   PuzzleStates,
-} from './gameSlice';
+} from 'models/cellModels';
 import { AppThunk } from './store';
-
-export enum Direction {
-  Horizontal = 0,
-  Vertical = 1,
-  Both = 2,
-}
-
-export interface IDesignCell {
-  type: CellType;
-  index: number;
-  hintHorizontal?: number;
-  hintVertical?: number;
-  solution?: number;
-}
-
-export enum DesignStepsEnum {
-  SetSize = 0,
-  DrawGrid = 1,
-  InsertHints = 2,
-  CheckPuzzle = 3,
-}
-
-export const designSteps = [
-  { label: 'Set Size' },
-  { label: 'Draw Grid' },
-  { label: 'Insert Hints' },
-  { label: 'Check Puzzle' },
-];
+import { DesignStepsEnum } from 'models/designModels';
 
 type DesignSliceState = {
   activeStep: number;

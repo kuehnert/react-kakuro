@@ -1,4 +1,4 @@
-import { CellType, IGameData } from 'store/gameSlice';
+import { CellType, IGameData } from 'models/cellModels';
 import { getGroupForCell } from './pencilmarks';
 
 export interface IValidatePuzzleResult {

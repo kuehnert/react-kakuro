@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { IGameData, IHint, IHintCell } from 'store/gameSlice';
+import { IGameData, IHint, IHintCell } from 'models/cellModels';
 
 export interface ICellHInts {
   hints: IHint[];

@@ -1,8 +1,8 @@
-import { Panel } from 'primereact/panel';
+import { designSteps } from 'models/designModels';
 import { Button } from 'primereact/button';
-import React, { FunctionComponent } from 'react';
+import { Panel } from 'primereact/panel';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { designSteps } from 'store/designSlice';
 import { RootState } from '../../store/store';
 import ExportButton from './ExportButton';
 
@@ -12,7 +12,7 @@ interface Props {
   handleNext?: () => void;
 }
 
-const DesignPanel: FunctionComponent<Props> = props => {
+const DesignPanel: React.FC<Props> = props => {
   const { handleBack, handleNext, children } = props;
   const { activeStep } = useSelector((state: RootState) => state.design);
 

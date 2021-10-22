@@ -10,7 +10,8 @@ import {
   setPuzzleState,
   solveGame,
 } from 'store/designSlice';
-import { IGameData, PuzzleStates, setCurrentGame } from 'store/gameSlice';
+import { setCurrentGame } from 'store/gameSlice';
+import { IGameData, PuzzleStates } from 'models/cellModels';
 import { checkAllSolved } from 'utils/checkPuzzle';
 import { makePencilmarks, singlePencilmarksToGuess } from 'utils/pencilmarks';
 import { RootState } from '../../store/store';

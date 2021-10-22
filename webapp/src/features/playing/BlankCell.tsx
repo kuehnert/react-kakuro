@@ -4,7 +4,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/store';
 import { calcCellSize } from 'utils/calcCellSize';
-import { IBlankCell } from '../../store/gameSlice';
+import { IBlankCell } from 'models/cellModels';
 import styles from './BlankCell.module.scss';
 
 export interface Props {

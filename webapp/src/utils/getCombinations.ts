@@ -1,4 +1,4 @@
-import { ICombination } from 'store/gameSlice';
+import { ICombination } from 'models/cellModels';
 import combinations from './combinations';
 
 interface IGetCombinationsParams {

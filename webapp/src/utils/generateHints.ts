@@ -1,4 +1,4 @@
-import { CellType, IGameData, IHintCell, INumberCell } from 'store/gameSlice';
+import { CellType, IGameData, IHintCell, INumberCell } from 'models/cellModels';
 
 /** obsolete? */
 export default function generateHints(game: IGameData, index: number) {
@@ -23,7 +23,8 @@ export default function generateHints(game: IGameData, index: number) {
   }
 
   hints[0].index = hIndex;
-  hints[0].sumSolved = (game.cells[hIndex] as IHintCell).hints[0]?.sumSolved! || -1;
+  hints[0].sumSolved =
+    (game.cells[hIndex] as IHintCell).hints[0]?.sumSolved! || -1;
 
   // Find count of cells for this hint
   hIndex = index;
@@ -51,7 +52,8 @@ export default function generateHints(game: IGameData, index: number) {
   }
 
   hints[1].index = vIndex;
-  hints[1].sumSolved = (game.cells[vIndex] as IHintCell).hints[1]?.sumSolved || -1;
+  hints[1].sumSolved =
+    (game.cells[vIndex] as IHintCell).hints[1]?.sumSolved || -1;
 
   // Find count of cells for this hint
   vIndex = index;

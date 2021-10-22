@@ -1,7 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  CellType,
-  IGameData,
   setGuess,
   setSelectedIndex,
 } from '../store/gameSlice';
@@ -9,6 +7,7 @@ import useEventListener from 'hooks/useEventListener';
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store/store';
+import { CellType, IGameData } from 'models/cellModels';
 
 const KeyboardListener: React.FC = () => {
   const dispatch = useDispatch();

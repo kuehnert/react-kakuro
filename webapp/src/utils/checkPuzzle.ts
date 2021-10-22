@@ -1,4 +1,4 @@
-import { CellType, IGameData, IHintCell, INumberCell } from 'store/gameSlice';
+import { CellType, IGameData, IHintCell, INumberCell } from 'models/cellModels';
 
 export function checkPuzzle(puzzle: IGameData) {
   const { cells } = puzzle;

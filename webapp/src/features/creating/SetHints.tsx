@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { setErrorAlert } from 'features/alerts/alertSlice';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,10 +13,11 @@ const SetHints: React.FC = () => {
     (state: RootState) => state.design
   );
   const dispatch = useDispatch();
+  const debugMode = false;
 
   useEffect(() => {
     dispatch(makeHintCells());
-  });
+  }, []);
 
   const handleBack = () => {
     dispatch(setActiveStep(activeStep - 1));
@@ -34,7 +36,16 @@ const SetHints: React.FC = () => {
   return (
     <DesignPanel handleNext={handleNext} handleBack={handleBack}>
       <DrawGrid />
-      <div className='notes'>Missing hints: {puzzle.hintCount}</div>
+      <>
+        <div className='notes'>Missing hints: {puzzle.hintCount}</div>
+        {debugMode && (
+          <div className='debug'>
+            <pre style={{ textAlign: 'left' }}>
+              {JSON.stringify(puzzle, null, 4)}
+            </pre>
+          </div>
+        )}
+      </>
     </DesignPanel>
   );
 };

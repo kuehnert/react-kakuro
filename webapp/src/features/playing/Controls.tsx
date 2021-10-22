@@ -8,7 +8,6 @@ import {
   autoPencil,
   clearPencilMarks,
   increaseZoom,
-  PuzzleStates,
   redo,
   resetGame,
   setGuess,
@@ -19,6 +18,7 @@ import {
 import { RootState } from '../../store/store';
 import styles from './Controls.module.scss';
 import GuessButton from './GuessButton';
+import { PuzzleStates } from 'models/cellModels';
 
 /*
  * Here be number buttons for guesses and pencil marks

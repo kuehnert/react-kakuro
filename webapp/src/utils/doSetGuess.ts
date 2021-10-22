@@ -1,4 +1,4 @@
-import { IGameData, INumberCell } from 'store/gameSlice';
+import { IGameData, INumberCell } from 'models/cellModels';
 import getHintsForCell from './getHintsForCell';
 import _ from 'lodash';
 

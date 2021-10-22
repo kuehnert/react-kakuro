@@ -1,4 +1,4 @@
-import { CellType, IGameData, INumberCell } from 'store/gameSlice';
+import { CellType, IGameData, INumberCell } from 'models/cellModels';
 
 export const clearGuesses = (game: IGameData): IGameData => {
   const newGame: IGameData = JSON.parse(JSON.stringify(game));

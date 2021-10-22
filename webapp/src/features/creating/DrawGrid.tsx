@@ -1,6 +1,6 @@
+import { ICell } from 'models/cellModels';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { IDesignCell } from 'store/designSlice';
 import { RootState } from '../../store/store';
 import DesignCell from './DesignCell';
 import styles from './DrawGrid.module.scss';
@@ -19,7 +19,7 @@ const DrawGrid: React.FC = () => {
             gridTemplateColumns: `repeat(${columnCount}, 1fr)`,
           }}>
           {cells.map((c, i) => (
-            <DesignCell key={i} index={i} cell={c as IDesignCell} />
+            <DesignCell key={i} index={i} cell={c as ICell} />
           ))}
         </div>
       </div>

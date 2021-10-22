@@ -1,5 +1,5 @@
 import { IListGame } from 'features/list/listSlice';
-import { CellType, IGameData, PuzzleStates } from 'store/gameSlice';
+import { CellType, IGameData, PuzzleStates } from 'models/cellModels';
 import doCountMissingCells from './doCountMissingCells';
 import { doMakeHintCells, doFillHintsFromSolution } from './hintCells';
 

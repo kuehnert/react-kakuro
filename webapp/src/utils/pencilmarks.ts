@@ -1,7 +1,6 @@
-import { CellType, IGameData, IHint, IHintCell, INumberCell } from 'store/gameSlice';
+import { CellType, IGameData, IHint, IHintCell, INumberCell } from 'models/cellModels';
 import doSetGuess from './doSetGuess';
 import getCombinations from './getCombinations';
-import { guessNumber } from './solvePuzzle';
 
 export function getGroupForCell(
   { cells, columnCount }: IGameData,
@@ -39,12 +38,21 @@ export function getGroupForCell(
   }
 
   const count = (y - x) / delta;
-  const combinations = getCombinations({ sumSolved: sumGuessed, count });
+  const combinations =
+    sumGuessed > 0 ? getCombinations({ sumSolved: sumGuessed, count }) : [];
 
-  return { index: x, count, sumSolved, sumGuessed, cellIndexes, usedDigits, combinations };
+  return {
+    index: x,
+    count,
+    sumSolved,
+    sumGuessed,
+    cellIndexes,
+    usedDigits,
+    combinations,
+  };
 }
 
-export function guessRemovesPencilmarks(game: IGameData, index: number) { }
+export function guessRemovesPencilmarks(game: IGameData, index: number) {}
 
 export function singlePencilmarksToGuess(game: IGameData): boolean {
   let setGuess = false;
@@ -59,7 +67,7 @@ export function singlePencilmarksToGuess(game: IGameData): boolean {
           cell.solution = cell.pencilMarks[0];
         }
         // guessNumber(game, cell.index, cell.pencilMarks[0]);
-        doSetGuess(game, cell.index, cell.pencilMarks[0])
+        doSetGuess(game, cell.index, cell.pencilMarks[0]);
         setGuess = true;
       }
     }
@@ -93,7 +101,6 @@ export function makePencilmarksForCell(
   const vDigits = Array.from(new Set(vComb.flat()));
   newPM = hDigits.filter(e => vDigits.includes(e) && !used.includes(e)).sort();
   // console.log('0 newPM:', newPM);
-
 
   if ((nCell.pencilMarks || []).length > 0) {
     newPM = newPM.filter(e => nCell.pencilMarks.includes(e));

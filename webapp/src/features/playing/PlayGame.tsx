@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import KeyboardListener from 'components/KeyboardListener';
+import { IGameData } from 'models/cellModels';
 import myHistory from 'myHistory';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IGameData, setGameState } from 'store/gameSlice';
+import { setGameState } from 'store/gameSlice';
 import { RootState } from '../../store/store';
 import './Cell.scss';
 import CombinationLine from './CombinationLine';

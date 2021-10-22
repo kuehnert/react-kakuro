@@ -8,7 +8,7 @@ import {
   ICell,
   IHintCell,
   INumberCell,
-} from '../../store/gameSlice';
+} from '../../models/cellModels';
 import { RootState } from '../../store/store';
 import BlankCell from './BlankCell';
 import './Cell.scss';

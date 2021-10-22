@@ -3,7 +3,7 @@ import {
   IGameData,
   INumberCell,
   IServerGameData,
-} from 'store/gameSlice';
+} from 'models/cellModels';
 
 function preparePuzzle(game: IGameData): IServerGameData {
   const cellString = game.cells
