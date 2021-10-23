@@ -1,4 +1,10 @@
-import { CellType, IGameData, IHint, IHintCell, INumberCell } from 'models/cellModels';
+import {
+  CellType,
+  IGameData,
+  IHint,
+  IHintCell,
+  INumberCell,
+} from 'models/cellModels';
 import doSetGuess from './doSetGuess';
 import getCombinations from './getCombinations';
 
@@ -84,6 +90,8 @@ export function makePencilmarksForCell(
   if (nCell.guess > 0) {
     return;
   }
+
+  // console.log('game:', JSON.stringify(game, null, 4));
 
   // Filter out impossible combinations
   let newPM = nCell.pencilMarks || [];

@@ -3,6 +3,7 @@
   max-width: 64px;
   aspect-ratio: 1;
   border: 0.05rem lightgray solid;
+  position: relative;
 }
 
 .hintMissing {
@@ -19,4 +20,12 @@
   color: #aaa;
   font-size: 0.8rem;
   inset:  0px;
+}
+
+.debug {
+  position: absolute;
+  left: 4px;
+  color: #f88;
+  opacity: 0.8;
+  z-index: 100;
 }

@@ -1,17 +1,16 @@
 import classNames from 'classnames';
+import { IGameData, PuzzleStates } from 'models/cellModels';
 import myHistory from 'myHistory';
 import { Button } from 'primereact/button';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   clearDesignGame,
-  createGame,
-  setActiveStep,
-  setPuzzleState,
-  solveGame,
+  createGame, setActiveStep,
+  setPuzzle,
+  solveGame
 } from 'store/designSlice';
 import { setCurrentGame } from 'store/gameSlice';
-import { IGameData, PuzzleStates } from 'models/cellModels';
 import { checkAllSolved } from 'utils/checkPuzzle';
 import { makePencilmarks, singlePencilmarksToGuess } from 'utils/pencilmarks';
 import { RootState } from '../../store/store';
@@ -24,6 +23,7 @@ const SaveGame: React.FC = () => {
   const { activeStep, puzzle } = useSelector(
     (state: RootState) => state.design
   );
+  const debugMode = true;
 
   const handleBack = () => {
     dispatch(setActiveStep(activeStep - 1));
@@ -47,7 +47,7 @@ const SaveGame: React.FC = () => {
       newPuzzle.state = PuzzleStates.Solved;
     }
 
-    dispatch(setPuzzleState({ puzzle: newPuzzle, activeStep }));
+    dispatch(setPuzzle(newPuzzle));
   };
 
   const handleSolveMultiple = () => {
@@ -61,7 +61,7 @@ const SaveGame: React.FC = () => {
       newPuzzle.state = PuzzleStates.Solved;
     }
 
-    dispatch(setPuzzleState({ puzzle: newPuzzle, activeStep }));
+    dispatch(setPuzzle(newPuzzle));
   };
 
   const handleSend = () => {
@@ -71,11 +71,6 @@ const SaveGame: React.FC = () => {
   const handleClear = () => {
     dispatch(clearDesignGame());
   };
-
-  useEffect(() => {
-    // handleSolveStep();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <DesignPanel handleBack={handleBack}>
@@ -129,6 +124,13 @@ const SaveGame: React.FC = () => {
       </>
 
       <DrawGrid />
+      {debugMode && (
+        <div className='debug'>
+          <pre style={{ textAlign: 'left' }}>
+            {JSON.stringify(puzzle, null, 4)}
+          </pre>
+        </div>
+      )}
     </DesignPanel>
   );
 };

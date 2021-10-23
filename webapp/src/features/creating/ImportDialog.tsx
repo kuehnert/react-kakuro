@@ -5,7 +5,7 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useDispatch } from 'react-redux';
-import { setPuzzleState } from 'store/designSlice';
+import { setPuzzle } from 'store/designSlice';
 import { IGameData } from 'models/cellModels';
 import styles from './ImportDialog.module.scss';
 
@@ -34,7 +34,7 @@ const SetSize: React.FC = () => {
   const handleImport = (e: React.MouseEvent) => {
     const newPuzzle: IGameData = JSON.parse(puzzleJSON);
     setImportVisible(false);
-    dispatch(setPuzzleState({ activeStep: 1, puzzle: newPuzzle }));
+    dispatch(setPuzzle(newPuzzle));
   };
 
   return (

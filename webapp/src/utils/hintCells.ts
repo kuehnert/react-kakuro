@@ -1,4 +1,10 @@
-import { CellType, ICell, IGameData, IHint, IHintCell } from 'models/cellModels';
+import {
+  CellType,
+  ICell,
+  IGameData,
+  IHint,
+  IHintCell,
+} from 'models/cellModels';
 import { getGroupForCell } from './pencilmarks';
 
 export function delta(puzzle: IGameData, direction: number): number {
@@ -22,15 +28,15 @@ export function doCountMissingHints(puzzle: IGameData) {
   return puzzle.cells.reduce(reducer, 0);
 }
 
-const makeHints = (counts: number[]): Array<IHint | null> => {
+const makeHints = (index: number, counts: number[]): Array<IHint | null> => {
   const [across, down] = counts;
   const hints = new Array<IHint | null>(2);
 
   if (across > 0) {
     hints[0] = {
-      index: -1,
+      index,
       sumSolved: -1,
-      sumGuessed: -1,
+      sumGuessed: 0,
       count: across,
       cellIndexes: [],
       usedDigits: [],
@@ -40,9 +46,9 @@ const makeHints = (counts: number[]): Array<IHint | null> => {
 
   if (down > 0) {
     hints[1] = {
-      index: -1,
+      index,
       sumSolved: -1,
-      sumGuessed: -1,
+      sumGuessed: 0,
       count: down,
       cellIndexes: [],
       usedDigits: [],
@@ -54,11 +60,11 @@ const makeHints = (counts: number[]): Array<IHint | null> => {
 };
 
 export function doMakeHintCells(puzzle: IGameData) {
-  const { cells } = puzzle;
+  const { cells, hintMaps } = puzzle;
   let hintCount = 0;
 
-  // no hint cells in last cell
-  for (let index = 0; index < cells.length - 1; index++) {
+  // no hint cells in last two cells
+  for (let index = 0; index < cells.length - 2; index++) {
     const cell: ICell = cells[index];
     let counts = [0, 0];
 
@@ -76,16 +82,71 @@ export function doMakeHintCells(puzzle: IGameData) {
         }
       });
 
+      // it's a hint cell unless both counts are zero
       const isHint = counts.join('') !== '00';
+
       if (isHint) {
-        (cell as IHintCell).hints = makeHints(counts);
+        const hCell = cell as IHintCell;
+
+        // make hints unless already present & valid
+        let needsNew0 = false;
+        if (counts[0] > 0) {
+          needsNew0 =
+            !hCell.hints ||
+            !hCell.hints[0] ||
+            hCell.hints[0].count !== counts[0];
+        }
+
+        let needsNew1 = false;
+        if (counts[1] > 0) {
+          needsNew1 =
+            !hCell.hints ||
+            !hCell.hints[1] ||
+            hCell.hints[1].count !== counts[1];
+        }
+
+        // don't overwrite existing hint
+        if (needsNew0 || needsNew1) {
+          hCell.hints = makeHints(index, counts);
+        }
         hintCount += (counts[0] > 0 ? 1 : 0) + (counts[1] > 0 ? 1 : 0);
       } else {
         cell.type = CellType.BlankCell;
-        delete (cell as any).hints // = null;
+        delete (cell as any).hints; // = null;
       }
     }
   }
+
+  // populate hintMaps
+  cells
+    .filter(c => c.type === CellType.HintCell)
+    .forEach(c => {
+      const hintCell = c as IHintCell;
+
+      [0, 1].forEach(direction => {
+        if (hintCell.hints[direction]) {
+          const group = getGroupForCell(
+            puzzle,
+            hintCell.index + delta(puzzle, direction),
+            direction
+          );
+
+          const hint: IHint = {
+            ...group,
+            sumSolved: hintCell.hints[direction]?.sumSolved || 0,
+            sumGuessed: 0,
+          };
+
+          // console.log('hint:', hint);
+          hintCell.hints[direction] = hint;
+
+          // populate hint map
+          group.cellIndexes.forEach(i => {
+            hintMaps[direction][i] = c.index;
+          });
+        }
+      });
+    });
 
   puzzle.hintCount = hintCount;
 }
@@ -98,26 +159,26 @@ export function doFillHintsFromSolution(puzzle: IGameData) {
     .forEach(c => {
       const hintCell = c as IHintCell;
 
-      [0, 1].forEach(dir => {
-        if (hintCell.hints[dir]) {
+      [0, 1].forEach(direction => {
+        if (hintCell.hints[direction]) {
           const group = getGroupForCell(
             puzzle,
-            hintCell.index + delta(puzzle, dir),
-            dir
+            hintCell.index + delta(puzzle, direction),
+            direction
           );
+
           const hint = {
             ...group,
-            // index: hintCell.index,
             sumGuessed: 0,
             sumSolved: group.sumGuessed,
           };
 
           // console.log('hint:', hint);
-          hintCell.hints[dir] = hint;
+          hintCell.hints[direction] = hint;
 
           // populate hint map
           group.cellIndexes.forEach(i => {
-            hintMaps[dir][i] = c.index;
+            hintMaps[direction][i] = c.index;
           });
         }
       });
