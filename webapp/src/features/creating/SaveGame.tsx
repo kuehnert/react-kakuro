@@ -39,6 +39,8 @@ const SaveGame: React.FC = () => {
   };
 
   const handleSolveStep = () => {
+    console.log("handleSolveStep");
+
     const newPuzzle: IGameData = JSON.parse(JSON.stringify(puzzle));
     makePencilmarks(newPuzzle);
     singlePencilmarksToGuess(newPuzzle);

@@ -35,11 +35,11 @@ export function getGroupForCell(
     const nCell = cells[y] as INumberCell;
     if (nCell.guess) {
       usedDigits.push(nCell.guess);
-      sumSolved += nCell.guess;
+      sumGuessed += nCell.guess;
     }
 
     if (nCell.solution) {
-      sumGuessed += nCell.solution;
+      sumSolved += nCell.solution;
     }
   }
 
@@ -91,17 +91,20 @@ export function makePencilmarksForCell(
     return;
   }
 
-  // console.log('game:', JSON.stringify(game, null, 4));
-
   // Filter out impossible combinations
   let newPM = nCell.pencilMarks || [];
   const hHint = (game.cells[game.hintMaps[0][index]] as IHintCell).hints[0];
   const vHint = (game.cells[game.hintMaps[1][index]] as IHintCell).hints[1];
 
   const used = [...hHint!.usedDigits, ...vHint!.usedDigits];
-
-  const hComb = hHint!.combinations.map(c => c.digits);
-  const vComb = vHint!.combinations.map(c => c.digits);
+  const hComb = hHint!.combinations.filter(c => !c.impossible).map(c => c.digits);
+  const vComb = vHint!.combinations.filter(c => !c.impossible).map(c => c.digits);
+  // console.log('index:', index);
+  // console.log('hHint:', hHint);
+  // console.log('vHint:', vHint);
+  // console.log('used:', used);
+  // console.log('hComb:', hComb);
+  // console.log('vComb:', vComb);
 
   // if no current pencil marks, find possible ones
   // Get possible digits

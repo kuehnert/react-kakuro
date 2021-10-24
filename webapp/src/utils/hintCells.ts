@@ -4,7 +4,9 @@ import {
   IGameData,
   IHint,
   IHintCell,
+  INumberCell,
 } from 'models/cellModels';
+import getCombinations from './getCombinations';
 import { getGroupForCell } from './pencilmarks';
 
 export function delta(puzzle: IGameData, direction: number): number {
@@ -131,13 +133,15 @@ export function doMakeHintCells(puzzle: IGameData) {
             direction
           );
 
+          const sumSolved = hintCell.hints[direction]?.sumSolved || 0;
           const hint: IHint = {
             ...group,
-            sumSolved: hintCell.hints[direction]?.sumSolved || 0,
+            sumSolved,
             sumGuessed: 0,
+            usedDigits: [],
+            combinations: getCombinations({ sumSolved, count: group.count }),
           };
 
-          // console.log('hint:', hint);
           hintCell.hints[direction] = hint;
 
           // populate hint map
@@ -146,6 +150,15 @@ export function doMakeHintCells(puzzle: IGameData) {
           });
         }
       });
+    });
+
+  cells
+    .filter(c => c.type === CellType.NumberCell)
+    .forEach(c => {
+      const numberCell = c as INumberCell;
+      numberCell.guess = 0;
+      numberCell.pencilMarks = [];
+      numberCell.solution = 0;
     });
 
   puzzle.hintCount = hintCount;

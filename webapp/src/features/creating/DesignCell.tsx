@@ -54,8 +54,9 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
 
   const numberCell =
     cell.type === CellType.NumberCell ? (cell as INumberCell) : null;
+  const hasNumber = numberCell && numberCell.solution > 0;
   const hintCell = cell.type === CellType.HintCell ? (cell as IHintCell) : null;
-  const pm = numberCell ? (cell as INumberCell).pencilMarks?.join('') : null;
+  const pm = numberCell && !hasNumber ? (cell as INumberCell).pencilMarks?.join('') : null;
 
   return (
     <>
@@ -72,7 +73,7 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
             </div>
           </>
         )}
-        {numberCell && <div className={styles.solution}>{numberCell.solution}</div>}
+        {hasNumber && <div className={styles.solution}>{numberCell.solution}</div>}
         {pm && <div className={styles.pencilmarks}>{pm}</div>}
         {debugMode && <div className={styles.debug}>{cell.index}</div>}
       </div>

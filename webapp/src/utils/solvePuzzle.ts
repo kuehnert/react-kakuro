@@ -1,23 +1,10 @@
 import { CellType, IGameData, INumberCell } from 'models/cellModels';
 import {
-  getGroupForCell, makePencilmarks,
+  makePencilmarks,
   singlePencilmarksToGuess
 } from './pencilmarks';
 
 let solutions: IGameData[];
-
-export function guessNumber(game: IGameData, index: number, guess: number) {
-  (game.cells[index] as INumberCell).guess = guess;
-  getGroupForCell(game, index, 0).cellIndexes.forEach(i => {
-    const nCell = game.cells[i] as INumberCell;
-    nCell.pencilMarks = nCell.pencilMarks.filter(pm => pm !== guess);
-  });
-
-  getGroupForCell(game, index, 1).cellIndexes.forEach(i => {
-    const nCell = game.cells[i] as INumberCell;
-    nCell.pencilMarks = nCell.pencilMarks.filter(pm => pm !== guess);
-  });
-}
 
 // function logBoard(game: IGameData) {
 //   console.log(
