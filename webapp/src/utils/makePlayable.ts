@@ -1,7 +1,7 @@
 import { IListGame } from 'features/list/listSlice';
-import { CellType, IGameData, PuzzleStates } from 'store/gameSlice';
+import { CellType, IGameData, PuzzleStates } from 'models/cellModels';
 import doCountMissingCells from './doCountMissingCells';
-import { doMakeHintCells, doFillHintsFromSolution } from './hintCells';
+import { doMakeHintCells } from './hintCells';
 
 function makePlayable(input: IListGame): IGameData {
   // convert each digit of cell string to proper cell
@@ -26,12 +26,10 @@ function makePlayable(input: IListGame): IGameData {
     state: PuzzleStates.Solved,
     hintCount: -1,
     missingCells: doCountMissingCells(cells),
+    hintMaps: [{}, {}],
   };
 
-  doMakeHintCells(newPuzzle);
-  doFillHintsFromSolution(newPuzzle);
-
-  // JSON.stringify(newPuzzle, null, 4);
+  doMakeHintCells(newPuzzle, true);
   return newPuzzle;
 }
 

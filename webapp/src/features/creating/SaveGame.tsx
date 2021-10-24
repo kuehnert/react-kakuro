@@ -1,16 +1,17 @@
 import classNames from 'classnames';
+import { IGameData, PuzzleStates } from 'models/cellModels';
 import myHistory from 'myHistory';
 import { Button } from 'primereact/button';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   clearDesignGame,
   createGame,
   setActiveStep,
-  setPuzzleState,
-  solveGame,
+  setPuzzle,
+  solveGame
 } from 'store/designSlice';
-import { IGameData, PuzzleStates, setCurrentGame } from 'store/gameSlice';
+import { setCurrentGame } from 'store/gameSlice';
 import { checkAllSolved } from 'utils/checkPuzzle';
 import { makePencilmarks, singlePencilmarksToGuess } from 'utils/pencilmarks';
 import { RootState } from '../../store/store';
@@ -38,6 +39,8 @@ const SaveGame: React.FC = () => {
   };
 
   const handleSolveStep = () => {
+    console.log('handleSolveStep');
+
     const newPuzzle: IGameData = JSON.parse(JSON.stringify(puzzle));
     makePencilmarks(newPuzzle);
     singlePencilmarksToGuess(newPuzzle);
@@ -46,7 +49,7 @@ const SaveGame: React.FC = () => {
       newPuzzle.state = PuzzleStates.Solved;
     }
 
-    dispatch(setPuzzleState({ puzzle: newPuzzle, activeStep }));
+    dispatch(setPuzzle(newPuzzle));
   };
 
   const handleSolveMultiple = () => {
@@ -60,7 +63,7 @@ const SaveGame: React.FC = () => {
       newPuzzle.state = PuzzleStates.Solved;
     }
 
-    dispatch(setPuzzleState({ puzzle: newPuzzle, activeStep }));
+    dispatch(setPuzzle(newPuzzle));
   };
 
   const handleSend = () => {
@@ -70,11 +73,6 @@ const SaveGame: React.FC = () => {
   const handleClear = () => {
     dispatch(clearDesignGame());
   };
-
-  useEffect(() => {
-    // handleSolveStep();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <DesignPanel handleBack={handleBack}>

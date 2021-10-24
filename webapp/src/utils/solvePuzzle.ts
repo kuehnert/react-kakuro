@@ -1,25 +1,10 @@
-import { CellType, IGameData, INumberCell } from 'store/gameSlice';
+import { CellType, IGameData, INumberCell } from 'models/cellModels';
 import {
   makePencilmarks,
-  getRowForCell,
-  singlePencilmarksToGuess,
-  getColumnForCell,
+  singlePencilmarksToGuess
 } from './pencilmarks';
 
 let solutions: IGameData[];
-
-export function guessNumber(game: IGameData, index: number, guess: number) {
-  (game.cells[index] as INumberCell).guess = guess;
-  getRowForCell(game, index).cellIndexes.forEach(i => {
-    const nCell = game.cells[i] as INumberCell;
-    nCell.pencilMarks = nCell.pencilMarks.filter(pm => pm !== guess);
-  });
-
-  getColumnForCell(game, index).cellIndexes.forEach(i => {
-    const nCell = game.cells[i] as INumberCell;
-    nCell.pencilMarks = nCell.pencilMarks.filter(pm => pm !== guess);
-  });
-}
 
 // function logBoard(game: IGameData) {
 //   console.log(
@@ -63,11 +48,12 @@ function _solvePuzzle(game: IGameData, index: number) {
       // if cell is not a number cell or if there is a guess in it already
       _solvePuzzle(game, index + 1);
     } else {
+      /*
       // Try all options for current cell's pencil marks
       // and solve rest of puzzle recursively
       const nCell: INumberCell = cell as INumberCell;
-      const rowData = getRowForCell(game, cell.index);
-      const columnData = getColumnForCell(game, cell.index);
+      const rowData = (cell).hints[0];
+      const columnData = (cell).hints[1];
 
       nCell.pencilMarks.forEach(p => {
         // TODO: check if pencil mark is valid option
@@ -84,9 +70,9 @@ function _solvePuzzle(game: IGameData, index: number) {
 
         if (
           (rowData.usedDigits.length === rowData.count - 1 &&
-            rowData.sum + p !== rowData.hint) ||
+            rowData.sumSolved + p !== rowData.hint) ||
           (columnData.usedDigits.length === columnData.count - 1 &&
-            columnData.sum + p !== columnData.hint)
+            columnData.sumSolved + p !== columnData.hint)
         ) {
           // only one digit missing, check if p is the missing number
           return;
@@ -104,6 +90,7 @@ function _solvePuzzle(game: IGameData, index: number) {
         _solvePuzzle(tempGame, index + 1);
         nCell.guess = 0;
       });
+      */
     }
   }
 }

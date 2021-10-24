@@ -13,8 +13,10 @@ const ExportButton: React.FC = () => {
   const { puzzle } = useSelector((state: RootState) => state.design);
 
   useEffect(() => {
-    setPuzzleJSON(JSON.stringify(puzzle));
-  }, [puzzle]);
+    if (exportVisible) {
+      setPuzzleJSON(JSON.stringify(puzzle, null, 4));
+    }
+  }, [exportVisible, puzzle]);
 
   const handleDownload = () => {
     const blob = new Blob([puzzleJSON]);
@@ -39,7 +41,7 @@ const ExportButton: React.FC = () => {
         onHide={() => setExportVisible(false)}>
         <InputTextarea
           rows={8}
-          style={{ width: '100%', height: 'calc(100% - 48px)' }}
+          style={{ width: '100%', height: 'calc(100% - 48px)', fontFamily: 'monospace' }}
           value={puzzleJSON}
         />
         <Button
@@ -50,7 +52,7 @@ const ExportButton: React.FC = () => {
         />
         <Button
           icon='mdi mdi-close'
-          label='Cancel'
+          label='Close'
           className={styles.button}
           onClick={() => setExportVisible(false)}
         />

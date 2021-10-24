@@ -1,80 +1,120 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import getCombinations from 'utils/getCombinations';
+import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { CellType, ICombination, IHint } from 'models/cellModels';
+import { toggleCombination } from 'store/gameSlice';
+import getHintsForCell, { ICellHInts } from 'utils/getHintsForCell';
 import { RootState } from '../../store/store';
 import styles from './CombinationLine.module.scss';
 
 const CombinationLine: React.FC = () => {
-  const { hints } = useSelector((state: RootState) => state.game);
-  const [possibilities, setPossibilities] = useState<number[][][]>([[], []]);
+  const dispatch = useDispatch();
+  const { selectedIndex, game } = useSelector((state: RootState) => state.game);
+  const { debugMode } = useSelector((state: RootState) => state.users);
+  const [cellHints, setCellHints] = useState<ICellHInts>();
+  const icons = [
+    <i className='mdi mdi-arrow-right' />,
+    <i className='mdi mdi-arrow-down' />,
+  ];
 
-  const renderDigit = (d: number, direction: number) => {
-    const key = 'd' + d + '' + direction;
+  const handleToggleCombination = (
+    hintIndex: number,
+    direction: number,
+    combinationIndex: number
+  ) => {
+    dispatch(toggleCombination({ hintIndex, direction, combinationIndex }));
+  };
 
-    if (hints[direction].used.includes(d)) {
+  const renderDigit = (hint: IHint, combination: ICombination, d: number) => {
+    if (combination.excluded || combination.impossible) {
+      return <span>{d}</span>;
+    } else if (cellHints?.allUsed.includes(d)) {
       return (
-        <span className={styles.highlight} key={key}>
+        <span className={styles.usedDigit} key={d}>
+          {d}
+        </span>
+      );
+      // } else if (cellHints!.candidates.length < 5 && cellHints!.candidates.includes(d)) {
+    } else if (cellHints!.candidates.includes(d)) {
+      return (
+        <span className={styles.candidateDigit} key={d}>
           {d}
         </span>
       );
     } else {
-      return <span key={key}>{d}</span>;
+      return <span key={d}>{d}</span>;
     }
   };
 
-  const renderPossibility = (a: number[], index: number, direction: number) => {
-    const key = 'p' + a[0] + '' + index + '' + direction;
+  const renderCombination = (hint: IHint, index: number, direction: number) => {
+    const combination = hint.combinations[index];
+    const excluded = combination.excluded && styles.excluded;
+    const impossible = combination.impossible && styles.impossible;
 
     return (
-      <div className={styles.possibility} key={key}>
-        {a.map(d => renderDigit(d, direction))}
+      <div
+        className={classNames(styles.possibility, excluded, impossible)}
+        key={index}
+        onClick={() => handleToggleCombination(hint.index, direction, index)}>
+        {combination.digits?.map(d => renderDigit(hint, combination, d))}
       </div>
     );
   };
 
-  const renderPossibilities = (a: number[][], direction: number) => {
-    const key = 'ps' + a[0] + '' + direction;
-
-    return (
-      <div key={key}>
-        {a.map((b, i) => renderPossibility(b, i, direction))}
-      </div>
+  const renderCombinations = (hint: IHint, direction: number) => {
+    return hint.combinations.map((_, i) =>
+      renderCombination(hint, i, direction)
     );
   };
 
   const renderLine = (direction: number) => {
-    if (hints[direction].sum < 0) {
+    const dirHints = cellHints!.hints[direction];
+
+    if (dirHints.sumSolved <= 0) {
       return '\u00a0';
     } else {
       return (
         <>
-          <div className={styles.sum}>
-            {hints[direction].sum}
-            {direction === 0 ? 'a' : 'd'}
+          <div className={styles.sumSolved}>
+            {dirHints.sumSolved}
+            {icons[direction]}
           </div>
-          {renderPossibilities(possibilities[direction], direction)}
+          <div>{renderCombinations(dirHints, direction)}</div>
         </>
       );
     }
   };
 
   useEffect(() => {
-    if (hints[0].index > -1) {
-      setPossibilities([getCombinations(hints[0]), getCombinations(hints[1])]);
+    if (
+      selectedIndex &&
+      game.cells[selectedIndex].type === CellType.NumberCell
+    ) {
+      const ch = getHintsForCell(game, selectedIndex);
+      // console.log('ch', ch);
+
+      setCellHints(ch);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hints]);
+  }, [game, selectedIndex]);
 
   return (
-    <div className={styles.combinations}>
-      <div className={styles.column}>
-        <div className={styles.text}>{renderLine(0)}</div>
+    <>
+      <div className={styles.combinations}>
+        {cellHints &&
+          [0, 1].map(dir => (
+            <div className={styles.column} key={dir}>
+              <div className={styles.text}>{renderLine(dir)}</div>
+            </div>
+          ))}
       </div>
-      <div className={styles.column}>
-        <div className={styles.text}>{renderLine(1)}</div>
-      </div>
-    </div>
+      {debugMode && (
+        <div className='debugWindow'>
+          <pre>{JSON.stringify(cellHints, null, 4)}</pre>
+        </div>
+      )}
+    </>
   );
 };
 

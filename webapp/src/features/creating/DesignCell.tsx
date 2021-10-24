@@ -1,12 +1,9 @@
 import classnames from 'classnames';
+import { CellType, ICell, IHintCell, INumberCell } from 'models/cellModels';
+import { DesignStepsEnum } from 'models/designModels';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CellType, INumberCell } from 'store/gameSlice';
-import {
-  DesignStepsEnum,
-  IDesignCell,
-  updateCell
-} from '../../store/designSlice';
+import { updateCell } from '../../store/designSlice';
 import { RootState } from '../../store/store';
 import '../playing/Cell.scss';
 import '../playing/HintCell.scss';
@@ -14,7 +11,7 @@ import styles from './DesignCell.module.scss';
 import HintDialog from './HintDialog';
 
 export interface Props {
-  cell: IDesignCell;
+  cell: ICell;
   index: number;
 }
 
@@ -22,6 +19,7 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
   const { activeStep } = useSelector((state: RootState) => state.design);
   const dispatch = useDispatch();
   const [dialogVisible, setDialogVisible] = useState(false);
+  const { debugMode } = useSelector((state: RootState) => state.users);
 
   const hide = () => {
     setDialogVisible(false);
@@ -45,7 +43,7 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
   };
 
   const renderHint = (value: number | undefined) => {
-    if (value) {
+    if (value != null) {
       const hintStr = value > 0 ? value : '?';
       const hintClass = value > 0 ? '' : styles.hintMissing;
       return <div className={hintClass}>{hintStr}</div>;
@@ -54,27 +52,39 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
     }
   };
 
-  const pm = (cell.type === CellType.NumberCell) ? (cell as INumberCell).pencilMarks?.join('') : null;
+  const numberCell =
+    cell.type === CellType.NumberCell ? (cell as INumberCell) : null;
+  const hasNumber = numberCell && numberCell.solution > 0;
+  const pm = numberCell && !hasNumber ? (cell as INumberCell).pencilMarks?.join('') : null;
+  const hintCell = cell.type === CellType.HintCell ? (cell as IHintCell) : null;
 
   return (
     <>
       <div
         className={classnames(styles.designCell, cell.type)}
         onClick={handleClick}>
-        {/* <div className={styles.index}>{cell.index}</div> */}
-        <div className='horizontalHint'>{renderHint(cell.hintHorizontal)}</div>
-        <div className='verticalHint'>{renderHint(cell.hintVertical)}</div>
-        <div className={styles.solution}>{cell.solution}</div>
+        {hintCell && (
+          <>
+            <div className='horizontalHint'>
+              {renderHint(hintCell.hints[0]?.sumSolved)}
+            </div>
+            <div className='verticalHint'>
+              {renderHint(hintCell.hints[1]?.sumSolved)}
+            </div>
+          </>
+        )}
+        {hasNumber && <div className={styles.solution}>{numberCell.solution}</div>}
         {pm && <div className={styles.pencilmarks}>{pm}</div>}
+        {debugMode && <div className={styles.debug}>{cell.index}</div>}
       </div>
 
-      {activeStep === DesignStepsEnum.InsertHints && (
+      {activeStep === DesignStepsEnum.InsertHints && hintCell && (
         <HintDialog
-          cell={cell}
+          cell={hintCell}
           visible={dialogVisible}
           onHide={hide}
-          across={cell.hintHorizontal != null}
-          down={cell.hintVertical != null}
+          across={hintCell.hints[0] != null}
+          down={hintCell.hints[1] != null}
         />
       )}
     </>

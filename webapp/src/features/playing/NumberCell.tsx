@@ -1,9 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import classnames from 'classnames';
+import { INumberCell } from 'models/cellModels';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { calcCellSize, calcGuessFontSize, calcPencilMarkFontSize } from 'utils/calcCellSize';
-import { INumberCell, setSelectedIndex } from '../../store/gameSlice';
+import {
+  calcCellSize,
+  calcGuessFontSize,
+  calcPencilMarkFontSize,
+} from 'utils/calcCellSize';
+import { setSelectedIndex } from '../../store/gameSlice';
 import { RootState } from '../../store/store';
 import styles from './NumberCell.module.scss';
 

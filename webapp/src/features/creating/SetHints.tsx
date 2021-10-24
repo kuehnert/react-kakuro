@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { setErrorAlert } from 'features/alerts/alertSlice';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeHintCells, setActiveStep } from 'store/designSlice';
 import { checkPuzzle } from 'utils/checkPuzzle';
@@ -13,10 +14,6 @@ const SetHints: React.FC = () => {
   );
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(makeHintCells());
-  });
-
   const handleBack = () => {
     dispatch(setActiveStep(activeStep - 1));
   };
@@ -25,6 +22,7 @@ const SetHints: React.FC = () => {
     const res = checkPuzzle(puzzle);
 
     if (res.valid) {
+      dispatch(makeHintCells());
       dispatch(setActiveStep(activeStep + 1));
     } else {
       dispatch(setErrorAlert(res.error || 'Error in puzzle'));

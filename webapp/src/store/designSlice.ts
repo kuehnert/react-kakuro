@@ -14,36 +14,9 @@ import {
   IGameData,
   INumberCell,
   PuzzleStates,
-} from './gameSlice';
+} from 'models/cellModels';
 import { AppThunk } from './store';
-
-export enum Direction {
-  Horizontal = 0,
-  Vertical = 1,
-  Both = 2,
-}
-
-export interface IDesignCell {
-  type: CellType;
-  index: number;
-  hintHorizontal?: number;
-  hintVertical?: number;
-  solution?: number;
-}
-
-export enum DesignStepsEnum {
-  SetSize = 0,
-  DrawGrid = 1,
-  InsertHints = 2,
-  CheckPuzzle = 3,
-}
-
-export const designSteps = [
-  { label: 'Set Size' },
-  { label: 'Draw Grid' },
-  { label: 'Insert Hints' },
-  { label: 'Check Puzzle' },
-];
+import { DesignStepsEnum } from 'models/designModels';
 
 type DesignSliceState = {
   activeStep: number;
@@ -67,6 +40,7 @@ const initialState: DesignSliceState = {
     state: PuzzleStates.Raw,
     hintCount: -1,
     missingCells: -1,
+    hintMaps: [{}, {}],
   },
 };
 
@@ -76,34 +50,37 @@ export const designSlice = createSlice({
   reducers: {
     setActiveStep: (state, action) => {
       state.activeStep = action.payload;
-      localStorage.setItem('puzzleState', JSON.stringify(state));
     },
     setBaseGame: (state, action: PayloadAction<IBaseGame>) => {
-      state.puzzle = { ...state.puzzle, ...action.payload };
-      state.puzzle.cells = createGrid(
-        state.puzzle.columnCount,
-        state.puzzle.rowCount
-      );
-    },
-    clearDesignGame: () => {
-      localStorage.removeItem('puzzleState');
-      return initialState;
-    },
-    setPuzzleState: (state, action: PayloadAction<DesignSliceState>) => {
-      const newState = action.payload;
-      newState.activeStep = DesignStepsEnum.DrawGrid;
-      const newPuzzle = newState.puzzle;
-      const res = validatePuzzle(newPuzzle);
-      if (res.valid) {
-        newState.activeStep = DesignStepsEnum.InsertHints;
+      const oldCols = state.puzzle.columnCount;
+      const oldRows = state.puzzle.rowCount;
 
-        const res = checkPuzzle(newPuzzle);
-        if (res.valid) {
-          newState.activeStep = DesignStepsEnum.CheckPuzzle;
-        }
+      const newPuzzle: IGameData = { ...state.puzzle, ...action.payload };
+
+      if (oldCols !== newPuzzle.columnCount || oldRows !== newPuzzle.rowCount) {
+        newPuzzle.cells = createGrid(newPuzzle.columnCount, newPuzzle.rowCount);
       }
 
-      return newState;
+      state.puzzle = newPuzzle;
+    },
+    clearDesignGame: () => {
+      localStorage.removeItem('designPuzzle');
+      return initialState;
+    },
+    setPuzzle: (state, action: PayloadAction<IGameData>) => {
+      const puzzle = action.payload;
+      state.puzzle = puzzle;
+      localStorage.setItem('designPuzzle', JSON.stringify(puzzle));
+
+      const res = validatePuzzle(puzzle);
+      if (res.valid) {
+        state.activeStep = DesignStepsEnum.InsertHints;
+
+        const res = checkPuzzle(puzzle);
+        if (res.valid) {
+          state.activeStep = DesignStepsEnum.CheckPuzzle;
+        }
+      }
     },
     updateCell: (state, action) => {
       const newCell = action.payload;
@@ -120,6 +97,9 @@ export const designSlice = createSlice({
       state.puzzle.hintCount = doCountMissingHints(state.puzzle);
     },
     makeHintCells: state => {
+      // const newPuzzle = JSON.parse(JSON.stringify(state.puzzle));
+      // doMakeHintCells(newPuzzle);
+      // state.puzzle = newPuzzle;
       doMakeHintCells(state.puzzle);
     },
     solveGameSuccess: (state, action: PayloadAction<IGameData>) => {
@@ -138,7 +118,7 @@ export const designSlice = createSlice({
     },
     createGameSuccess: () => {
       // myHistory.push('/');
-      localStorage.removeItem('puzzleState');
+      localStorage.removeItem('designPuzzle');
       return initialState;
     },
   },
@@ -150,7 +130,7 @@ export const {
   createGameSuccess,
   setActiveStep,
   setBaseGame,
-  setPuzzleState,
+  setPuzzle,
   makeHintCells,
   solveGameSuccess,
   solveGameFailed,

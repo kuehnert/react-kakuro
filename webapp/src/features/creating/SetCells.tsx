@@ -1,7 +1,7 @@
 import { setErrorAlert } from 'features/alerts/alertSlice';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveStep } from 'store/designSlice';
+import { makeHintCells, setActiveStep } from 'store/designSlice';
 import validatePuzzle from 'utils/validateGrid';
 import { RootState } from '../../store/store';
 import DesignPanel from './DesignPanel';
@@ -20,6 +20,7 @@ const SetCells: React.FC = () => {
   const handleNext = () => {
     const res = validatePuzzle(puzzle);
     if (res.valid) {
+      dispatch(makeHintCells());
       dispatch(setActiveStep(activeStep + 1));
     } else {
       dispatch(setErrorAlert(res.message));

@@ -1,18 +1,29 @@
-import { IHintValues } from 'store/gameSlice';
+import { ICombination } from 'models/cellModels';
 import combinations from './combinations';
+
+interface IGetCombinationsParams {
+  sumSolved: number;
+  count: number;
+}
 
 /**
  *
  * @param hints the computed hints for a particular cell
  * @param combinations all combinations
  */
-export default function getCombinations(
-  hints: IHintValues,
-) {
-  let combs = combinations[hints.count][hints.sum];
+export default function getCombinations({
+  sumSolved,
+  count,
+}: IGetCombinationsParams): ICombination[] {
+  let combs = combinations[count][sumSolved];
+
+  if (!combs) {
+    return [];
+  }
 
   // only select those combinations which contain every used digit
-  combs = combs.filter(c => hints.used.every(h => c.includes(h)));
+  // TODO do this when new number guessed
+  // combs = combs.filter(c => hints.usedDigits.every(h => c.includes(h)));
 
-  return combs;
+  return combs.map(c => ({ digits: c, excluded: false, impossible: false }));
 }

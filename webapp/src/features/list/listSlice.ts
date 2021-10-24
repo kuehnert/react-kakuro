@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import kakuroApi from 'api/kakuroApi';
 import { setErrorAlert } from 'features/alerts/alertSlice';
+import { IBaseGame } from 'models/cellModels';
 import { AppThunk } from 'store/store';
 import authHeader from 'utils/authHeader';
-import { IBaseGame } from '../../store/gameSlice';
 
 export interface IListGame extends IBaseGame {
   cellString: string;

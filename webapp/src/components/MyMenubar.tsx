@@ -4,12 +4,18 @@ import { Menubar } from 'primereact/menubar';
 import React from 'react';
 import { RootState } from 'store/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from 'store/userSlice';
+import { logout, toggleDebugMode } from 'store/userSlice';
 import styles from './MyMenubar.module.scss';
+import { ToggleButton } from 'primereact/togglebutton';
 
 const MyMenubar: React.FC = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.users);
+  const { debugMode } = useSelector((state: RootState) => state.users);
+
+  const handleToggleDebug = () => {
+    dispatch(toggleDebugMode());
+  };
 
   const startItem = (
     <div className={styles.startItem}>
@@ -36,21 +42,41 @@ const MyMenubar: React.FC = () => {
     },
   ];
 
-  const endItem = user ? (
-    <Button
-      label={`Sign Out ${user.name}`}
-      icon='mdi mdi-logout'
-      onClick={() => dispatch(logout())}
-    />
-  ) : (
-    <Button
-      label='Sign Up/Sign In'
-      icon='mdi mdi-login'
-      onClick={() => myHistory.push('/signin')}
-    />
+  const endItem = (
+    <>
+      <ToggleButton
+        checked={debugMode}
+        onLabel='Debug'
+        offLabel='No Debug'
+        onIcon='mdi mdi-bug'
+        offIcon='mdi mdi-bug-check'
+        onChange={handleToggleDebug}
+      />
+
+      {user ? (
+        <Button
+          label={`Sign Out ${user.name}`}
+          icon='mdi mdi-logout'
+          onClick={() => dispatch(logout())}
+        />
+      ) : (
+        <Button
+          label='Sign Up/Sign In'
+          icon='mdi mdi-login'
+          onClick={() => myHistory.push('/signin')}
+        />
+      )}
+    </>
   );
 
-  return <Menubar model={menuItems} start={startItem} end={endItem} className={styles.header}/>;
+  return (
+    <Menubar
+      model={menuItems}
+      start={startItem}
+      end={endItem}
+      className={styles.header}
+    />
+  );
 };
 
 export default MyMenubar;

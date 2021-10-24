@@ -1,6 +1,6 @@
 .dialog {
   min-width: 400px;
-  width: 40vw;
+  max-width: 40vw;
 }
 
 .label {
@@ -11,9 +11,11 @@
 .buttonGrid {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
+  gap: 6px;
 }
 
 .button {
   display: flex;
   flex-direction: column;
+  aspect-ratio: 1;
 }

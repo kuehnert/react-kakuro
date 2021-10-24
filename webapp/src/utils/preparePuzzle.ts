@@ -3,7 +3,7 @@ import {
   IGameData,
   INumberCell,
   IServerGameData,
-} from 'store/gameSlice';
+} from 'models/cellModels';
 
 function preparePuzzle(game: IGameData): IServerGameData {
   const cellString = game.cells
@@ -12,7 +12,7 @@ function preparePuzzle(game: IGameData): IServerGameData {
     )
     .join('');
 
-  const { cells, ...newGame } = game;
+  const { cells, missingCells, hintMaps, ...newGame } = game;
   const newServerGame = { ...newGame, cellString } as IServerGameData;
 
   return newServerGame;

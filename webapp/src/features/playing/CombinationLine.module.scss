@@ -20,17 +20,34 @@
   text-align: left;
 }
 
-.sum {
+.sumSolved {
   font-size: 2rem;
   display: inline-block;
   color: #5f5;
-  width: 3rem;
 }
 
 .possibility {
   padding: 2px 0;
+  cursor: pointer;
 }
 
-.highlight {
-  color: grey;
+.excluded {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.impossible {
+  color: #666;
+}
+
+.usedDigit {
+  color: #aaf;
+}
+
+.candidateDigit {
+  color: #ffa;
+}
+
+.impossibleDigit {
+  color: #eee;
 }

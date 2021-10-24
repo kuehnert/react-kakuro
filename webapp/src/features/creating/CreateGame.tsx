@@ -1,8 +1,9 @@
+import { designSteps } from 'models/designModels';
 import { Panel } from 'primereact/panel';
 import { Steps } from 'primereact/steps';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { designSteps, setPuzzleState } from 'store/designSlice';
+import { setPuzzle } from 'store/designSlice';
 import { RootState } from '../../store/store';
 import styles from './CreateGame.module.scss';
 import SaveGame from './SaveGame';
@@ -15,11 +16,11 @@ const CreateGame: React.FC = () => {
   const { activeStep } = useSelector((state: RootState) => state.design);
 
   useEffect(() => {
-    const puzzleStateJSON = localStorage.getItem('puzzleState');
-    if (puzzleStateJSON) {
+    const puzzleJSON = localStorage.getItem('designPuzzle');
+    if (puzzleJSON) {
       console.log('Found puzzle in local storage');
-      const state = JSON.parse(puzzleStateJSON);
-      dispatch(setPuzzleState(state));
+      const puzzle = JSON.parse(puzzleJSON);
+      dispatch(setPuzzle(puzzle));
     }
   }, [dispatch]);
 

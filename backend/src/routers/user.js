@@ -16,6 +16,25 @@ router.post('/users/login', async (req, res) => {
   }
 });
 
+// LOGOUT
+router.post('/users/logout', auth, async (req, res) => {
+  try {
+    const { user } = req;
+    const token = req.header('Authorization').replace('Bearer ', '');
+    const tokenId = user.tokens.find(t => t.token === token)?._id;
+
+    if (tokenId) {
+      user.tokens.id(tokenId).remove();
+      res.sendStatus(201);
+    } else {
+      throw new Error('Token not found');
+    }
+  } catch (error) {
+    console.log('error', error);
+    res.status(400).send({ error: 'Unable to login' });
+  }
+});
+
 // CREATE
 router.post('/users', async (req, res) => {
   const user = new User(req.body);
