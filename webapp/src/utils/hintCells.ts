@@ -61,7 +61,7 @@ const makeHints = (index: number, counts: number[]): Array<IHint | null> => {
   return hints;
 };
 
-export function doMakeHintCells(puzzle: IGameData) {
+export function doMakeHintCells(puzzle: IGameData, solutionKnown = false) {
   const { cells, hintMaps } = puzzle;
   let hintCount = 0;
 
@@ -133,13 +133,20 @@ export function doMakeHintCells(puzzle: IGameData) {
             direction
           );
 
-          const sumSolved = hintCell.hints[direction]?.sumSolved || 0;
+          const sumSolved = solutionKnown
+            ? group.sumSolved
+            : hintCell.hints[direction]?.sumSolved || 0;
+
+          const combinations =
+            sumSolved > 0
+              ? getCombinations({ sumSolved, count: group.count })
+              : [];
           const hint: IHint = {
             ...group,
             sumSolved,
             sumGuessed: 0,
             usedDigits: [],
-            combinations: getCombinations({ sumSolved, count: group.count }),
+            combinations,
           };
 
           hintCell.hints[direction] = hint;
@@ -162,38 +169,4 @@ export function doMakeHintCells(puzzle: IGameData) {
     });
 
   puzzle.hintCount = hintCount;
-}
-
-export function doFillHintsFromSolution(puzzle: IGameData) {
-  const { cells, hintMaps } = puzzle;
-
-  cells
-    .filter(c => c.type === CellType.HintCell)
-    .forEach(c => {
-      const hintCell = c as IHintCell;
-
-      [0, 1].forEach(direction => {
-        if (hintCell.hints[direction]) {
-          const group = getGroupForCell(
-            puzzle,
-            hintCell.index + delta(puzzle, direction),
-            direction
-          );
-
-          const hint = {
-            ...group,
-            sumGuessed: 0,
-            sumSolved: group.sumGuessed,
-          };
-
-          // console.log('hint:', hint);
-          hintCell.hints[direction] = hint;
-
-          // populate hint map
-          group.cellIndexes.forEach(i => {
-            hintMaps[direction][i] = c.index;
-          });
-        }
-      });
-    });
 }

@@ -50,7 +50,6 @@ export const gameSlice = createSlice({
   reducers: {
     setGameState(state, action: PayloadAction<IGameData>) {
       state.game = action.payload;
-      // state.hints = getHints(state.game, state.selectedIndex!);
       state.undoStack = [];
       state.redoStack = [];
     },
@@ -60,16 +59,12 @@ export const gameSlice = createSlice({
       state.game = action.payload;
       state.game.missingCells = doCountMissingCells(state.game.cells);
       delete state.selectedIndex;
-      // state.hints = DEFAULT_HINTS;
       const currentGame = JSON.stringify(state.game);
-      console.log('currentGame:', currentGame);
-
       localStorage.setItem('currentGame', currentGame);
     },
     setSelectedIndex(state, action: PayloadAction<number>) {
       let newIndex = action.payload;
       state.selectedIndex = newIndex;
-      // state.hints = getHints(state.game!, newIndex);
     },
     increaseZoom(state, action: PayloadAction<number>) {
       const delta = action.payload;
@@ -124,7 +119,6 @@ export const gameSlice = createSlice({
       state.redoStack = [];
       state.game = clearGuesses(state.game);
       state.game.missingCells = doCountMissingCells(state.game.cells);
-      // state.hints = getHints(state.game, state.selectedIndex!);
     },
     toggleMarkWrong(state) {
       state.markWrong = !state.markWrong;
@@ -139,10 +133,8 @@ export const gameSlice = createSlice({
       state.undoStack.push(JSON.stringify(state.game));
       // set guesses where there is only one pencil mark option
       singlePencilmarksToGuess(state.game!);
-
       // calculate pencil marks
       makePencilmarks(state.game!);
-
       state.game.missingCells = doCountMissingCells(state.game.cells);
     },
     toggleCombination(state, action: PayloadAction<IToggleCombinationParams>) {
@@ -158,14 +150,12 @@ export const gameSlice = createSlice({
       const game = JSON.parse(oldGameString!);
       state.redoStack.push(JSON.stringify(state.game));
       state.game = game;
-      // state.hints = getHints(state.game, state.selectedIndex!);
     },
     redo(state) {
       const oldGameString = state.redoStack.pop();
       const game = JSON.parse(oldGameString!);
       state.undoStack.push(JSON.stringify(state.game));
       state.game = game;
-      // state.hints = getHints(state.game, state.selectedIndex!);
     },
   },
 });

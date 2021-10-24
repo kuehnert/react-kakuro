@@ -6,7 +6,8 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   clearDesignGame,
-  createGame, setActiveStep,
+  createGame,
+  setActiveStep,
   setPuzzle,
   solveGame
 } from 'store/designSlice';
@@ -23,7 +24,6 @@ const SaveGame: React.FC = () => {
   const { activeStep, puzzle } = useSelector(
     (state: RootState) => state.design
   );
-  const debugMode = true;
 
   const handleBack = () => {
     dispatch(setActiveStep(activeStep - 1));
@@ -39,7 +39,7 @@ const SaveGame: React.FC = () => {
   };
 
   const handleSolveStep = () => {
-    console.log("handleSolveStep");
+    console.log('handleSolveStep');
 
     const newPuzzle: IGameData = JSON.parse(JSON.stringify(puzzle));
     makePencilmarks(newPuzzle);
@@ -126,13 +126,6 @@ const SaveGame: React.FC = () => {
       </>
 
       <DrawGrid />
-      {debugMode && (
-        <div className='debug'>
-          <pre style={{ textAlign: 'left' }}>
-            {JSON.stringify(puzzle, null, 4)}
-          </pre>
-        </div>
-      )}
     </DesignPanel>
   );
 };

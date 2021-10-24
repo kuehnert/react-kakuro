@@ -11,12 +11,12 @@ import styles from './CombinationLine.module.scss';
 const CombinationLine: React.FC = () => {
   const dispatch = useDispatch();
   const { selectedIndex, game } = useSelector((state: RootState) => state.game);
+  const { debugMode } = useSelector((state: RootState) => state.users);
   const [cellHints, setCellHints] = useState<ICellHInts>();
   const icons = [
     <i className='mdi mdi-arrow-right' />,
     <i className='mdi mdi-arrow-down' />,
   ];
-  const debugMode = false;
 
   const handleToggleCombination = (
     hintIndex: number,
@@ -28,15 +28,14 @@ const CombinationLine: React.FC = () => {
 
   const renderDigit = (hint: IHint, combination: ICombination, d: number) => {
     if (combination.excluded || combination.impossible) {
-      return <span>{d}</span>
-     } else
-    if (cellHints?.allUsed.includes(d)) {
+      return <span>{d}</span>;
+    } else if (cellHints?.allUsed.includes(d)) {
       return (
         <span className={styles.usedDigit} key={d}>
           {d}
         </span>
       );
-    // } else if (cellHints!.candidates.length < 5 && cellHints!.candidates.includes(d)) {
+      // } else if (cellHints!.candidates.length < 5 && cellHints!.candidates.includes(d)) {
     } else if (cellHints!.candidates.includes(d)) {
       return (
         <span className={styles.candidateDigit} key={d}>
@@ -110,9 +109,11 @@ const CombinationLine: React.FC = () => {
             </div>
           ))}
       </div>
-      {debugMode && (<div className={styles.debug}>
-        <pre>{JSON.stringify(cellHints, null, 4)}</pre>
-      </div>)}
+      {debugMode && (
+        <div className='debugWindow'>
+          <pre>{JSON.stringify(cellHints, null, 4)}</pre>
+        </div>
+      )}
     </>
   );
 };

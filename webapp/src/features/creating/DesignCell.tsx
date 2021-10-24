@@ -19,7 +19,7 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
   const { activeStep } = useSelector((state: RootState) => state.design);
   const dispatch = useDispatch();
   const [dialogVisible, setDialogVisible] = useState(false);
-  const debugMode = true;
+  const { debugMode } = useSelector((state: RootState) => state.users);
 
   const hide = () => {
     setDialogVisible(false);
@@ -43,7 +43,7 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
   };
 
   const renderHint = (value: number | undefined) => {
-    if (value) {
+    if (value != null) {
       const hintStr = value > 0 ? value : '?';
       const hintClass = value > 0 ? '' : styles.hintMissing;
       return <div className={hintClass}>{hintStr}</div>;
@@ -55,8 +55,8 @@ const DesignCell: React.FC<Props> = ({ cell, index }) => {
   const numberCell =
     cell.type === CellType.NumberCell ? (cell as INumberCell) : null;
   const hasNumber = numberCell && numberCell.solution > 0;
-  const hintCell = cell.type === CellType.HintCell ? (cell as IHintCell) : null;
   const pm = numberCell && !hasNumber ? (cell as INumberCell).pencilMarks?.join('') : null;
+  const hintCell = cell.type === CellType.HintCell ? (cell as IHintCell) : null;
 
   return (
     <>

@@ -13,7 +13,6 @@ const SetHints: React.FC = () => {
     (state: RootState) => state.design
   );
   const dispatch = useDispatch();
-  const debugMode = true;
 
   const handleBack = () => {
     dispatch(setActiveStep(activeStep - 1));
@@ -33,16 +32,7 @@ const SetHints: React.FC = () => {
   return (
     <DesignPanel handleNext={handleNext} handleBack={handleBack}>
       <DrawGrid />
-      <>
-        <div className='notes'>Missing hints: {puzzle.hintCount}</div>
-        {debugMode && (
-          <div className='debug'>
-            <pre style={{ textAlign: 'left' }}>
-              {JSON.stringify(puzzle, null, 4)}
-            </pre>
-          </div>
-        )}
-      </>
+      <div className='notes'>Missing hints: {puzzle.hintCount}</div>
     </DesignPanel>
   );
 };

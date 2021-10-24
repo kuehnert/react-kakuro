@@ -7,47 +7,46 @@ import {
 } from 'models/cellModels';
 import doSetGuess from './doSetGuess';
 import getCombinations from './getCombinations';
+import { delta } from './hintCells';
 
 export function getGroupForCell(
-  { cells, columnCount }: IGameData,
+  puzzle: IGameData,
   index: number,
   direction: number
 ): IHint {
-  const across = direction === 0;
-  const delta = across ? 1 : columnCount;
-  let x = index - delta;
+  const { cells } = puzzle;
+  const d = delta(puzzle, direction);
+  let x = index - d;
   let cellIndexes = [];
   let usedDigits = [];
   let sumSolved = 0;
   let sumGuessed = 0;
 
   while (cells[x].type === CellType.NumberCell) {
-    x -= delta;
+    x -= d;
   }
 
   let y = x;
-  while (
-    y + delta < cells.length &&
-    cells[y + delta].type === CellType.NumberCell
-  ) {
-    y += delta;
+  while (y + d < cells.length && cells[y + d].type === CellType.NumberCell) {
+    y += d;
     cellIndexes.push(y);
     const nCell = cells[y] as INumberCell;
+
     if (nCell.guess) {
       usedDigits.push(nCell.guess);
       sumGuessed += nCell.guess;
     }
 
-    if (nCell.solution) {
+    if (nCell.solution > 0) {
       sumSolved += nCell.solution;
     }
   }
 
-  const count = (y - x) / delta;
+  const count = (y - x) / d;
   const combinations =
-    sumGuessed > 0 ? getCombinations({ sumSolved: sumGuessed, count }) : [];
+    sumGuessed > 0 ? getCombinations({ sumSolved, count }) : [];
 
-  return {
+  const hint: IHint = {
     index: x,
     count,
     sumSolved,
@@ -56,6 +55,8 @@ export function getGroupForCell(
     usedDigits,
     combinations,
   };
+
+  return hint;
 }
 
 export function guessRemovesPencilmarks(game: IGameData, index: number) {}
@@ -97,14 +98,12 @@ export function makePencilmarksForCell(
   const vHint = (game.cells[game.hintMaps[1][index]] as IHintCell).hints[1];
 
   const used = [...hHint!.usedDigits, ...vHint!.usedDigits];
-  const hComb = hHint!.combinations.filter(c => !c.impossible).map(c => c.digits);
-  const vComb = vHint!.combinations.filter(c => !c.impossible).map(c => c.digits);
-  // console.log('index:', index);
-  // console.log('hHint:', hHint);
-  // console.log('vHint:', vHint);
-  // console.log('used:', used);
-  // console.log('hComb:', hComb);
-  // console.log('vComb:', vComb);
+  const hComb = hHint!.combinations
+    .filter(c => !c.impossible)
+    .map(c => c.digits);
+  const vComb = vHint!.combinations
+    .filter(c => !c.impossible)
+    .map(c => c.digits);
 
   // if no current pencil marks, find possible ones
   // Get possible digits

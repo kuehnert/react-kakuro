@@ -25,6 +25,7 @@ export interface IUserState {
   isRequesting: boolean;
   user: IUser | null;
   error: string | null;
+  debugMode: boolean;
 }
 
 export interface IUnauthorizedPayload {
@@ -64,6 +65,7 @@ const initialState: IUserState = {
   isRequesting: false,
   user,
   error: null,
+  debugMode: false,
 };
 
 const userSlice = createSlice({
@@ -120,6 +122,9 @@ const userSlice = createSlice({
         state.isRequesting = false;
       }
     },
+    toggleDebugMode(state) {
+      state.debugMode = !state.debugMode;
+    },
   },
 });
 
@@ -131,6 +136,7 @@ export const {
   signUpFailed,
   signUpSuccess,
   submitting,
+  toggleDebugMode,
 } = userSlice.actions;
 
 export default userSlice.reducer;
@@ -148,7 +154,11 @@ export const login =
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('token', token);
     } catch ({ response }) {
-      dispatch(setSuccessAlert('There was an error signing you in. Please check email and password.'));
+      dispatch(
+        setSuccessAlert(
+          'There was an error signing you in. Please check email and password.'
+        )
+      );
       dispatch(
         requestFailed({ resourceType: 'users', resources: [], response })
       );
@@ -188,7 +198,7 @@ export const signUp =
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('token', token);
     } catch ({ response }: any) {
-      dispatch(setErrorAlert('Unable to sign you up.'))
+      dispatch(setErrorAlert('Unable to sign you up.'));
       dispatch(signUpFailed('Unable to sign up'));
       return;
     }

@@ -6,9 +6,9 @@ import DesignCell from './DesignCell';
 import styles from './DrawGrid.module.scss';
 
 const DrawGrid: React.FC = () => {
-  const {
-    puzzle: { columnCount, cells },
-  } = useSelector((state: RootState) => state.design);
+  const { puzzle } = useSelector((state: RootState) => state.design);
+  const { columnCount, cells } = puzzle;
+  const { debugMode } = useSelector((state: RootState) => state.users);
 
   return (
     <div>
@@ -23,6 +23,12 @@ const DrawGrid: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {debugMode && (
+        <div className='debugWindow'>
+          <pre>{JSON.stringify(puzzle, null, 4)}</pre>
+        </div>
+      )}
     </div>
   );
 };
