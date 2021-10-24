@@ -117,6 +117,7 @@ export const gameSlice = createSlice({
     resetGame(state) {
       state.undoStack.push(JSON.stringify(state.game));
       state.redoStack = [];
+      state.selectedIndex = undefined;
       state.game = clearGuesses(state.game);
       state.game.missingCells = doCountMissingCells(state.game.cells);
     },

@@ -18,7 +18,10 @@ export const clearGuesses = (game: IGameData): IGameData => {
         if (hint) {
           hint.sumGuessed = 0;
           hint.usedDigits = [];
-          hint.combinations.forEach(c => c.excluded = false)
+          hint.combinations.forEach(c => {
+            c.excluded = false;
+            c.impossible = false;
+          });
         }
       });
     });
