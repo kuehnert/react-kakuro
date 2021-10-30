@@ -14,3 +14,11 @@
   display: grid;
   grid-gap: 0px;
 }
+
+@media (screen-spanning: single-fold-vertical) {
+  /* styles applied in double-portrait (wide) mode */
+  .gameBackground {
+    grid-column-start: 3;
+    grid-row-start: 1;
+  }
+}

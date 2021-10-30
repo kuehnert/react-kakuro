@@ -1,6 +1,5 @@
 .controls {
   background-color: #c6b0a1;
-
 }
 
 .columns {
@@ -21,4 +20,12 @@
 
 .zoomButtons {
   margin: 0.5rem;
+}
+
+@media (screen-spanning: single-fold-vertical) {
+  /* styles applied in double-portrait (wide) mode */
+  .cntrols {
+    grid-column-start: 1;
+    grid-row-start: 1;
+  }
 }

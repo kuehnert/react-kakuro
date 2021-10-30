@@ -7,3 +7,15 @@
   grid-template-columns: minmax(150px, 15%) 1fr minmax(150px, 15%);
   overflow: hidden;
 }
+
+@media (screen-spanning: single-fold-vertical) {
+  /* styles applied in double-portrait (wide) mode */
+  /* matches Figure 1. below */
+  .content {
+    width: 100%;
+    height: calc(100% - #{$headerHeight} + #{$footerHeight} - 64px);
+    display: grid;
+    grid-template-columns: 0.5fr 0.5fr 1fr;
+    overflow: hidden;
+  }
+}
