@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { CellType, IHintCell } from 'models/cellModels';
+import { IHintCell } from 'models/cellModels';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import React, { useEffect, useState } from 'react';

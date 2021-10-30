@@ -13,6 +13,7 @@ import {
   setGuess,
   toggleMarkWrong,
   togglePencilMark,
+  toggleShowSolution,
   undo,
 } from '../../store/gameSlice';
 import { RootState } from '../../store/store';
@@ -24,7 +25,7 @@ import { PuzzleStates } from 'models/cellModels';
  * Here be number buttons for guesses and pencil marks
  */
 const Controls: React.FC = () => {
-  const { selectedIndex, zoomLevel, markWrong, game, undoStack, redoStack } =
+  const { selectedIndex, zoomLevel, markWrong, game, undoStack, redoStack, showSolution } =
     useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
   const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -44,9 +45,7 @@ const Controls: React.FC = () => {
       icon: 'pi pi-exclamation-triangle',
       accept: () => dispatch(resetGame()),
       // reject: () => rejectFunc()
-  });
-
-
+    });
   };
 
   const handleClearPencilMarks = (event: React.MouseEvent) => {
@@ -76,11 +75,7 @@ const Controls: React.FC = () => {
           onClick={() => handleZoom(-1)}
           disabled={zoomLevel < 1}
         />
-        <Button
-          className={''}
-          label='100 %'
-          onClick={() => handleZoom(0)}
-        />
+        <Button className={''} label='100 %' onClick={() => handleZoom(0)} />
         <Button
           className={''}
           icon='mdi mdi-magnify-plus'
@@ -95,25 +90,21 @@ const Controls: React.FC = () => {
         </div>
 
         <Button
-          className={classnames(
-            'button',
-            'is-warning',
-            styles.button
-          )}
+          className={classnames('button', 'is-warning', styles.button)}
           icon='mdi mdi-pencil-off'
           label='Delete'
           onClick={handleDeletePencilMarks}
         />
 
         <Button
-          className={classnames('button is-large', styles.button)}
+          className={classnames('button', styles.button)}
           onClick={handleAutoPencil}
           label='Auto'
           icon='mdi mdi-pencil'
         />
 
         <Button
-          className={classnames('button is-large', styles.button)}
+          className={classnames('button', styles.button)}
           onClick={handleClearPencilMarks}
           label='Clear'
           icon='mdi mdi-pencil-off'
@@ -124,12 +115,7 @@ const Controls: React.FC = () => {
         </div>
 
         <Button
-          className={classnames(
-            'button',
-            'is-warning',
-            'is-large',
-            styles.button
-          )}
+          className={classnames('button', styles.button)}
           icon='mdi mdi-delete'
           label='Delete'
           onClick={handleDelete}
@@ -160,6 +146,16 @@ const Controls: React.FC = () => {
           />
         )}
       </div>
+
+      <ToggleButton
+        checked={showSolution}
+        onLabel='Show Solution'
+        offLabel='Hide Solution'
+        onIcon='mdi mdi-eye'
+        offIcon='mdi mdi-eye-off'
+        onChange={() => dispatch(toggleShowSolution())}
+      />
+
       <div className='undoredo'>
         <Button
           className={classnames('button', 'p-button-large', styles.button)}

@@ -165,7 +165,7 @@ export function doMakeHintCells(puzzle: IGameData, solutionKnown = false) {
       const numberCell = c as INumberCell;
       numberCell.guess = 0;
       numberCell.pencilMarks = [];
-      numberCell.solution = 0;
+      // numberCell.solution = 0;
     });
 
   puzzle.hintCount = hintCount;

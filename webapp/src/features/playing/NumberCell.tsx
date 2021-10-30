@@ -18,7 +18,7 @@ export interface Props {
 }
 
 const NumberCell: React.FC<Props> = ({ cell, index }) => {
-  const { selectedIndex, zoomLevel, markWrong } = useSelector(
+  const { selectedIndex, zoomLevel, markWrong, showSolution } = useSelector(
     (state: RootState) => state.game
   );
   const dispatch = useDispatch();
@@ -49,14 +49,21 @@ const NumberCell: React.FC<Props> = ({ cell, index }) => {
       })}
       style={cellStyle}
       onClick={handleClick}>
-      {cell.guess > 0 && (
+      {showSolution && (
+        <div
+          className={classnames(styles.solution)}
+          style={guessFontSize}>
+          {cell.solution}
+        </div>
+      )}
+      {!showSolution && cell.guess > 0 && (
         <div
           className={classnames(styles.guess, { wrongGuess })}
           style={guessFontSize}>
           {cell.guess}
         </div>
       )}
-      {!cell.guess && cell.pencilMarks?.length > 0 && (
+      {!showSolution && !cell.guess && cell.pencilMarks?.length > 0 && (
         <div className={classnames(styles.pencilMarks)} style={{}}>
           {renderPencilMarks(cell.pencilMarks)}
         </div>

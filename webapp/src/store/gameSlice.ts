@@ -19,6 +19,7 @@ export type GameSliceState = {
   game: IGameData;
   selectedIndex?: number;
   markWrong: boolean;
+  showSolution: boolean;
   undoStack: string[];
   redoStack: string[];
 };
@@ -40,6 +41,7 @@ const initialState: GameSliceState = {
     hintMaps: [{}, {}],
   },
   markWrong: JSON.parse(localStorage.getItem('kakuro-markWrong') || 'false'),
+  showSolution: false,
   undoStack: [],
   redoStack: [],
 };
@@ -121,10 +123,6 @@ export const gameSlice = createSlice({
       state.game = clearGuesses(state.game);
       state.game.missingCells = doCountMissingCells(state.game.cells);
     },
-    toggleMarkWrong(state) {
-      state.markWrong = !state.markWrong;
-      localStorage.setItem('kakuro-markWrong', JSON.stringify(state.markWrong));
-    },
     clearPencilMarks(state) {
       state.undoStack.push(JSON.stringify(state.game));
       state.redoStack = [];
@@ -145,6 +143,13 @@ export const gameSlice = createSlice({
       if (comb) {
         comb.excluded = !comb?.excluded;
       }
+    },
+    toggleMarkWrong(state) {
+      state.markWrong = !state.markWrong;
+      localStorage.setItem('kakuro-markWrong', JSON.stringify(state.markWrong));
+    },
+    toggleShowSolution(state) {
+      state.showSolution = !state.showSolution;
     },
     undo(state) {
       const oldGameString = state.undoStack.pop();
@@ -173,6 +178,7 @@ export const {
   toggleCombination,
   togglePencilMark,
   toggleMarkWrong,
+  toggleShowSolution,
   redo,
   undo,
 } = gameSlice.actions;
